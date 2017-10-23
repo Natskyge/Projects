@@ -1,0 +1,18 @@
+(define (newton function)
+  (define delta 0.00001)
+  (define (dydx f x)
+    (/ (- (f (+ x delta)) (f x))
+       delta))
+  (define (good-enough? guess preivous-guess)
+    (< (/ (abs (- guess preivous-guess))
+          preivous-guess)
+       delta))
+  (define (improve guess function)
+    (- guess (/ (function guess)
+                (dydx function guess))))
+  (define (newton-iter function guess preivous-guess)
+    (if (good-enough? guess preivous-guess)
+        guess
+        (newton-iter function (improve guess function) guess)))
+  (newton-iter function 3.0 1.0))
+
