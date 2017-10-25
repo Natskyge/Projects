@@ -16,10 +16,10 @@ createNode(char *data, Node *left, Node *right)
 {
 	Node *newNode = NULL;
 	newNode = (Node *)malloc(sizeof(Node));
-	
+
 	if (newNode == NULL)
 		return NULL;
-	
+
 	newNode->data  = data;
 	newNode->left  = left;
 	newNode->right = right;
@@ -31,14 +31,14 @@ insertNode(char *data, Node *leftNode)
 {
 	Node *newNode = NULL;
 	Node *rightNode = leftNode->right;
-    newNode = createNode(data, leftNode, rightNode);
-    
-    if (newNode == NULL)
-        return 1;
+	newNode = createNode(data, leftNode, rightNode);
 
-    leftNode->right	= newNode;
-    rightNode->left = newNode;
-    return 0;
+	if (newNode == NULL)
+		return 1;
+
+	leftNode->right	= newNode;
+	rightNode->left = newNode;
+	return 0;
 }
 
 char *test = "ayy lmao";
@@ -51,7 +51,7 @@ textSpan(char* text, int start, int stop)
 		return NULL;
 	} else if ( start < 0 )
 		return NULL;
-	
+
 	char *span;
 	for (int index = 0; index + start < stop; index++)
 		*(span+index) = *(text+start+index);
