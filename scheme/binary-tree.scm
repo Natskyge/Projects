@@ -34,10 +34,6 @@
                            row
                            (left-conection tree))))))
 
-;(define (make-node data leftNode rightNode)
-;  (list data (list leftNode rightNode)))
-
-; doesn't work, car at wrong type. Fix later
 (define (insert-leaf level row tree data)
   (define maxLeft 0)
   (begin (set! maxLeft (- (expt 2 (- level 1)) 1))
