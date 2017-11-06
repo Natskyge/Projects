@@ -1,12 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Data {
-	int data;
-} Data;
+#define TYPE int
 
 typedef struct Item {
-	Data data;
+	TYPE data;
 	struct Item *prev;
 } Item;
 
@@ -29,7 +27,7 @@ stackInit(size_t max)
 }
 
 Item*
-makeItem(Data data, Item *prev)
+makeItem(TYPE data, Item *prev)
 {
 	Item *newItem = (Item*)malloc(sizeof(Item));
 	
@@ -40,10 +38,10 @@ makeItem(Data data, Item *prev)
 }
 
 int
-push(Data data, Stack *stack)
+push(TYPE data, Stack *stack)
 {
-	if (stack->size >= stack->max) {
-		return 1; /* Error, stackoverflow */
+	if (!stack || stack->size >= stack->max) {
+		return 1;
 	} else {
 		Item *newItem = makeItem(data, stack->top);
 		stack->top = newItem;
@@ -55,8 +53,8 @@ push(Data data, Stack *stack)
 int
 pop(Stack *stack)
 {
-	if (0 == stack->size) {
-		return 1; /* Stack is empty */
+	if (!stack || 0 >= stack->size) {
+		return 1;
 	} else {
 		Item *oldTop = stack->top;
 		stack->top = stack->top->prev;
@@ -66,24 +64,65 @@ pop(Stack *stack)
 	}
 }
 
-Data
+TYPE
 peek(Stack* stack)
 {
-	return stack->top->data;
+	if (!stack || stack->size == 0) {
+		/* No data */
+	} else {
+		return stack->top->data;
+	}
 }
 
 int
-freeStack(Stack *stack)
+clearStack(Stack *stack)
 {
+	if (!stack || stack->size <= 0)
+		return 1;
+	
 	while (stack->size > 0) {
 		pop(stack);
 	}
-	free(stack);
+	
 	return 0;
+}
+
+int
+printStack(Stack* stack)
+{
+	printf("Size: %d\n", stack->size);
+	printf("Max:  %d\n", stack->max);
+	printf("TYPE: %d\n\n", peek(stack));
+	return 1;
 }
 
 int
 main(void)
 {
+	/* A test of the data Stucture */
+	Stack *myStack = stackInit(10);
+	printf("pop return code: %d\n", pop(myStack));
+	printStack(myStack);
+
+	push(23, myStack);
+	printStack(myStack);
+
+	pop(myStack);
+	printStack(myStack);
+
+	for (int i = 1; push(i, myStack) != 1; i++) {}
+	printf("push return code: %d\n", push(23, myStack));
+	printStack(myStack);
+
+	clearStack(myStack);
+	printStack(myStack);
+
+	myStack = NULL;
+
+	printf("push return code: %d\n", push(23, myStack));
+	printf("pop return code: %d\n", pop(myStack));
+
+	free(myStack);
+
 	return 0;
 }
