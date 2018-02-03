@@ -1,0 +1,240 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+%\usepackage[margin=0.5in]{geometry}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\title{Calculus}
+\author{eriksgimsing }
+\date{September 2017}
+
+\begin{document}
+\maketitle
+
+Let $P: A \rightarrow \{\top,\bot \}$, where $\neg \top = \bot$ and 
+$\neg \bot = \top$
+
+\begin{align}
+	\forall x \in A,\ P(x) = \top 
+	&\Leftrightarrow \bot \notin \{P(x)|x \in A\} \\
+	\exists x \in A,\ P(x) = \top
+	&\Leftrightarrow \top \in \{P(x)|x \in A\} \\
+	\exists! x \in A,\ P(x) = \top &\Leftrightarrow \forall y \in A,\ 
+	P(x) = P(y) = \top \Rightarrow x = y
+\end{align}
+
+From this it is trivial to prove the following:
+
+\begin{align}
+	\neg (\forall x \in A, P(x) = \top) &\Leftrightarrow 
+	\neg (\bot \notin \{P(x)|x \in A\}) \\
+	&\Leftrightarrow \bot \in \{P(x)|x \in A \} \nonumber \\
+	&\Leftrightarrow \exists x \in A, P(x) = \bot \nonumber \\
+	&\Leftrightarrow \exists x \in A, \neg P(x) = \top \nonumber
+\end{align}
+
+\begin{align}
+	\neg (\exists x \in A, P(x)) &\Leftrightarrow 
+	\neg ( \top \in \{P(x)|x \in A\} ) \\
+	&\Leftrightarrow \top \notin  \{P(x)|x \in A\} \nonumber \\
+	&\Leftrightarrow \forall x \in A, P(x) = \bot \nonumber \\
+	&\Leftrightarrow \forall x \in A, \neg P(x) = \top \nonumber
+\end{align}
+
+
+\begin{align}
+	p \leftrightarrow q \eq = (p \rightarrow q) \land (q \rightarrow p) \\
+	p \rightarrow q = \neg p \lor q
+\end{align}
+
+\newpage
+
+\section{Rectangle center of mass}
+\textbf{Theorem}:
+Consider a $n \times m$ rectangle. It is to be proven that the center of 
+mass is $(n/2,m/2)$.
+
+\textit{proof}:
+Consider the points $A = (0,0),\ B = (n,0),\ C = (n,m)$ and $D = (0,m)$. Then 
+$ABCD$ is a rectangle with sides $n$ and $m$. Thus the center of mass of it
+is the same as the $n \times m$ rectangle. 
+
+Let a circle have center $(n/2,m/2)$ and radius $r$. Given a point 
+$p=(a,b)$ lying on the perimeter of the circle, then we may find another point 
+on the other side of the circle, namely $p'=(n-a,m-a)$. If we then consider only
+the points $p$ such that $p$ is inside the square, that is $0 \leq a \leq n$ 
+and $0 \leq b \leq m$ then we find that $p'$ is in the rectangle and the center
+of $p$ and $p'$ to be:
+
+\begin{align}
+	\left( \frac{a+(n-a)}{2},\frac{b+(m-b)}{2} \right) =
+	\left( \frac{n}{2},\frac{m}{2} \right) \nonumber
+\end{align}
+
+Since $r$ is free to change then the points $p$ and $p'$ together are all points 
+in the rectangle it follows that the center of mass is $(n/2,m/2)$.
+
+\section{Symmetry}
+\textit{Note: Equal distance}
+
+A shape $X \subseteq \mathbb{R}^n$ is symmetric if there is $x \in \mathbb{R}^n$ 
+such that for $S^n$ with center $x$ then for all $p \in S^n \cap X$ there
+is a $P \subseteq S^n \cap X$ and 
+
+\begin{align}
+	(|P|+1)x = p + \sum_{q \in P} q \nonumber
+\end{align}
+
+\begin{align}
+	\exists x \in \mathbb{R}^n:\ \forall p \in S^n \cap X\ \exists P \subseteq 
+	S^n \cap X\ (|P|+1)x = p + \sum_{q \in P} q \nonumber
+\end{align}
+
+\section{Average}
+Let $F$ be a field, then for $B \subseteq F$ the
+\textit{average}, $a$, of $B$ is
+
+\begin{align}
+	a = \frac{1}{|B|}\sum_{b \in B} b
+\end{align}
+
+\newpage
+
+\section{Symmetry 2}
+A symmetry on a set $X$ is a bijective function $s: X \rightarrow X$ such that
+for any operator $*$ on $X$, $s(x * y) = s(x) * s(y)$ and the
+symmetries of $X$ is a set $\mathcal{S}$ containing all such functions $s$. 
+We call the function $s(x)=x$ a \textit{trivial symmetry}, since it always 
+exists and denote it $I$. Further more, since $s$ is bijective there is an $s^{-1}$ 
+for all $s$. We say that that $X$ is has symmetry order of $n$ if there exists
+$s_1,s_2,\dots,s_n$ such that $s_1 \circ s_2 \circ \cdots \circ s_n = I$. 
+
+\section{Symmetry 3}
+A symmetry is a bijective function on a mathematical structure.
+
+\section{Condition for defining the natural numbers}
+$\mathbb{N} \neq \emptyset$ and there must for all $a \in \mathbb{N}$ be a $b \in 
+\mathbb{N}$ such that given an order $\prec$ on $\mathbb{N}$ then $a \prec b$.
+
+\section{Various graph theory definitions}
+\subsection{Graph}
+\textbf{Def}: A graph $G$ is $(V,E)$ where in $V$ is a set whose elements we
+call \textit{vertices's} and $E \subseteq \{\{x,y\}| x,y \in V\} = \binom{V}{2}$ 
+whose elements we call an \textit{edge} and for any $\{x,y\} \in E$ 
+(written $xy \in E$) we say there is an edge between $x$ and $y$. 
+
+\subsection{Graph with movement}
+\textbf{Def}: A graph $G=(V,E,M)$ where $V$ and $E$ are defined as above and 
+$M = \{(x,y)| x,y \in z \in E\}$. That is for all $xy \in E$, $xy, yx \in M$.
+
+We define $i_1(m) = m^1$ and $i_2(m) = m^2$, where $m = (a,b)$, such that 
+$(i_1(m),i_2(m)) = (m^1,m^2) = m$.
+
+Further more we can apply a movement on a vertice follows, let $v \in V$ and
+$m \in M$:
+
+\begin{equation}
+	(|): V \times M \rightarrow V 
+\end{equation}
+\begin{equation}
+	(v|m) = m^2 \Leftrightarrow v = m^1 \nonumber
+\end{equation}
+
+We can compose movements as follows using the operator $+$, let $n,m \in M$
+
+\begin{align}
+	n+m = n^1m^2 \Leftrightarrow n^2 = m^1
+\end{align}
+
+\subsection{Simple graph}
+\textbf{Def}: A graph containing no loops, $\nexists x \in E,\ x = \{y,y\}$, or 
+double edges, $E \subseteq \binom{V}{2}$.
+
+\subsection{Complete graph}
+\textbf{Def}: A complete graph is a graph such that $E = \binom{V}{2}$.
+
+\subsection{Connected graph}
+\textbf{Def}: For any $x,y \in V$ we call them connected if $xy \in E$ or there
+exists $xz \in E$ such that $z$ and $y$ are connected. More precisely
+
+\begin{equation}
+	C: V \times V \rightarrow \{\top,\bot\}
+\end{equation}
+\begin{equation}
+	C(x,y) = xy \in V \lor (\exists z \in V,\ xz \in E \land C(z,y)) \nonumber
+\end{equation}
+
+Then a graph $G$ is connected if for all $x,y \in V$ then $x$ and $y$ are
+connected.
+
+\subsection{Cyclic graph}
+\textbf{Def}: A simple and connected graph where any $v\in V$ is in precisely 2
+elements of $E$.
+\begin{align*}
+	\forall v \in V \exists e,f\in E: v\in e,f \land (v \in g \in E \implies (g
+	=e \lor g = f)) \land e \neq f
+\end{align*}
+
+\section{Logarithm}
+\begin{theorem}
+	\begin{align*}
+		\ln x = \int^x_1 \frac{dt}{t}
+	\end{align*}
+\end{theorem}
+\begin{proof}
+	First note that $e^x$ is bijective. So in fact there exists a function $\ln$
+	such that $\ln e^x = e^{\ln x} = x$ so we may write
+	\begin{align*}
+		e^{\ln x} = x \\
+		D_x e^{\ln x} = D_x x \\
+		x D_x \ln x = 1 \\
+		D_x \ln x = \frac{1}{x}
+	\end{align*}
+	We have that $e^0 = 1$, so $\ln 1 = 0$, therefore
+	\begin{align*}
+		D_x \ln x = \frac{1}{x} \\
+		\ln x = \int^x_1 \frac{dt}{t}
+	\end{align*}
+\end{proof}
+\newpage
+\section{Teknologi noter}
+\begin{enumerate}
+	\item Ulemper med gas lys
+	\begin{enumerate}
+		\item Bruger ilt
+		\item Brandefare
+		\item Dyre
+	\end{enumerate}
+	\item Ulemper med kul lys
+	\begin{enumerate}
+		\item Meget dyrt
+		\item Holder ikke lang tid
+		\item For skarpt lys
+	\end{enumerate}
+\end{enumerate}
+
+\section{List data structure}
+The list data structure $\mathcal{L} = (L,E)$ is defined by the following
+functions
+\begin{align*}
+	&\text{nil}: \emptyset \rightarrow L \\
+	&\text{cons}: E \times L \rightarrow L \\
+	&\text{car}: L \rightarrow E \\
+	&\text{cdr}: L \rightarrow L \\
+\end{align*}
+With the axioms
+\begin{align*}
+	\text{car}(\text{cons}(e,l)) = e \\
+	\text{cdr}(\text{cons}(e,l)) = l
+\end{align*}
+Equality of lists are defined as follows, let $l_1 \in L$ and $l_2 \in L$
+\begin{align*}
+	l_1 \equiv l_2 := \text{car}(l_1) = \text{car}(l_2) \land 
+	\text{cdr}(l_1) \equiv \text{cdr}(l_2)
+\end{align*}
+\end{document}

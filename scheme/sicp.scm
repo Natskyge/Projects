@@ -155,4 +155,172 @@
 
 
 
+; 2.18
+(define (revers lst)
+  (define (rev-iter lst)
+	(if (null? lst)
+	    '()
+		(append (rev-iter (cdr lst)) (list (car lst)))))
+  (rev-iter lst))
 
+; 2.20
+(define (same-parity num . lst)
+  (define parity (modulo num 2))
+  (define (par-iter lst)
+	(cond ((null? lst) 
+		   '())
+		  ((= (modulo (car lst) 2) parity)
+		   (cons (car lst) (par-iter (cdr lst))))
+		  (#t
+		   (par-iter (cdr lst)))))
+  (cons num (par-iter lst)))
+
+(define (prim-map proc items)
+  (if (null? items)
+	  '()
+	  (cons (proc (car items))
+			(prim-map proc (cdr items)))))
+
+(define (square-lst lst)
+  (prim-map (lambda (x) (* x x))
+			lst))
+
+(define (for-eac proc lst)
+  (if (null? lst)
+	  #t
+	  (begin (proc (car lst))
+			 (for-eac proc (cdr lst)))))
+
+(define (deep-revers lst)
+  (revers (prim-map revers lst)))
+
+
+(define (fringe lst)
+  (cond ((null? lst) '())
+		((not (pair? lst)) (list lst))
+		(else
+		  (append (fringe (car lst))
+				  (fringe (cdr lst))))))
+
+(define (make-mobile left right)
+  (list left right))
+
+(define (make-branch len struct)
+  (list len struct))
+
+(define left-branch car)
+(define right-branch cadr)
+(define branch-len car)
+(define branch-struct cadr)
+
+(define test-mobile (make-mobile (make-branch 2 3) 5))
+
+(define (total-weight mobile)
+  (cond ((null? mobile) 0)
+		((not (pair? mobile)) mobile)
+		(else
+		  (+ (total-weight (left-branch mobile))
+			 (total-weight (right-branch mobile))))))
+
+; Combines the elements of a list into one using combine and get-data
+; In order to use the following must be true:
+; 1: There exists a function, conc, such that:
+;      conc(split1(list), split2(list)) = list
+;    and
+;      conc(split2(list), split1(list)) != list
+;
+; 2: combine(arg, get-data(item)) must be defined for item in list, where arg is
+; also compatible.
+;
+; 3: There must be an identity element for combine
+(define (combine-lst split1 split2 combine get-data lst identity)
+  (cond ((null? lst) identity)
+		((not (pair? lst)) (get-data lst))
+		(else
+		  (combine (combine-lst (split1 lst))
+				   (combine-lst (split2 lst))))))
+
+(define (square x) (* x x))
+
+(define (square-tree-dir tree)
+  (cond ((null? tree) '())
+		((not (pair? tree)) (square tree))
+		(else (cons (square-tree-dir (car tree))
+					(square-tree-dir (cdr tree))))))
+
+(define (square-tree tree)
+  (map (lambda (sub-tree)
+		 (cond ((pair? sub-tree)
+				(square-tree sub-tree))
+			   (#t
+				(square sub-tree))))
+	   tree))
+
+(define (tree-map func tree)
+  (map (lambda (sub-tree)
+		 (cond ((pair? sub-tree)
+				(tree-map func sub-tree))
+			   (#t
+				(func sub-tree))))
+	   tree))
+
+; Works because i make a set out of the removed element and those that are left.
+; And since order doesn't matter it means i get all posible combies.
+(define (subset s)
+  (if (null? s)
+	  (list '())
+	  (let ((rest (subset (cdr s))))
+		(append rest 
+				(map (lambda (x) 
+					   (append (list (car s)) x)) 
+					 rest)))))
+
+(define (accumulate op initial sequence)
+  (if (null? sequence)
+	  initial
+	  (op (car sequence)
+		  (accumulate op initial (cdr sequence)))))
+
+(define (mapt p sequence)
+  (accumulate (lambda (x y) (cons (p x) y)) '() sequence))
+
+(define (appendt seq1 seq2)
+  (accumulate cons seq2 seq1))
+
+(define (lengtht sequence)
+  (accumulate (lambda (x y) (+ 1 y)) 0 sequence))
+
+(define (horner-eval x . coeff)
+  (accumulate (lambda (this-coeff higher-terms)
+				(+ this-coeff (* x higher-terms)))
+			  0
+			  coeff))
+
+(define (accumulate-n op init seqs)
+  (if (null? (car seqs))
+	  '()
+	  (cons (accumulate op init (map car seqs))
+			(accumulate-n op init (map cdr seqs)))))
+
+(define (dot-product v w)
+  (accumulate + 0 (map * v w)))
+
+;;(define (matrix-*-vector m v)
+;;  (map ?? m))
+
+;;(define (transpose mat)
+;;  (accumulate-n ?? ?? mat))
+
+;;(define (matrix-*-matrix m n)
+;;  (let ((cols (transpose n)))
+;;	(map ?? m)))
+
+(define (fold-leftt op initial sequence)
+  (define (iter result rest)
+	(if (null? rest)
+	    result
+		(iter (op result (car rest))
+			  (cdr rest))))
+  (iter initial sequence))
+
+;; Fold-left and fold-right will only be equal if op is commutiative

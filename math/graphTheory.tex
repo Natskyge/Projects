@@ -1,0 +1,250 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+%\usepackage[margin=0.5in]{geometry}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem*{observation}{Observation}
+\newtheorem*{example}{Example}
+\newtheorem*{remark}{Remark}
+\newtheorem{definition}[theorem]{Definition} 
+
+\title{Movement on graphs}
+\author{Erik. S. Gimsing}
+\date{January 2018}
+
+\begin{document}
+\maketitle
+\section{Abstract}
+\section{Graphs}
+The object of study in this paper is a graph. For this reason a small write up
+on the necessary definitions are included. If one is already familiar it is not
+imperative to read this section.
+\subsection{Definitions}
+Two sorts of graphs are considered in this paper. \textit{Graphs} and
+\textit{digraphs}. The definition of these two follows.
+\begin{definition}[Graph]\label{def graph}
+	A graph is an ordered pair $G = (V,E)$ such that
+	\begin{itemize}
+		\item $V$ is a set, called the \textbf{vertex set}
+		\item $E$ is a set of 2-element subset of $V$, called the \textbf{edge 
+			set}. That is: 
+			
+			$E \subseteq \{\{u,v\}:u,v \in V\}$.
+	\end{itemize}
+	Then the elements of $V$ are called \textbf{vertices}, and the
+	elements of $E$ are called \textbf{edges}. We call $G$ a \textbf{complete 
+	graph} if for all $u,v\in V$ then $\{u,v\} \in E$.
+\end{definition}
+\begin{definition}[Digraph]\label{def digraph}
+	A digraph is an ordered pair $D = (V,E)$ such that
+	\begin{itemize}
+		\item $V$ is a set, called the \textit{vertex set}
+		\item $E$ is a set of ordered pair elements of $V^2$, called the 
+			\textit{edge set}. That is $E \subseteq V^2$ with the property that
+			$\forall v \in V: (v,v) \notin E$.
+	\end{itemize}
+	The terminology of a normal graph apply to digraphs, except that the
+	elements of $E$ are called \textbf{arcs} instead. A digraph $D$ is called a
+	\textbf{symmetric digraph} if $(u,v) \in V$ implies that $(v,u) \in V$. We
+	call $D$ a \textbf{simple digraph} if $(u,v)\in V$ implies that $(v,u)
+	\notin V$.
+\end{definition}
+\begin{definition}[Notation]\label{def notation}
+	From this point $(a,b)$ will be abreviated to $ab$ if it is a
+	move. Further more let
+	\begin{equation}
+	\begin{aligned}
+		\pi_1(p) &= \bigcup \bigcap p \\
+		\pi_2(p) &= \bigcup \{x \in \bigcup p: \bigcup p \neq
+		\bigcap p \implies x \notin \bigcap p\} \\
+	\end{aligned}
+	\end{equation}
+	That is $\pi_1$ is the first coordinate of $p$ and $\pi_2$ the second
+\end{definition}
+\section{Movement on graphs}
+\subsection{Definitions}
+I will be defining movement on graphs separately. However, as will be shown, 
+graph movement is the same as movement on a symmetric digraph.
+\begin{definition}[Movement on graph]\label{def graph movement}
+	Movement on a graph is an ordered pair $\mathcal{M} = (M,+)$, where
+	$+:M\times M \rightarrow M$, and the properties
+	\begin{itemize}
+		\item $M \subseteq V^2$ is a \textbf{movement set} with the property
+			that $uv \in M$ iff $\{u,v\} \in E$. Additionally for
+			all $v \in V$, $vv\in M$.
+		\item Equality of moves is set equality.
+		\item For any $a,b\in M$ let $a+b = \pi_1(a)\pi_2(b)$ iff
+			$\pi_2(a) = \pi_1(b)$.
+	\end{itemize}
+	Then we call $G_M=(V,E,\mathcal{M})$ a graph with movement.
+\end{definition}
+\begin{definition}[Movement on digraph]\label{def digraph movement}
+	Movement on a digraph is an ordered pair $\mathcal{M} = (M,+)$, where
+	$+:M\times M \rightarrow M$, and the properties
+	\begin{itemize}
+		\item $M \subseteq V^2$ is a \textbf{movement set} with the property
+			that for all $(u,v) \in E$ we have $uv \in M$. Additionally for
+			all $v \in V$, $vv\in M$.
+		\item Equality and composition defined as above.
+	\end{itemize}
+	Then we call $D_M=(V,E,\mathcal{M})$ a digraph with movement.
+\end{definition}
+\begin{definition}[Applying move to vertices]\label{def apply movement}
+	Let $f: M \times V \rightarrow V$ such that 
+	\begin{equation}
+	\begin{aligned}
+		f(m,v) = \pi_2(m) \Leftrightarrow \pi_1(m) = v
+	\end{aligned}
+	\end{equation}
+	This will be abbreviated to $m[v]$ going forward.
+\end{definition}
+\newpage
+\subsection{Results}
+\begin{proposition}[Graph movement is symmetric digraph movement]\label{prop1}
+	Let $G_M=(V_0,E_0,\mathcal{M}_0)$ be a graph with movement. Then
+	there exists a digraph $D_M = (V_1,E_1,\mathcal{M}_1)$ with
+	movement such that $D_M$ is symmetric iff $\mathcal{M}_0 =
+	\mathcal{M}_1$.
+\end{proposition}
+\begin{proof}
+	\textbf{Necessary condition}
+
+	Let $V_1 = V_0$. Let $(u,v),(v,u) \in E_1$ for all $\{u,v\} \in
+	E_0$. Then since $(u,v) \in E_1$ implies $(v,u)\in E_1$,
+	then per Definition~\ref{def digraph}, $D_M$ is symmetric.
+	Next consider $\mathcal{M}_1 = (M_1,+_1)$. By Definition~\ref{def
+	digraph movement} equality and composition is identical. Since
+	$V_1 = V_0$ we have that, by Definition~\ref{def graph movement}
+	and~\ref{def digraph movement}, that if $vv\in M_0$ then $vv\in
+	M_1$. Next let $uv \in M_0$, then $\{u,v\} \in V_0$. Therefore
+	by the definition $E_1$ and Definition~\ref{def digraph movement}
+	$uv \in M_1$. So $\mathcal{M}_0 = \mathcal{M}_1$
+	
+	\textbf{Sufficient condition}
+
+	Assume that $\mathcal{M}_0 = \mathcal{M}_1$. Then $uv \in M_0$
+	iff $uv \in M_1$. By Definition~\ref{def graph movement} we have
+	$\{u,v\} \in E_0$. Since $\{u,v\} = \{v,u\}$ we have $vu \in M_0$
+	and thus $vu \in M_1$. So therefore $uv \in M_1$ implies that
+	$vu \in M_1$. By Definition~\ref{def digraph} $D_M$ is symmetric.
+\end{proof}
+\begin{proposition}[Composition is partial mapping]\label{prop2}
+	Let $\mathcal{M} = (M,+)$ be a movement structure. Let $x,y \in M$, then if
+	for some $z,z' \in M$ we have $x+y=z$ and $x+y=z'$ then $z=z'$.
+\end{proposition}
+\begin{proof}
+	By Definition~\ref{def graph movement} the equivalence relation on
+	$M$ is set equality we have that $=$ is transitive and symmetric
+	so therefore $x+y=z$ and $x+y=z'$ implies $z=z'$.
+\end{proof}
+\begin{proposition}[Composition is assosiative]\label{prop3}
+	Let $\mathcal{M} = (M,+)$ be a movement structure. Then for all $x,y,z \in
+	M$, $x+(y+z) = (x+y)+z$ if $\pi_2(x)= \pi_1(y)$ and $\pi_2(y)= \pi_1(z)$,
+	that is if $x+y$ and $y+z$ is defined.
+\end{proposition}
+\begin{proof}
+	For the left side we write
+	\begin{equation}
+	\begin{aligned}
+		x+(y+z) &= x+\pi_1(y)\pi_2(z) && \text{Definition~\ref{def graph
+		movement} and $\pi_2(y)= \pi_1(z)$} \\
+		&= \pi_1(x)\pi_2(z) && \text{Definition~\ref{def graph
+		movement} and $\pi_2(x) = \pi_1(y)$} 
+	\end{aligned}
+	\end{equation}
+	For the right side we write
+	\begin{equation}
+	\begin{aligned}
+		(x+y)+z &= \pi_1(x)\pi_2(y)+z && \text{Definition~\ref{def graph
+		movement} and $\pi_2(x)= \pi_1(y)$} \\
+		&= \pi_1(x)\pi_2(z) && \text{Definition~\ref{def graph
+		movement} and $\pi_2(y)= \pi_1(z)$}
+	\end{aligned}
+	\end{equation}
+	By Definition~\ref{def graph movement} equality of moves is
+	set equality.  Therefore $=$ is symmetric and transitive which
+	implies that $x+(y+z)=(x+y)+z$
+\end{proof}
+\begin{proposition}[Composition has left and right 
+	per element identity]\label{prop4}
+	Let $\mathcal{M} = (M,+)$ be a movement structure. Then for all $x \in M$
+	there exists $e_l\in M$ and $e_r\in M$ such that $e_l+x=a$ and $x+e_r = a$.
+\end{proposition}
+\begin{proof}
+	Let $e_l = \pi_1(x)\pi_1(x)$. Then $e_l \in M$ since by Definition~\ref{def
+	graph movement} $vv\in M$ for all $v\in V$. So we have
+	\begin{equation}
+	\begin{aligned}
+		e_l+x &= \pi_1(x)\pi_2(x) && \text{Definition~\ref{def graph
+		movement} and $\pi_2(e_l)= \pi_1(x)$} \\
+		&= x && \text{Definition~\ref{def notation}}
+	\end{aligned}
+	\end{equation}
+	Next let $e_r=\pi_2(x)\pi_2(x)$. Like $e_l$, $e_r \in M$. So we have
+	\begin{equation}
+	\begin{aligned}
+		x+e_r &= \pi_1(x)\pi_2(x) && \text{Definition~\ref{def graph
+		movement} and $\pi_2(x)= \pi_1(e_r)$} \\
+		&= x && \text{Definition~\ref{def notation}}
+	\end{aligned}
+	\end{equation}
+\end{proof}
+\begin{proposition}[Graph has inverse element]\label{prop5}
+	Let $G_M =(V,E,\mathcal{M})$ be a graph with movement. Then for all $x \in
+	M$ there exists $-x \in M$ such that $x+(-x) = e_l$ and $(-x)+x = e_r$
+\end{proposition}
+\begin{proof}
+	We have that $x \in M$. So by Definition~\ref{def graph movement}
+	and~\ref{def notation}, which since $G_M$ is a graph implies that
+	$\pi_2(x)\pi_1(x) \in M$ (See Proposition~\ref{prop1}). Let $-x =
+	\pi_2(x)\pi_1(x)$, then
+	\begin{equation}
+	\begin{aligned}
+		x+(-x) &= \pi_1(x)\pi_2(-x) && \text{Definition~\ref{def graph
+		movement} and $\pi_2(x)= \pi_1(-x)$} \\
+		&= \pi_1(x)\pi_1(x) && \text{$\pi_2(-x)= \pi_1(x)$} \\
+		&= e_l && \text{Proposition~\ref{prop5}} \\
+	\end{aligned}
+	\end{equation}
+	And for the left side
+	\begin{equation}
+	\begin{aligned}
+		(-x)+x &= \pi_1(-x)\pi_2(x) && \text{Definition~\ref{def graph
+		movement} and $\pi_2(-x)= \pi_1(x)$} \\
+		&= \pi_2(x)\pi_2(x) && \text{$\pi_2(x)= \pi_1(-x)$} \\
+		&= e_r && \text{Proposition~\ref{prop5}} \\
+	\end{aligned}
+	\end{equation}
+\end{proof}
+\begin{proposition}[Complete graph has closure]\label{prop6}
+	Let $G_M =(V,E,\mathcal{M})$ be a complete graph with movement. Then for all
+	$x,y \in M$, $x+y \in M$ if $x+y$ is defined.
+\end{proposition}
+\begin{proof}
+	By Definition~\ref{def graph movement}, $\{\pi_1(x),\pi_2(x)\} \in E$ and
+	$\{\pi_1(y),\pi_2(y)\} \in E$. Therefore by Definition~\ref{def graph} we
+	have $\pi_1(x)\in V$ and $\pi_2(y) \in V$. By the definition of a complete
+	graph (See Definition~\ref{def graph}) we have $\{\pi_1(x),\pi_2(y)\} \in
+	E$. By Definition~\ref{def graph movement}, $\pi_1(x)\pi_2(y) \in M$. Since
+	$x+y$ is defined $x+y=\pi_1(x)\pi_2(y)$ which means that $x+y\in M$.
+\end{proof}
+\begin{corollary}[Complete graph movement is group-like]\label{cor1}
+	Let $G_M=(V,E,\mathcal{M})$ be a complete graph with movement. 
+	By Proposition~\ref{prop6}, $\mathcal{M}$ has closure. By Proposition~\ref{prop3},
+	$\mathcal{M}$ is associative. By Proposition~\ref{prop4}, $\mathcal{M}$ has
+	element wise left and right identity. By Proposition~\ref{prop5},
+	$\mathcal{M}$ has inverse.
+\end{corollary}
+\subsection{Applications}
+\section{Conclusion}
+\end{document}

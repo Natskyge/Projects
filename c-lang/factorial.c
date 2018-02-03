@@ -3,16 +3,18 @@
 int
 factorial(int n)
 {
-	int prod = 1;
-	for (int i = 1; i <= n; i++)
-		prod = prod * i;
+	static int a = 1;
 
-	return prod;
+	if (n == 0)
+		return a;
+
+	a *= n;
+	factorial(n-1);
 }
 
 int
 main(void)
 {
 	printf("%d\n", factorial(6));
-	return 1;
+	return 0;
 }

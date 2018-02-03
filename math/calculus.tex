@@ -1,0 +1,707 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+%\usepackage[margin=0.5in]{geometry}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\title{Calculus}
+\author{eriksgimsing }
+\date{September 2017}
+
+\begin{document}
+\maketitle
+\section{Limits}
+We adopt the following definition of a \textit{limit}. Let $f: I
+\rightarrow \mathbb{R}$ where $I \subseteq \mathbb{R}$ is an open set,
+$x,a \in I$ and $\delta,\varepsilon \in \mathbb{R}$
+\begin{align*}
+    \lim_{x \rightarrow a} f(x) = l &:= \forall \varepsilon > 0 \exists
+    \delta > 0:\  0 < |x-a| < \delta \implies |f(x)-l| < \varepsilon \\
+\end{align*}  
+In order to use this definition more easily we will first prove a few
+inequalities.
+\begin{theorem}
+Let all the following variables be real numbers, then the following is true
+\begin{align*}
+    \left(|x-y| < \frac{\varepsilon}{2} \land |x_0-y_0| <
+    \frac{\varepsilon}{2}\right)
+        &\implies |(x+x_0)-(y+y_0)| < \varepsilon \\
+    \left(|x-y| < \min \left(1, \frac{\varepsilon}{2(|y_0|+1)} \right)
+    \land |x_0-y_0| < \frac{\varepsilon}{2(|y|+1)}\right)
+        &\implies |xx_0-yy_0| < \varepsilon \\
+    \left(|x-y| < \min \left( \frac{|y|}{2},
+    \frac{\varepsilon|y|^2}{2}\right) \land y \neq 0 \right)
+        &\implies x \neq 0 \land \left| \frac{1}{x} - \frac{1}{y}\right|
+        < \varepsilon
+\end{align*}
+\end{theorem}
+\begin{proof}
+\textbf{Part 1:}
+\begin{align*}
+        |(x+x_0)-(y+y_0)| &= |(x-y)+(x_0-y_0)| \\
+                      &\leq |x-y|+|x_0-y_0| \\ &<
+                      \frac{\varepsilon}{2}+\frac{\varepsilon}{2}
+                      = \varepsilon
+\end{align*}
+
+\textbf{Part 2:}
+\begin{align*}
+    &|x| - |y| \leq |x-y| < 1  \\
+    &\implies |x| < |y|+1 
+\end{align*}
+\begin{align*}
+    |xx_0-yy_0| &= |x(x_0-y_0)+y_0(x-y)| \\
+                &\leq |x||x_0-y_0| + |y_0||x-y| \\ 
+				&< (|y|+1)\frac{\varepsilon}{2(|y|+1)} +
+                |y_0|\frac{\varepsilon}{2(|y_0|+1)} \\ 
+				&< \frac{\varepsilon}{2} + \frac{\varepsilon}{2} 
+				= \varepsilon
+\end{align*}
+\textbf{Part 3:}
+\begin{align*}
+    &|y|-|x| \leq |x-y| < \frac{|y|}{2} \\
+    &\implies \frac{|y|}{2} < |x| \land x \neq 0 \\
+    &\implies \frac{1}{|x|} < \frac{2}{|y|}
+\end{align*}
+\begin{align}
+    \left| \frac{1}{x} - 
+	\frac{1}{y}\right| &= \frac{|x-y|}{|xy|} \\
+                       &< \frac{2|x-y|}{|y|^2}\\
+                       &< \frac{2}{|y|^2} \frac{\varepsilon |y|^2}{2}
+					   = \varepsilon
+\end{align}
+\end{proof}
+\begin{theorem}
+Let
+\begin{align*}
+    \lim_{x \rightarrow a} f(x) = l \land \lim_{x \rightarrow a} g(x) = m
+\end{align*}
+Then
+\begin{align*}
+	\lim_{x \rightarrow a} f(x) + g(x) &= l + m \\
+	\lim_{x \rightarrow a} f(x)g(x) &= lm \\
+	l \neq 0 \implies \lim_{x \rightarrow a} \frac{1}{f(x)} &= \frac{1}{l} \\
+\end{align*}
+\end{theorem}
+\begin{proof}
+\textbf{Part 1:} We have that for some $\delta_1$ and $\delta_2$ 
+\begin{align*}
+    0<|x-a|<\delta_1 \implies |f(x)-l| < \varepsilon_1 \\
+    0<|x-a|<\delta_2 \implies |g(x)-l| < \varepsilon_2
+\end{align*}
+Choose $\delta_1$ and $\delta_2$ such that
+\begin{align*}
+    |f(x)-l| < \frac{\varepsilon}{2} \\
+    |g(x)-l| < \frac{\varepsilon}{2}
+\end{align*}
+And let $\delta = \min(\delta_1, \delta_2)$, then by Theorem 1.1
+\begin{align*}
+    0 <|x-a| < \delta \implies |(f(x)+g(x))-(l+m)|< \varepsilon
+\end{align*}
+And therefore
+\begin{align*}
+    \lim_{x \rightarrow a} f(x) + g(x) = l + m
+\end{align*}
+\textbf{Part 2:} Like above choose $\delta_1$ and $\delta_2$ such that
+\begin{align*}
+    |f(x)-l| &< \min \left(1, \frac{\varepsilon}{2(|m|+1)} \right) \\
+    |g(x)-m| &< \frac{\varepsilon}{2(|l|+1)}
+\end{align*}
+And let $\delta = \min(\delta_1, \delta_2)$, then by Theorem 1.1
+\begin{align*}
+    0 <|x-a| < \delta \implies |f(x)g(x)-lm|< \varepsilon
+\end{align*}
+Thus
+\begin{align*}
+    \lim_{x \rightarrow a} f(x) g(x) = l m
+\end{align*}
+\textbf{Part 3:} By assumption, $l \neq 0$. Choose $\delta$ such that
+\begin{align*}
+    |f(x)-l| < \min \left( \frac{|y|}{2}, \frac{\varepsilon|l|^2}{2}\right)
+\end{align*}
+So by Theorem 1.1 $f(x) \neq 0$ and 
+\begin{align*}
+    0<|x-a|<\delta \implies \left|\frac{1}{f(x)}-\frac{1}{l}\right| < \varepsilon
+\end{align*}
+\end{proof}
+\begin{theorem}
+\begin{align*}
+    \lim_{x \rightarrow a} f(x) = l \land \lim_{x \rightarrow a} f(x) = m
+    \implies l = m
+\end{align*}
+\end{theorem}
+\begin{proof}
+Assume $l \neq m$ We have that the limit exists, so let let $\varepsilon
+= \frac{|l-m|}{2}$
+\begin{align*}
+    |l-m| &= |(f(x)-f(x))-(l-m)| \\
+          &= |(l-f(x))+(f(x)-m)| \\
+          &\leq |f(x)-l|+|f(x)-m|
+          < 2\varepsilon
+\end{align*}
+Which is a contradiction, so our assumption that $l \neq m$ is wrong
+and therefore $l = m$.
+\end{proof}
+
+\begin{theorem}
+	Let $I \subseteq \mathbb{R}$ be an open set. Given functions $f: I
+	\rightarrow \mathbb{R}$ and $g: I \rightarrow \mathbb{R}$ if $f(x)=g(x)$ for
+	$a \neq x$, then for $a \in I$
+	\[\lim_{x \rightarrow a} f(x) = l \implies \lim_{x \rightarrow a} g(x) = l\]
+\end{theorem}
+\begin{proof}
+We have that
+\begin{align*}
+	\forall \varepsilon > 0 \exists \delta > 0: 0<|x-a|<\delta 
+	\implies |f(x)-l| < \varepsilon
+\end{align*}
+In particular $x \neq a$, since $0<|x-a|$. Thus $f(x)=g(x)$, which means
+\begin{align*}
+	\lim_{x \rightarrow a} f(x) = \lim_{x \rightarrow a} g(x) = l
+\end{align*}
+
+\end{proof}
+
+\section{Continuity}
+Let $I \subseteq \mathbb{R}$ be open, $f: I \rightarrow \mathbb{R}$ and 
+$a \in I$. Then we say $f$ is continues at $a$ if
+\begin{align}
+	\lim_{x \rightarrow a} f(x)=f(a)
+\end{align}
+We say that $f$ is continues on $I$ if the above holds for all $a \in I$.
+Further more, $f$ is continues on $[\alpha,\beta]$ if for all 
+$\alpha < c < \beta$ $f$ is continues at $c$ and
+\begin{align}
+	\lim_{x \rightarrow \alpha^-} f(x)=f(\alpha) \land 
+	\lim_{x \rightarrow \beta^+} f(x)=f(\beta)
+\end{align}
+
+\section{Boundedness}
+\subsection{Definition of boundedness}
+Let $A \subseteq \mathbb{R}$, we say that $A$ is \textit{bounded above} if there
+exists some $b \in \mathbb{R}$ such that for all $a \in A$, $a \leq b$. That is
+\begin{align*}
+	\exists b \in \mathbb{R}: \forall a \in A: a \leq b
+\end{align*}
+$A$ is \textit{bounded below} if there is some $c \in \mathbb{R}$ such that $c
+\leq a$. That is
+\begin{align*}
+	\exists c \in \mathbb{R}: \forall a \in A: c \leq a
+\end{align*}
+\subsection{Infimum and supremum}
+Let $A$ be defined as above. We say $A$ has a supremum (also called least upper
+bound), written $\sup A$ if there is an upper bound $c$ with the property that 
+for all upper bounds $a$, $c\leq a$. Infimum (also called greatest lower bound),
+written $\inf A$ is an lower bounded $b$ such that for all lower bounds 
+$d$, $d \leq b$.
+\subsection{Dedekind completeness of the reals}
+$\mathbb{R}$ is dedkind complete, that is for any $A \subseteq \mathbb{R}$ that
+is bounded above $\sup A$ exists.
+
+\begin{theorem}
+	Let $A \neq \emptyset$ be a bounded set of real numbers. Then $\alpha = \sup
+	A$ iff $\alpha$ is an upper bound and
+\begin{align*}
+	\forall \varepsilon \in \mathbb{R}_{>0}: \exists a \in A: |\alpha-a| <
+	\varepsilon
+\end{align*}
+\end{theorem}
+\begin{proof}
+	Assume the usual definition, if $\alpha \in A$ then we are done. So assume
+	$\alpha \notin A$. Aiming for contradiction, assume that it is not possible 
+	for all $\varepsilon$. Then there is $\varepsilon$ such that
+	for all $b \in [\alpha-\varepsilon,\alpha]$, $b$ is not in $A$.
+	But then $b$ is an upper bound of $A$ and $b \leq \alpha$ meaning that $b$
+	is the supremum, contradicting our assumption about $\alpha$.
+
+	Assume next the other definition, again if $\alpha \in A$ we are done. Again
+	aiming for contradiction assume $\alpha \neq \sup A$. Then $\sup A <
+	\alpha$ and for any $b  \in (\sup A, \alpha] \implies b \notin A$,
+	contradicting our assumption about $\alpha$.
+\end{proof}
+
+\begin{theorem}
+	Suppose $A \neq \emptyset$ is bounded below. Let $-A = \{-x|x\in A\}$. Then
+	$-A \neq \emptyset$, $-A$ is bounded above and $-\sup(-A) = \inf A$.
+\end{theorem}
+\begin{proof}
+	Since $A \neq \emptyset$ there is some $a \in A$ so by the definition of
+	$-A$ we have $-a \in -A$. Let $c$ be an lower bound of $A$ then for $x \in
+	A$ we have
+	\begin{align*}
+		c \leq x \implies -x \leq -c
+	\end{align*}
+	So $-A$ is bounded above by $-c$. Since $\mathbb{R}$ is dedekind-complete
+	$-A$ has a $\sup(-A)$, that is for all upper bounds $b$
+	\begin{align*}
+		b \leq \sup(-A) \implies -\sup(-A) \leq -b
+	\end{align*}
+	But that is the defintion of a largest lower bound so $\inf A = -\sup(-A)$.
+\end{proof}
+\begin{theorem}
+	Let $A \neq \emptyset$ be bounded below and let $B$ a set of lower bounds of
+	$A$. Then $B \neq \emptyset$, $B$ is bounded above and $\sup B = \inf
+	A$.
+\end{theorem}
+\begin{proof}
+	First note that since $A \neq \emptyset$ is bounded below, and therefore $B
+	\neq \emptyset$. Let $a \in A$ and $b \in B$, then by definition
+	\begin{align*}
+		b \leq a
+	\end{align*}
+	But that is the definition of an upper bound, so $B$ is bounded above and
+	therefore $\sup B$ exists. Thus
+	\begin{align*}
+		b \leq \sup B \leq a
+	\end{align*}
+	But that is the definition of $\inf A$, so we have $\sup B = \inf A$.
+\end{proof}
+\begin{theorem}
+	Let $f: [a,b] \rightarrow \mathbb{R}$ such that $f(a) < 0 < f(b)$. Then
+	there is $x \in [a,b]$ such that $f(x)=0$ and for all $y \in [a,b]$ such
+	that $f(y)=0$ we have $y \leq x$.
+\end{theorem}
+\begin{proof}
+	Let $g(x) = f(-x)$, then $g: [-b,-a] \rightarrow \mathbb{R}$,
+	and define that set $A$ as follows
+	\begin{align*}
+		A = \{x|-b \leq x \leq -a \land \forall y \in [-b,x]: f(y)<0\}
+	\end{align*}
+	Then by theorem 7-1 in Spivak calculus there is a number $\alpha \in A$ such
+	that $g(\alpha)=0$ and for all $\beta \in A$ with $g(\beta) = 0$
+	\begin{align*}
+		\alpha &\leq \beta \\
+		-\beta &\leq -\alpha
+	\end{align*}
+	But then $-\alpha,-\beta \in [a,b]$ and by the definition of $g$
+	\begin{align*}
+		g(\alpha) = f(-\alpha) = 0
+	\end{align*}
+	So $-\alpha$ is the largest number in $[a,b]$ with $f$ equal to zero.
+\end{proof}
+\begin{theorem}
+	If $A = \{x: x < a\}$, then for all $x \in A$ there is $0<\delta_0$ such 
+	that for $x_0$ with $|x_0 - x| < \delta_0$, $x_0 \in A$. Further more, for 
+	$a < y$ there is $\delta_1$ such that for $x_1$ with $|x_1-y| < \delta_1$,
+	$x_1 \notin A$.
+\end{theorem}
+\begin{proof}
+	If $x_0 \leq x < a$ we are done. Therefore, assume $x < x_0$ and let 
+	$\delta_0 = a-x$ which is positive since $x < a$, then since $x < x_0$ we
+	have $|x_0-x| = x_0-x$, so
+	\begin{align*}
+		x_0-x<a-x \implies x_0 < a
+	\end{align*}
+	For the second part, because $a < y$, $y \notin A$. So if $y \leq x_1$ we
+	are done. Assume $x_1 < y$, and let $\delta_1 = y-a$, then $|x_1-y| =
+	y-x_1$, then
+	\begin{align*}
+		y-x_1<y-a \implies -x_1 < -a \implies a < x_1
+\end{align*}
+\end{proof}
+\begin{theorem}
+	Let $f: [a,b] \rightarrow \mathbb{R}$ be an continues function such that
+	$f(a) < 0 < f(b)$, then there is $\alpha \in [a,b]$ such that $f(\alpha) =
+	0$
+\end{theorem}
+\begin{proof}
+	Consider the set $B = \{x:a \leq x \leq b \land f(x) < 0\}$. First note that
+	$B \neq \emptyset$, since $f(a) < 0$. Next note that $B$ is bounded above by
+	$b$. Let $\alpha = \sup B$, aiming for contradiction assume $f(\alpha)
+	\neq 0$. First consider $f(\alpha) < 0$, then $\alpha \in B$. Then by the
+	above theorem there is $0 < \delta$ such that for $x_0\in B$ if $\alpha 
+	< x_0 < \alpha + \delta$ contradicting $\alpha$ being an upper bound.
+	Consider next $0 < f(\alpha)$, meaning $\alpha \notin B$. Then by the above 
+	theorem there is $\delta$ with $x_1 \notin B$ if $\alpha - \delta < x_1 < 
+	\alpha$, but then $0 < x_1 < \alpha$ contradicting $\alpha$ being the least 
+	upper bound. So we are forced to conclude that $f(\alpha) = 0$.
+\end{proof}
+\begin{theorem}
+	Let $f: [a,b] \rightarrow \mathbb{R}$ be an continues function such that
+	$f(a) < c < f(b)$, then there is $\alpha \in [a,b]$ such that $f(\alpha) =
+	0$
+\end{theorem}
+\begin{proof}
+	Let $g: [a,b] \rightarrow \mathbb{R}$ be defined by $g(x) = f(x)-c$. Note
+	that $g$ is continues on $[a,b]$ since $f$ is. 
+	\begin{align*}
+		f(a) <&\ c < f(b) \\
+			f(a) - c <&\ 0 < f(b) - c \\
+			g(a) <&\ 0 < g(b)
+	\end{align*}
+	By theorem 3.5, there is $x \in [a,b]$ with $g(x)=0$, thus $f(x)=c$.
+\end{proof}
+\begin{theorem}
+	For all $x,y \in \mathbb{R}$ where $x < y$ there is $q \in \mathbb{Q}$ such
+	that $x < q < y$.
+\end{theorem}
+\begin{proof}
+	We have $x < y$, so $0 < y -x$ which means there is $q \in \mathbb{N}$ such
+	that 
+	\begin{align*}
+		\frac{1}{q} < y -x \\
+		1 < qy - qx \\
+	\end{align*}
+	Consider now the interval $[qx,qy]$. This interval is non empty, and by
+	the above in inequality, $0 \leq qy-z<1$ implies $z \in [qx,qy]$. Let $S = 
+	\{n:n \leq qy\} \subseteq \mathbb{Z}$. By the arcemidian property, $S$ is
+	bounded above and therefore admits a $p = \sup S$. Then $p+1 \notin S$,
+	meaning $qy < p+1$, so we have $p \leq qy < p+1$, which yields $0 \leq qy-p
+	< 1$. Therefore $p\in [qx,qy]$, so we may write
+	\begin{align*}
+		qx <&\ p < qy \\
+		x <&\ \frac{p}{q} < y
+	\end{align*}
+	The definition of $\mathbb{Q}$ implies that $\frac{p}{q} \in \mathbb{Q}$,
+	which completes the proof.
+\end{proof}
+\begin{theorem}
+	Let $r<s$ for $r,s \in \mathbb{Q}$. Then there is $x\in \mathbb{R} \land x
+	\notin \mathbb{Q}$ such that $r<x<s$.
+\end{theorem}
+\begin{proof}
+	First note that there is infact an irrational number $i$ between 0 and 1, 
+	for example $1/\sqrt{2}$. For any given integers $k\neq n$, their
+	difference is at at least 1. So without loss of generality let $k<n$, then
+	\begin{align*}
+		k < i+k < k+1 \leq n
+	\end{align*}
+	Let $\frac{a}{c}< \frac{b}{d}$ be rational numbers, then $a < \frac{bc}{d}$ 
+	and therefore $ad < bc$. Since $ad,bc \in \mathbb{Z}$ we can write 
+	$ad < x < bc$ for irrational $x$. 
+	\begin{align*}
+		a < \frac{x}{d} < \frac{bc}{d} \\
+		\frac{a}{c} < \frac{x}{cd} < \frac{b}{d}
+	\end{align*}
+	Since $\frac{x}{cd}$ is irrational, this completes the proof.
+\end{proof}
+\begin{theorem}
+	Let $x<y$. Then there is an irrational number between $x$ and $y$.
+\end{theorem}
+\begin{proof}
+	There is $r \in \mathbb{Q}$ such that $x<r<y$. There is also $s\in
+	\mathbb{Q}$ such that $x<s<r<y$. Therefore there is irational $i$ between
+	$s$ and $r$. So $x<i<y$.
+\end{proof}
+\subsection{Dense in the reals}
+A set $A$ is said to be dense in $\mathbb{R}$ if all $(a,b) \subseteq
+\mathbb{R}$ contains element of $A$. That is 
+\begin{align*}
+	A \text{ is dense in } \mathbb{R} := \forall (x,y) \subseteq \mathbb{R}:
+	\exists a \in A: a \in (x,y)
+\end{align*}
+\begin{theorem}
+	Let $f: \mathbb{R} \rightarrow \mathbb{R}$ be a continues function such that
+	for all $a$ in dense set $A$ then $f(a)=0$. Then $f$ is 0 for all $x$ in
+	$\mathbb{R}$.
+\end{theorem}
+\begin{proof}
+	Aiming for contradiction, assume that $f$ is not 0 for all x. Then for some
+	$b$ not in $A$ the value of $f$ is non zero. Then by the continuity of $f$ 
+	we must have $\lim_{x \rightarrow b} f(x) = f(b)$. However there is no $0 <
+	\delta$ such that for $|x-b| < \delta$ implies $|f(x)-f(b)|<|f(b)|$ since
+	$A$ is dense and therefore some $x \in (b-\delta,b+\delta)$ is in $A$,
+	meaning that for such $x$ we have $|f(x)-f(b)| = |f(b)| < |f(b)|$.
+\end{proof}
+\begin{theorem}
+	Let $f: \mathbb{R} \rightarrow \mathbb{R}$ and $g: \mathbb{R} \rightarrow 
+	\mathbb{R}$ be continues functions such that
+	for all $a$ in dense set $A$ then $f(a)=g(a)$. Then $f(x)=g(x)$ for all $x$ 
+	in $\mathbb{R}$.
+\end{theorem}
+\begin{proof}
+	Let $h(x) = f(x)-g(x)$, then $h$ is continues and for all $a \in A: h(a) 
+	= 0$. By the above theorem, $h(x)=0$ for all $x \in \mathbb{R}$. It follows
+	that $f(x)=g(x)$ for all $x$.
+\end{proof}
+\begin{theorem}
+	Let $f: \mathbb{R} \rightarrow \mathbb{R}$ and $g: \mathbb{R} \rightarrow 
+	\mathbb{R}$ be continues functions such that
+	for all $a$ in dense set $A$ then $f(a) \leq g(a)$. Then $f(x) \leq g(x)$ 
+	for all $x$ in $\mathbb{R}$.
+\end{theorem}
+\begin{proof}
+	Assume for contradiction that there exists $b \in \mathbb{R}$ such that
+	$f(b)>g(b)$. Let $h(x)=g(x)-f(x)$, then this function is continues, implying
+	that
+	\begin{align}
+		\lim_{x \rightarrow b} h(x) = h(b)
+	\end{align}
+	However this is not possible, since for every $\delta \in
+	\mathbb{R}_{>0}$ there is $a \in [b-\delta,b+\delta]$ such that $a \in A$,
+	meaning that for such $a$ we have $0 \leq h(a)$, meaning that for such $b$
+	we have $|h(b)-h(a)|$ as a lower bound on $\varepsilon \in \mathbb{R}_{>0}$.
+	Thus by contradiction, $f(x) \leq g(x)$.
+\end{proof}
+\begin{theorem}
+	Let $f: \mathbb{R} \rightarrow \mathbb{R}$ be continues and have the
+	property $f(x+y) = f(x) + f(y)$ for all $x,y \in \mathbb{R}$. Then there is
+	$c \in \mathbb{R}$ such that $f(x)=cx$ for all $x$.
+\end{theorem}
+\begin{proof}
+	First note that $f(x)=f(x)+f(0)\implies f(0)=0$. Next $f(n)+f(-n) = 0
+	\implies f(-n) = - f(n)$. Let $c = f(1)$, then assume $f(k) = ck$. We add
+	$f(1)$ which yields $f(k+1) = c(k+1)$. Next note that $f(1x) = 1 f(x)$,
+	assume $f(mx) = m f(x)$. Then adding $f(x)$ yields $f((m+1)x) = (m+1)f(x)$.
+	So let $q \in \mathbb{N}_{>0}$, then $qf(\frac{1}{q}) = c \implies
+	f(\frac{1}{q}) = \frac{c}{q}$. Therefore for all $r \in \mathbb{Q}$ we have
+	$f(r)=cr$. Then by \textbf{Theorem 3.12} we have $f(x)=cx$.
+\end{proof}
+
+\section{Various fundamental results of derivatives}
+
+\textbf{Def:} 
+
+Let $I \subseteq \mathbb{R}$ be an open set and $x \in I$. Then we define the 
+\textit{derivative} operator $D$ of a function $f: I \rightarrow \mathbb{R}$ as 
+follows:
+\begin{align}
+    \lim_{h \rightarrow 0} \frac{f(x+h)-f(x)}{h} = D_x f(x)
+\end{align}
+
+We say that $f$ is \textit{differentiable} at $x$ if the limit exists. We
+will first prove a few equivalences of the derivative which will be useful
+in further proofs.
+
+\begin{theorem}
+\begin{align}
+    \lim_{x \rightarrow a} \frac{f(x)-f(a)}{x-a} = D_a f(a)
+\end{align}
+\end{theorem}
+\begin{proof}
+Observe the following
+\begin{align}
+    \lim_{x \rightarrow a} x = \lim_{h \rightarrow 0} a+h
+\end{align}
+Therefore
+\begin{align}
+    \lim_{x \rightarrow a} \frac{f(x)-f(a)}{x-a} &= 
+    \lim_{h \rightarrow 0} \frac{f(a+h)-f(a)}{a+h-a} \\ \nonumber
+    &= \lim_{h \rightarrow 0} \frac{f(a+h)-f(a)}{h} \\ \nonumber
+    &= D_a f(a)
+\end{align}
+\end{proof}
+
+\begin{theorem}
+Let $I \subseteq \mathbb{R}$ be an open set, let $a \in I$, and $f:
+I \rightarrow \mathbb{R}$. Then $f$ is differentiable at $a$ if and
+only if there is a function $\varphi: I \rightarrow \mathbb{R}$ that is
+continuous at $a$ and satisfies:
+\begin{align}
+    f(x)-f(a)=\varphi(x)(x-a)
+\end{align}
+Further more $\varphi(a)=D_a f(a)$.
+\end{theorem}
+\begin{proof}
+First assume that $f$ is differentiable at $a$. This means that
+\begin{align}
+    \lim_{x \rightarrow a} \frac{f(x)-f(a)}{x-a} &=D_a f(a) \\
+    \lim_{x \rightarrow a} f(x)-f(a) &= 
+    \lim_{x \rightarrow a} D_a f(a) (x-a) \nonumber \\
+    \lim_{x \rightarrow a} f(x)-f(a) &= 0 \nonumber \\
+    \lim_{x \rightarrow a} f(x) &= f(a) \nonumber
+\end{align}
+
+So $f$ is continues at $a$. Let
+
+\begin{align}
+    \varphi(x) &= \frac{f(x)-f(a)}{x-a},\ x \neq a \\ \nonumber
+    \varphi(a) &= D_a f(a)
+\end{align}
+
+Then since $f'(a)$ exists and $f$ is continues at $a$, $\varphi$ is
+continues at $a$. Further the more by the definition of $\varphi$ we have
+
+\begin{align}
+    f(x)-f(a) = \varphi(x)(x-a)
+\end{align}
+
+Which completes the first part. Assume next that there is a
+$\varphi$. Then we have
+
+\begin{align}
+    f(x)-f(a) &= \varphi(x)(x-a) \\
+    \frac{f(x)-f(a)}{x-a} &= \varphi(x) \nonumber
+\end{align}
+
+By the continuity of $\varphi$ at $a$ we have that
+
+\begin{align}
+    \lim_{x \rightarrow a} \varphi(x) = \lim_{x \rightarrow a}
+    \frac{f(x)-f(a)}{x-a} = \varphi(a)
+\end{align}
+
+Therefore $\varphi(a) = D_a f(a)$ and thus $f$ is differentiable at $a$
+which completes the proof.
+\end{proof}
+
+\begin{corollary}
+The differentiability of Theorem 1.2 and 1.1 are equivalent. 
+\end{corollary}
+
+Using these we may prove a some useful results.
+
+\begin{theorem}
+Let $f$ and $g$ be differentiable at $x \in \mathbb{R}$. Then for $\lambda \in \mathbb{R}$ we have:
+\begin{enumerate}
+	\item $D_x \lambda f(x)= \lambda D_x f(x)$
+    \item $D_x(f+g)(x) = D_x f(x)+D_x g(x)$
+    \item $D_x (f\cdot g)(x) = (D_x f \cdot g)(x)+(f \cdot D_x g)(x)$
+    \item $D_x(f\circ g)(x) = ((D_g f \circ g)\cdot D_x g)(x)$
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\textbf{Part 1:} 
+\begin{align}
+	f(x_0)-f(x) &= \varphi(x_0)(x_0-x) \\
+	\lambda f(x_0)-\lambda f(x) &= \lambda \varphi(x_0)(x_0-x) \nonumber
+\end{align}
+\textbf{Part 2:}
+\begin{align}
+	f(x_0)-f(x) &= \varphi(x_0)(x_0-x) \\
+	g(x_0)-g(x) &= \gamma(x_0)(x_0-x) \nonumber \\
+	(f(x_0)+g(x_0))-(g(x)+f(x))&= (\varphi(x_0)+\gamma(x_0))(x_0-x) \nonumber
+\end{align}
+
+\textbf{Part 3:}
+
+\begin{align}
+    (f\cdot g)'(x) = \lim_{h \rightarrow 0} \frac{(f\cdot g)(x+h)-(f
+    \cdot g)(x)}{h} \\ \nonumber = \lim_{h \rightarrow 0} \frac{(f\cdot
+    g)(x+h)-(f \cdot g)(x)+f(x+h)g(x)-f(x+h)g(x)}{h} \\ \nonumber =
+    \lim_{h \rightarrow 0} \frac{f(x+h)(g(x+h)-g(x))+g(x)(f(x+h)-f(x))}{h}
+    \\ \nonumber = \lim_{h \rightarrow 0} f(x+h)\frac{g(x+h)-g(x)}{h}
+    + \lim_{h \rightarrow 0} g(x)\frac{f(x+h)-f(x)}{h} \\ \nonumber =
+    (f' \cdot g)(x)+(f \cdot g')(x) \nonumber
+\end{align}
+\textbf{Part 4:}
+\begin{align}
+    g(x_0)-g(x)&=\gamma(x_0)(x_0-x) \\ 
+    (f\circ g)(x_0) - (f\circ g)(x) &=\varphi(g(x_0))(g(x_0)-g(x)) \\ \nonumber
+    &= \varphi(g(x_0))\gamma(x_0)(x_0-x) \\ \nonumber
+    \implies &(f \circ g)'(x) = ((f' \circ g)\cdot g')(x) \nonumber
+\end{align}
+\end{proof}
+
+We may now determine the derivative of various functions.
+\section{Integrals}
+Before defining integrals we will first define a few other things.
+
+\subsection{Subdivision}
+Let $[a,b] \subset \mathbb{R}$. Let $x_i$ for $1 \leq i \leq n$ have the
+properties
+\begin{align}
+	x_0 = a,\ x_n = b,\ x_{i-1} < x_i
+\end{align}
+Then $\Delta = \{x_i|0 \leq i \leq n\}$ is a \textit{finite subdivision}. If on
+the other hand we require only that $0 \leq i$, such that the index set becomes
+$\mathbb{N}$ then $\Delta$ is called an \textit{infinite subdivision}. This
+subdivision is called \textit{normal} if for any $1 \leq i \leq n$, 
+$x_{i-1}-x_i = c$. We also define a function on a finite subdivision 
+$\Delta$ called a \textit{norm of subdivision} as follows
+\begin{align}
+	\|\Delta \| = \max \{x_{i}-x_{i-1}|x_i \in \Delta\}
+\end{align}
+
+\section{Results}
+
+\begin{theorem}
+\begin{align}
+    \frac{d}{dx} \ln x= \frac{1}{x}
+\end{align}
+\end{theorem}
+\begin{proof}
+\begin{align}
+    \ln x = \int_1^x \frac{dt}{t}
+    
+\end{align}
+\end{proof}
+
+
+\begin{theorem}
+\begin{align}
+    \frac{d}{dx} e^x =e^x
+\end{align}
+\end{theorem}
+\begin{proof}
+\begin{align}
+    \frac{d}{dx} \ln e^x = 1 \\ \nonumber
+    \frac{1}{e^x} \frac{d}{dx} e^x = 1 \\ \nonumber
+    \frac{d}{dx} e^x =e^x 
+\end{align}
+\end{proof}
+
+
+\begin{theorem}
+\begin{align}
+    \frac{d}{dx} x^a= ax^{a-1}
+\end{align}
+\end{theorem}
+\begin{proof}
+\begin{align}
+    \frac{d}{dx} x^a &= \frac{d}{dx} e^{a \ln x} \\ \nonumber
+                     &= x^a \cdot \frac{a}{x} \\ \nonumber
+                     &= ax^{a-1} \nonumber
+\end{align}
+\end{proof}
+\begin{theorem}
+\begin{align}
+    \frac{d}{dx} \sin x = \cos x \land \frac{d}{dx} \cos x = -\sin x
+\end{align}
+\end{theorem}
+\begin{proof}
+\begin{align}
+    e^{xi} &= \cos x + i \sin x \\ \nonumber \frac{d}{dx} e^{xi} &=
+    \frac{d}{dx} \cos x + \frac{d}{dx} i \sin x \\ \nonumber ie^{xi} &=
+    \frac{d}{dx} \cos x + \frac{d}{dx} i \sin x \\ \nonumber i\cos x -
+    \sin x &= \frac{d}{dx} \cos x + \frac{d}{dx} i \sin x \\ \nonumber
+    \implies \frac{d}{dx} \sin x = \cos x &\land \frac{d}{dx} \cos x =
+    -\sin x
+\end{align}
+\end{proof}
+
+\begin{align*}
+	F(x) &= \int f(x)\ dx \\
+	D_x(F \circ \varphi)(x) &= (f \circ \varphi)(x) \cdot D_x\varphi(x) \\
+	\int_a^b  (f \circ \varphi)(t) \cdot D_x\varphi(t)\ dt
+	&= (F \circ \varphi)(b) - (F \circ \varphi)(a) \\
+	&= F(\varphi(b)) - F(\varphi(a)) \\
+	&= \int_{\varphi(a)}^{\varphi(b)} f(x)\ dx
+\end{align*}
+
+\section{An idea}
+Let $\mathcal{F}$ be the set of function on a field $F$ and let $D:
+\mathcal{F} \rightarrow \mathcal{F}$ such that for $f,g \in \mathcal{F}$
+and $a \in F$:
+
+\begin{align}
+    D(f+g)       &= D(f)+D(g) \\
+    D(af)        &= aD(f) \\
+    D(f\cdot g)  &= gD(f)+fD(g) \\
+    D(f \circ g) &= (D(f) \circ g)D(g)
+\end{align}
+
+Are any of them redundant and is $D$ $\frac{dy}{dx}$ if $F$ is
+$(\mathbb{R},+,\cdot)$
+\begin{theorem}
+	Let $p_0,p_1,\dots,p_n$ be a list of propositions. Assume
+	\begin{align}
+		\forall 0 \leq i \leq n: p_i \implies p_k,\ k \equiv i+1 \mod n+1
+	\end{align}
+	Then for all $p_i$ and $p_j$, $p_i \iff p_j$
+\end{theorem}
+\begin{proof}
+	Let $0 \leq i,j \leq n$, then $i < j$, $i = j$ or $i > j$. We need
+	only consider the first since it implies the third and if $i = j$
+	then $p_i$ is $p_j$. First note that $p_i$ means that $p_{i+1}$, by
+	induction we have $p_i \implies p_j $. Next consider that $p_j$ means that
+	if $j < n$ we have $p_{j+1}$. Thus $p_j \implies p_n $. Next consider if $j
+	=n$, then $p_n \implies p_0$. By induction $p_0 \implies p_i $. By
+	transitivity of implications $p_j \implies p_i$, which completes the proof.
+\end{proof}
+\end{document}
