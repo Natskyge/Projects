@@ -10,11 +10,11 @@ typedef struct Task {
 	size_t d;
 	size_t t, t_i;
 	size_t e, e_i;
-	size_t score;
+	float score;
 } Task;
 
 typedef struct Item {
-	Task *data;
+	Task data;
 	struct Item *prev;
 } Item;
 
@@ -28,17 +28,17 @@ typedef struct List {
 bool sortBy_v(Task task1, Task task2);
 bool sortBy_t(Task task1, Task task2);
 bool sortBy_e(Task task1, Task task2);
+bool sortBy_score(Task task1, Task task2);
 
 Task makeTask(char *name, size_t v, size_t d, size_t t, size_t e);
 void addTask(Task task, List *taskList);
-void getIndexs(List *taskList);
 List* sortTasks(List *taskList);
 
 List* listInit(void);
-Item* makeItem(Task *data, Item *prev);
-int cons(Task *data, List *list);
+Item* makeItem(Task data, Item *prev);
+int cons(Task data, List *list);
 int cdr(List *list);
-Task* car(List *list);
+Task car(List *list);
 int freeList(List *list);
 Task* dumpToArray(List *list);
 
@@ -66,6 +66,12 @@ sortBy_e(Task task1, Task task2)
 	return task1.e < task2.e;
 }
 
+bool
+sortBy_score(Task task1, Task task2)
+{
+	return task1.score < task2.score;
+}
+
 Task
 makeTask(char *name, size_t v, size_t d, size_t t, size_t e)
 {
@@ -86,9 +92,38 @@ makeTask(char *name, size_t v, size_t d, size_t t, size_t e)
 void
 addTask(Task task, List *taskList)
 {
-	cons(&task, taskList);
+	cons(task, taskList);
 }
 
+List*
+sortTasks(List *taskList)
+{
+	size_t len = taskList->size;
+	Task *A = dumpToArray(taskList);
+
+	bool (*sortV)(Task, Task) = sortBy_v;
+	bool (*sortT)(Task, Task) = sortBy_t;
+	bool (*sortE)(Task, Task) = sortBy_e;
+
+	mergeSort(A, len, sortV);
+	for (int i = 0; i<len; ++i) {
+		A[i].v_i = i;
+	}
+
+	mergeSort(A, len, sortT);
+	for (int i = 0; i<len; ++i) {
+		A[i].t_i = i;
+	}
+	
+	mergeSort(A, len, sortE);
+	for (int i = 0; i<len; ++i) {
+		A[i].e_i = i;
+	}
+
+//	for (int i = 0; i<len; ++i) {
+//		A[i].score = ()/(abs());
+//	}
+}
 
 /*}}}*/
 
@@ -145,7 +180,7 @@ listInit(void)
 }
 
 Item*
-makeItem(Task *data, Item *prev)
+makeItem(Task data, Item *prev)
 {
 	Item *newItem = (Item*)malloc(sizeof(Item));
 
@@ -156,7 +191,7 @@ makeItem(Task *data, Item *prev)
 }
 
 int
-cons(Task *data, List *list)
+cons(Task data, List *list)
 {
 	Item *newItem = makeItem(data, list->top);
 	list->top = newItem;
@@ -174,7 +209,7 @@ cdr(List *list)
 	return 0;
 }
 
-Task*
+Task
 car(List *list)
 {
 	return list->top->data;
@@ -199,11 +234,15 @@ dumpToArray(List *list)
     Item *itemPtr = list->top;
 
     for (int i = 0; i < size; ++i) {
-        A[size-i-1] = *itemPtr->data;
+        A[size-i-1] = itemPtr->data;
         itemPtr = itemPtr->prev;
     }
 
-    Task *r = A;
+	Task *r = malloc(size*sizeof(Task));
+	for (int i = 0; i < size; i++) {
+		r[i] = A[i];
+	}
+
     return r;
 }
 /*}}} End List */
@@ -214,10 +253,18 @@ main(void)
 	Task myTask = makeTask("lmao", 1, 2, 3, 4);
 	Task myTask2 = makeTask("mao", 2, 3, 4, 5);
 	List *myTaskList = listInit();
+
 	addTask(myTask, myTaskList);
-	printf("%d\n", myTaskList->top->data->v);
-	if (sortBy_e(myTask, myTask2))
-		printf("ayy lmao\n");
+	addTask(myTask2, myTaskList);
+
+	Task *test = dumpToArray(myTaskList);
+
+	printf("%zu\n", test[0].v);
+	printf("%zu\n", test[1].v);
+
+	sortTasks(myTaskList);
+
+	printf("Didn't crash!\n");
 
 	return 1;
 }
