@@ -4,6 +4,7 @@
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{amsfonts}
+\usepackage{tikz}
 %\usepackage[margin=0.5in]{geometry}
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}
@@ -80,7 +81,7 @@ I will be defining movement on graphs separately. However, as will be
 shown, graph movement is the same as movement on a symmetric digraph.
 \begin{definition}[Movement on graph]\label{def graph movement}
 	Movement on a graph is an ordered pair $\mathcal{M} = (M,+)$,
-	where $+:M\times M \rightarrow M$, and the properties
+	where $+$ is a binary operator on $M$, and the properties
 	\begin{itemize}
 		\item $M \subseteq V^2$ is a \textbf{movement set} with the 
 			property that $uv \in M$ iff $\{u,v\} \in E$. Additionally 
@@ -93,7 +94,7 @@ shown, graph movement is the same as movement on a symmetric digraph.
 \end{definition}
 \begin{definition}[Movement on digraph]\label{def digraph movement}
 	Movement on a digraph is an ordered pair $\mathcal{M} = (M,+)$,
-	where $+:M\times M \rightarrow M$, and the properties
+	where $+$ is a binary operator on $M$, and the properties
 	\begin{itemize}
 		\item $M \subseteq V^2$ is a \textbf{movement set} with the 
 			property that for all $(u,v) \in E$ we have $uv
@@ -258,8 +259,60 @@ shown, graph movement is the same as movement on a symmetric digraph.
 \end{corollary}
 \subsection{Applications}
 \subsubsection{Graph Theory}
-\subsubsection{Category Theory}
+Since movement is defined in terms of graphs, it should be no surprise
+that it finds great use in graph theory. Thus far, it is in the form
+of nicer definitions of several concepts, phrased in the language of
+operators. Below are a few examples.
+\begin{proposition}[Equivlance of cycle definition]\label{prop7}
+	The digraph $D=(V,E)$ contains a cycle if and only if the movement
+	structure of $D$ contains a sequence $a_0,a_1,\dots,a_n\in M$
+	of unique moves such that
+	\begin{equation}
+	\begin{aligned}
+		a_0+a_1+\cdots+a_n= e_l
+	\end{aligned}
+	\end{equation}
+	Where $e_l$ is the left identity of $a_0$.
+\end{proposition}
+\begin{proof}
+	\textbf{Necessary condition}: 
+	Assume that $D$ contains a cycle. Then there exists a sequence
+	$v_0,v_1, \dots,v_n \in V$ of unique vertices such that for $0\leq
+	i < n$, $(v_i,v_{i+1}) \in E$ and $(v_n,v_0) \in E$. Let $a_i =
+	v_iv_{i+1}$ and $a_n =v_n v_0$ which exists by definition. Then
+	we have
+	\begin{equation}
+	\begin{aligned}
+		a_0+a_1+\cdots + a_n &= v_0v_1+v_1v_2+\cdots+v_nv_0 \\
+							 &= v_0v_0 = e_l
+	\end{aligned}
+	\end{equation}
+	
+	\textbf{Sufficient condition}: 
+	Assume there is a sequence $a_0,a_1,\dots,a_n\in M$ of unique
+	moves such that $a_0+a_1+\cdots+a_n= e_l$. Let $v_i = \pi_1(a_i)$
+	for $1 \leq i \leq n$, note that $v_i$ must be unique otherwise
+	$a_i$ would not. Then for $1 \leq j < n$ we have $(v_j,v_{j+1})
+	\in E$ by definition and since the sequence equals $e_l$,
+	$\pi_2(a_n) = \pi_1(a_0)$ thus $(v_n,v_0)\in E$.
+\end{proof}
+\begin{remark}
+	Note that this definition extends to ordinary graphs by requiring that
+	a given vertex only appears in two moves.
+\end{remark}
+The above proposition is representative of the general use of movement
+structures of graphs, that is more compact definitions.
 \subsubsection{Aritmethic}
 \subsubsection{Computer Science}
+\subsubsection{Group Theory}
+\subsubsection{Category Theory}
+\begin{theorem}[Equivlance of categories and digraphs]
+	For every graph, there exists a category isomorphic to the movement
+	structure of the graph and for every category there exists a graph with
+	isomorphic movement structure.
+\end{theorem}
+\begin{corollary}
+	Every category has an equivalent graph, and vice versa.
+\end{corollary}
 \section{Conclusion}
 \end{document}

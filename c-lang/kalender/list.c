@@ -1,18 +1,7 @@
-
+#include "list.h"
+#include "kalender.h"
 #include <stdio.h>
 #include <stdlib.h>
-
-#define TYPE int
-
-typedef struct Item {
-	TYPE data;
-	struct Item *prev;
-} Item;
-
-typedef struct List {
-	Item *top;
-	size_t size;
-} List;
 
 List*
 listInit(void)
@@ -26,7 +15,7 @@ listInit(void)
 }
 
 Item*
-makeItem(TYPE data, Item *prev)
+makeItem(Task *data, Item *prev)
 {
 	Item *newItem = (Item*)malloc(sizeof(Item));
 
@@ -37,7 +26,7 @@ makeItem(TYPE data, Item *prev)
 }
 
 int
-cons(TYPE data, List *list)
+cons(Task *data, List *list)
 {
 	Item *newItem = makeItem(data, list->top);
 	list->top = newItem;
@@ -55,7 +44,7 @@ cdr(List *list)
 	return 0;
 }
 
-TYPE
+Task*
 car(List *list)
 {
 	return list->top->data;
@@ -71,11 +60,12 @@ freeList(List *list)
 	free(list);
 	return 0;
 }
-TYPE*
+
+Task*
 dumpToArray(List *list)
 {
     int size = list->size;
-    TYPE A[size];
+    Task A[size];
     Item *itemPtr = list->top;
 
     for (int i = 0; i < size; ++i) {
@@ -83,22 +73,6 @@ dumpToArray(List *list)
         itemPtr = itemPtr->prev;
     }
 
-    TYPE *r = A;
+    Task *r = A;
     return r;
-}
-
-
-int
-main(void)
-{
-	List *myList = listInit();
-	for (int i = 0; i < 10; ++i) {
-		cons(i, myList);
-	}
-	printf("top: %d, size: %d\n", car(myList), myList->size);
-	TYPE *r = dumpToArray(myList);
-	for (int k = 0; k < 10; ++k) {
-		printf("%d", r[k]);
-	}
-	printf("\n");
 }

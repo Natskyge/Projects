@@ -1,0 +1,94 @@
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[margin=1in]{geometry}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem*{observation}{Observation}
+\newtheorem*{example}{Example}
+\newtheorem*{remark}{Remark}
+\newtheorem{definition}[theorem]{Definition} 
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\dx}{\text{d}}
+
+\title{Differentialligning opgaver}
+\date{Februar 2018}
+
+\begin{document}
+\maketitle
+\begin{large}
+Opgaverne er \textbf{ikke} lette og det forventes ikke at de kan l{\o}ses
+uden hj{\ae}lp. Hvis en opgave volder problemer, s{\aa} r{\ae}k h{\aa}nden
+op. Opgaverne vil blive gennemg{\aa}et i f{\ae}llesskab p{\aa} tavlen
+l{\o}bende. \textbf{Husk}: der er flere m{\aa}der at l{\o}se opgaverne,
+s{\aa} selv hvis du ikke tror din l{\o}sning er god nok kan det godt
+v{\ae}re den er.
+\begin{enumerate}
+	\item F{\o}lgende differentialligninger er givet:
+		\begin{equation}
+		\begin{aligned}
+			af''(x)+bf(x)=c \\
+			ag''(x)+bg(x)=0
+		\end{aligned}
+		\end{equation}
+		Antage at vi kender en $g$ der opfylder (1). Hvad
+		kan vi s{\aa} sige om $f$? Hvis vi kender $g$,
+		kan vi s{\aa} finde $f$? Hint: find $f$'s relation
+		til $g$.
+
+		Ekstra: Er der kun en l{\o}sning, eller er der flere?
+	\item Observer f{\o}lgende differentialligning:
+		\begin{equation}
+		\begin{aligned}
+			af''(x)+bf(x)=0
+		\end{aligned}
+		\end{equation}
+		Pr{\o}v at finde et problem der ligner den. Kan problemet
+		bruges til at l{\o}se differentialligningen? Hvad sker der
+		hvis man ganger problemet med en tilf{\ae}ldig funktion
+		$g$? Kan du skrive $f$ ud fra $g$? Hvad med $f''$?
+	\item Find en funktion $f$ der opfylder:
+		\begin{equation}
+		\begin{aligned}
+			     f'(x) &= \lambda f(x) \\
+			    f''(x) &= \lambda^2 f(x) \\
+				  	   &\  \vdots \\
+			f^{(n)}(x) &= \lambda^n f(x) \\
+		\end{aligned}
+		\end{equation}
+		For et givet tal $\lambda$. Hint: antag at $f(x)=g(h(x))$
+		for passende $g$ og $h$. Hvad er $f'$? Hvad m{\aa} $g$
+		opfylde og hvilken funktion opfylder det? Hvad er $h$?
+
+		Note: $f^{(n)}(x)$ betyder $f(x)$ differentieret $n$ gange.
+	\item L{\o}s f{\o}lgende differentialligning: $af'(x)+bf(x)=c$
+	\item L{\o}s f{\o}lgende differentialligning: $af''(x)+bf'(x)+cf(x)=0$
+\end{enumerate}
+
+\textbf{Ekstra opgave}: En anden form for differentialligning er p{\aa}
+formen $N(y) \frac{\dx y}{\dx x} = M(x)$. L{\o}s den ved at f{\o}rst
+bevise:
+\begin{equation}
+\begin{aligned}
+	\int f(\varphi(t))\varphi'(t)\ \dx t = \int f(x)\ \dx x
+\end{aligned}
+\end{equation}
+Brug at $\frac{\dx}{\dx x} \int f(x)\ \dx x = f(x)$.
+\end{large}
+\newpage
+\end{document}

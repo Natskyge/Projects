@@ -1,0 +1,477 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+%\usepackage[margin=0.5in]{geometry}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem*{observation}{Observation}
+\newtheorem*{example}{Example}
+\newtheorem*{remark}{Remark}
+\newtheorem{definition}[theorem]{Definition} 
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\dx}{\text{d}}
+
+
+\title{Closed curves}
+\author{Erik. S. Gimsing}
+\date{January 2018}
+
+\begin{document}
+\maketitle
+\begin{definition}[Simple closed curve]
+	Let $\gamma : [0,1] \rightarrow \R^2$ such that
+	\begin{enumerate}
+		\item $\forall \varepsilon \in \R_{>0}: \exists \delta \in
+			\R_{>0}: |x-a| < \delta \implies 
+			\|\gamma(x)-\gamma(a)\|<\varepsilon$
+		\item $\forall x,x' \in [0,1): \gamma(x) = \gamma(x') 
+			\implies x = x'$
+		\item $\gamma(0) = \gamma(1)$
+	\end{enumerate}
+	Then the map of $\gamma$ is called a simple closed curve.
+\end{definition}
+\begin{theorem}
+	Let $C$ be a simple closed curve in the plane $\R^2$. Then its
+	complement, $\R^2\backslash C$, consists of exactly two connected
+	components. One of these components is bounded (the interior)
+	and the other is unbounded (the exterior), and the curve $C$
+	is the boundary of each component.
+\end{theorem}
+\begin{proof}
+	The proof will proceed as follows; first it is proven that the
+	theorem holds for curves in the form of a triangle, then it
+	is shown that it holds for all polygons by triangulating them,
+	then it is proved that every simple closed curve is the limit
+	of a polygon approximation.
+	
+	n-gon approximation of C using convex combinations of map of
+	adjacent elements of sequence of lenght n in the
+	interval from zero to one
+	\begin{equation}
+	\begin{aligned}
+		&\forall X,Y \subseteq \R^2: d(X,Y) := \sup\ \{\|x-y\|:x\in X \land y 
+		\in y\} \\
+		&\forall x,y \in [0,1]: K(x,y) = \{z=\gamma(x)t+\gamma(y)(1-t)
+		:0\leq t \leq 1\} \\
+		&\forall ([a,b] \subseteq \R \land n \in \N): 
+		\Delta(n,[a,b]) = \{x_0,x_1,\dots,x_n\}:\\ 
+		&(x_0=a \land x_n = b \land x_i<x_{i+1}) \\
+		&\forall \Delta(n,[a,b]): S(\Delta(n,[a,b])) := (s_1,\dots,s_n):
+		s_i\in [x_{i-1},x_i]: 1<i\leq n\\
+		&\forall C: P_n(C) := \{K(s_{i-1},s_i):s_{i-1},s_i\in 
+		S(\Delta(n,[0,1]))\}\\
+		&\forall \varepsilon \in \R_{>0}: \exists n \in \N_{>0} : d(P_n(C),C)<
+		\varepsilon
+	\end{aligned}
+	\end{equation}
+\end{proof}
+\newpage
+\begin{align*}
+	d(t)&=re^{\omega i t} \\
+	\\
+	d'(t)=v(t)&=i\omega  r e^{\omega i t} \\
+	\left|v(t)\right|=u&=\left|i\omega  r e^{\omega i t}\right| \\
+	&=\omega \left|r e^{\omega i t}\right|= \omega r \\
+	\implies \omega &= \frac{u}{r} \\
+	\\
+	v'(t)=a(t)&=-\omega^2  r e^{\omega i t} \\
+	\left|a(t)\right| &= \left|-\omega^2  r e^{\omega i t}\right| \\
+	&= \omega^2 \left|r e^{\omega i t}\right| \\
+	&= \omega^2r = \frac{u^2}{r} \\
+\end{align*}
+\newpage
+\begin{align*}
+	D_x^n x^k &= \frac{k!\cdot x^{k-n}}{(k-n)!} \\
+	D_x^\alpha x^k &= \frac{\Gamma(k+1)\cdot x^{k-\alpha}}
+	{\Gamma(k-\alpha+1)} \\
+	\\
+	\text{Linearity}\\
+	D_x^\alpha \lambda x^k &= \frac{\Gamma(k+1)\cdot \lambda x^{k-\alpha}}
+	{\Gamma(k-\alpha+1)} \\
+	&=\lambda D_x^\alpha x^k \\
+	\\
+	D_x^\alpha x^m+ D_x^\alpha x^k &:= D_x^\alpha (x^m+x^k)\\
+	\\
+	D_x^\alpha D_x^\beta x^k &= D_x^\alpha\left(
+	\frac{\Gamma(k+1)\cdot x^{k-\beta}}{\Gamma(k-\beta+1)}\right) \\
+	&=\frac{\Gamma(k+1)}{\Gamma(k-\beta+1)}
+	D_x^\alpha x^{k-\beta}\\
+	&=\frac{\Gamma(k+1)}{\Gamma(k-\beta+1)}
+	\frac{\Gamma(k-\beta+1)\cdot x^{k-\beta-\alpha}}
+	{\Gamma(k-\beta-\alpha+1)}\\
+	&=\frac{\Gamma(k+1)\cdot x^{k-\beta-\alpha}}
+	{\Gamma(k-\beta-\alpha+1)} = D_x^{\alpha + \beta}x^k
+\end{align*}
+\begin{align*}
+	\sin(x+\pi/2) = \cos(x),&\ \cos(x+\pi/2) = -\sin (x),\\
+	-\sin(x+\pi/2) = -\cos(x),&\ -\cos(x+\pi/2) = \sin(x) \\
+	\\
+	D_x^n \sin x &= \sin \left(x+\frac{\pi n}{2}\right) \\
+	D_x^n \cos x &= \cos \left(x+\frac{\pi n}{2}\right) \\
+	\\
+	D_x^\alpha \sin x &= \sin \left(x+\frac{\pi \alpha}{2}\right) \\
+	D_x^\alpha \cos x &= \cos \left(x+\frac{\pi \alpha}{2}\right) \\
+	\\
+	D_x^\alpha D_x^\beta \sin x 
+	&= 	D_x^\alpha \sin \left(x+\frac{\pi \beta}{2}\right) \\
+	&= 	\sin \left(x+\frac{\pi \beta}{2}+\frac{\pi \beta}{2}\right) \\
+	&= 	\sin \left(x+\frac{\pi (\alpha+\beta)}{2}\right) 
+	= D_x^{\alpha+\beta} \sin x\\
+	\\
+	D_x^\alpha D_x^\beta \cos x 
+	&= 	D_x^\alpha \cos \left(x+\frac{\pi \beta}{2}\right) \\
+	&= 	\cos \left(x+\frac{\pi \beta}{2}+\frac{\pi \beta}{2}\right) \\
+	&= 	\cos \left(x+\frac{\pi (\alpha+\beta)}{2}\right) 
+	= D_x^{\alpha+\beta} \cos x\\
+\end{align*}
+\begin{align*}
+	D_x^n e^{\lambda x} &= \lambda^n e^{\lambda x} \\
+	D_x^\alpha e^{\lambda x} &= \lambda^\alpha e^{\lambda x} \\
+	\\
+	D_x^\alpha D_x^\beta e^{\lambda x} &= D_x^\alpha\left( \lambda^\beta
+	e^{\lambda x}\right) \\
+	&= \lambda^\beta D_x^\alpha e^{\lambda x} \\
+	&= \lambda^\beta \lambda^\alpha e^{\lambda x} 
+	= \lambda^{\alpha+\beta} e^{\lambda x}\\
+\end{align*}
+\newpage
+\begin{align*}
+	mv' &= mg - kv^2 \\
+	\frac{1}{g} v' &= 1 - \frac{k}{mg}v^2 \\
+	\frac{1}{g}\frac{1}{1 - \frac{k}{mg}v^2} v' &= 1 \\
+	\frac{1}{g}\int \frac{1}{1 - \frac{k}{mg}v^2} v'\ \text{d}t &= t+C \\
+	\frac{1}{g}\int \frac{\text{d}v}{1 - \frac{k}{mg}v^2}  &= t+C \\
+	\text{Let } u^2 = \frac{k}{mg}v^2 &\implies \text{d}u = \sqrt{k/mg} \\
+	\frac{1}{g}\int\frac{\sqrt{k/mg}}{\sqrt{k/mg}} \frac{\text{d}v}{1 - 
+	\frac{k}{mg}v^2}  &= t+C \\
+	\sqrt{gk/m}\int \frac{\text{d}u}{1-u^2}&=t+C \\
+	\sqrt{gk/m} \tanh^{-1} u&=t+C \\
+	\sqrt{gk/m} \tanh^{-1}{\left(v\sqrt{k/mg}\right)} &=t+C \\
+	v(t) &= \sqrt{mg/k} \tanh{\left(t\sqrt{m/gk}\right)} 
+\end{align*}
+\begin{align*}
+	J&=\int \frac{x^2}{x^3+4}\ \text{d}x \\
+	\text{Let } u = x^3+4 &\implies \text{d}u = 3x^2\ \text{d}x \\
+	J&=\int \frac{3}{3}\frac{x^2}{x^3+4}\ \text{d}x \\
+	 &=\frac{1}{3}\int \frac{\text{d}u}{u} \\
+	 &=\frac{1}{3} \ln{\left|x^3+4\right|}
+\end{align*}
+\begin{align*}
+	J&=\int \sin^3 (x)\cos(x)\ \text{d}x \\
+	\text{Let } u = \sin x &\implies \text{d}u = \cos x\ \text{d}x \\
+	J&=\int u^3\ \text{d}u \\
+	 &=\frac{u^4}{4} = \frac{\sin{(x)}^4}{4} \\
+\end{align*}
+\begin{align*}
+	J&=\int \frac{\ln^2 x}{x}\ \text{d}x \\
+	\text{Let } u = \ln x &\implies \text{d}u = \frac{1}{x}\ \text{d}x \\
+	J&=\int u^2\ \text{d}u \\
+	 &=\frac{u^3}{3} = \frac{\ln{(x)}^3}{3} \\
+\end{align*}
+\begin{align*}
+	J&=\int x \cos{\left(5x^2\right)}\ \text{d}x \\
+	\text{Let } u = 5x^2 &\implies \text{d}u = 10x\ \text{d}x \\
+	J&=\frac{1}{10}\int \cos u\ \text{d}u \\
+	 &= \frac{\sin{\left(5x^2\right)}}{10} 
+\end{align*}
+\begin{align*}
+	J&=\int (2x+5){(x^2+5x)}^7\ \text{d}x \\
+	\text{Let } u = x^2+5x &\implies \text{d}u = 2x+5\ \text{d}x \\
+	J&=\int u^7\ \text{d}u \\
+	 &=\frac{{\left(x^2+5x\right)}^8}{8} \\
+\end{align*}
+\begin{align*}
+	J&=\int {(3-x)}^{10}\ \text{d}x \\
+	\text{Let } u = 3-x &\implies \text{d}u = - \text{d}x \\
+	J&=-\int u^{10}\ \text{d}u \\
+	 &=\frac{{\left(3-x\right)}^{11}}{11} \\
+\end{align*}
+\begin{align*}
+	J&=\int \sqrt{(7x-9)}\ \text{d}x \\
+	\text{Let } u = 7x-9 &\implies \text{d}u = 7\ \text{d}x \\
+	J&=\frac{1}{7}\int \sqrt{u}\ \text{d}u \\
+	 &=\frac{{2\left(7x-9\right)}^{1.5}}{21} \\
+\end{align*}
+\begin{align*}
+	J&=\int \frac{x^3}{\sqrt[3]{1+x^4}}\ \text{d}x \\
+	\text{Let } u = 1+x^4 &\implies \text{d}u = 4x^3\ \text{d}x \\
+	J&=\frac{1}{4}\int \frac{1}{\sqrt[3]{u}}\ \text{d}u \\
+	 &=\frac{{2\left(1+x^4\right)}^{2/3}}{12} \\
+\end{align*}
+\begin{align*}
+	J&=\int e^{5x+2}\ \text{d}x \\
+	\text{Let } u = 5x+2 &\implies \text{d}u = 5\ \text{d}x \\
+	J&=\frac{1}{5}\int e^u\ \text{d}u \\
+	 &=\frac{1}{5}e^{5x+2} \\
+\end{align*}
+\begin{align*}
+	J&=\int 4\cos 3x\ \text{d}x \\
+	\text{Let } u = 3 &\implies \text{d}u = 3\ \text{d}x \\
+	J&=\frac{4}{3}\int \cos u\ \text{d}u \\
+	 &=\frac{4}{3}\sin 3x \\
+\end{align*}
+\begin{align*}
+	J&=\int \frac{\sin(\ln x)}{x}\ \text{d}x \\
+	\text{Let } u = \ln x &\implies \text{d}u = \frac{1}{x}\ \text{d}x \\
+	J&=\int \sin u\ \text{d}u \\
+	 &=-\cos(\ln x) \\
+\end{align*}
+\begin{align*}
+	J&=\int \frac{3x+6}{x^2+4x-3}\ \text{d}x \\
+	\text{Let } u = x^2+4x-3 &\implies \text{d}u = 2x+4\ \text{d}x \\
+	J&=\frac{3}{2}\int \frac{1}{u}\ \text{d}u \\
+	 &=\frac{3}{2}\ln \left|x^2+4x-3\right| \\
+\end{align*}
+\begin{align*}
+	J&=\int x 3^{x^2+1}\ \text{d}x \\
+	\text{Let } u = x^2+1 &\implies \text{d}u = 2x\ \text{d}x \\
+	J&=\frac{1}{2}\int 3^u\ \text{d}u \\
+	 &=\frac{3^{x^2+1}}{2\ln 3} \\
+\end{align*}
+\begin{align*}
+	J&=\int \frac{3}{x\ln x}\ \text{d}x \\
+	\text{Let } u = \ln x &\implies \text{d}u = \frac{1}{x}\ \text{d}x \\
+	J&=3\int \frac{1}{u}\ \text{d}u \\
+	 &=3 \ln \left|\ln |x|\right| \\
+\end{align*}
+\begin{align*}
+	J&=\int \frac{\cos 5x}{e^{\sin 5x}}\ \text{d}x \\
+	\text{Let } u = \sin 5x &\implies \text{d}u = 5\cos 5x\ \text{d}x \\
+	J&=\frac{1}{5}\int e^{-u}\ \text{d}u \\
+	 &=\frac{1}{5} e^{-\sin 5x} \\
+\end{align*}
+\begin{align*}
+	J&=\int_{0}^{\sqrt{\pi}} x\sin x^2\ \text{d}x \\
+	\text{Let } u = x^2 &\implies \text{d}u = 2x\ \text{d}x \\
+	J &= \frac{1}{2}\int_0^{\pi} \sin u\ \text{d}u \\
+	  &= \frac{1}{2} (-\cos \pi + \cos 0) = 1
+\end{align*}
+\begin{align*}
+	J&=\int (x+3){(x-1)}^5\ \text{d}x \\
+	\text{Let } u = x-1 &\implies \text{d}u = \ \text{d}x \\
+	J&=\int (u+4)u^5\ \text{d}u \\
+	 &= \int u^6 \ \text{d}u + \int 4u^5\ \text{d}u \\
+	 &= \frac{{(x-1)}^7}{7} + \frac{4{(x-1)}^6}{6}
+\end{align*}
+\begin{align*}
+	J&=\int x \sqrt{4-x}\ \text{d}x \\
+	\text{Let } u = 4-x &\implies \text{d}u = - \text{d}x \\
+	J&= -\int (4-u)\sqrt{u}\ \text{d}u \\
+	 &= \int u^{3/2}\ \text{d}u - \int 4\sqrt{u} \ \text{d}u \\
+	 &= \frac{2{(4-x)}^{5/2}}{5} - \frac{8{(4-x)}^{3/2}}{3}
+\end{align*}
+\begin{align*}
+	J&=\int \frac{x+5}{2x+3}\ \text{d}x \\
+	\text{Let } u = 2x+3 &\implies \text{d}u = 2\ \text{d}x \\
+						 &\implies x = \frac{u-3}{2} \\
+	J&= \frac{1}{2}\int \frac{u/2-3/2+5}{u}\ \text{d}u \\
+	 &= \frac{u}{4} + \frac{7}{4}\int \frac{\text{d}u}{u}  \\
+	 &= \frac{u}{4} + \frac{7}{4}\ln |u|  \\
+	 &= \frac{2x+3}{4} + \frac{7}{4}\ln |2x+3|  \\
+\end{align*}
+\begin{align*}
+	J&=\int \frac{x^2+4}{x+2}\ \text{d}x \\
+	\text{Let } u = x+2 &\implies \text{d}u = \text{d}x \\
+						&\implies x = u-2 \\
+	J&= \int \frac{{(u-2)}^2+4}{u}\ \text{d}u \\
+	 &= \int \frac{u^2-4u+8}{u}\ \text{d}u \\
+	 &= \int u\ \text{d}u -4 \int\ \text{d}u+8\int\frac{\text{d}u}{u} \\
+	 &= \frac{{(x+2)}^2}{2} -4x-8+8 \ln \left|x+2\right|
+\end{align*}
+\begin{align*}
+	J&=\int \frac{{(3 +\ln x)}^2(2-\ln x)}{4x}\ \text{d}x \\
+	\text{Let } u = 3+\ln x &\implies \text{d}u =\frac{1}{x} \ \text{d}x \\
+						&\implies -\ln x = 3-u \\
+	J&= \frac{1}{4}\int u^2(5-u)\ \text{d}u \\
+	 &= \frac{5}{4}\int u^2\ \text{d}u -\frac{1}{4}\int u^3\ \text{d}u \\
+	 &= \frac{5u^3}{12}-\frac{u^4}{16} =\frac{5{(3+\ln x)}^3}{12}
+										-\frac{{(3+\ln x)}^4}{16}
+\end{align*}
+\begin{align*}
+	J&=\int_0^9 \sqrt{4-\sqrt{x}}\ \text{d}x \\
+	\text{Let } u = 4-\sqrt{x} &\implies \sqrt{x} =4-u \\
+							   &\implies x = u^2-8u+16 \\
+							   &\implies \text{d}x = 2u-8\ \text{d}u\\
+	J&= \int_4^1 \sqrt{u}(2u-8)\ \text{d}u \\
+	 &= 2\int_4^1 u^{3/2}\ \text{d}u - 8 \int_4^1 \sqrt{u} \ \text{d}u \\
+	 &= \frac{4u^{5/2}}{5} \bigg|_4^1- \frac{16u^{3/2}}{3} \bigg|_4^1\\
+	 &= \left(\frac{4\cdot 1^{5/2}}{5}-\frac{4\cdot 4^{5/2}}{5}\right)
+	-\left(\frac{16\cdot 1^{3/2}}{3}-\frac{16\cdot 4^{3/2}}{3}\right)\\
+	&= -\frac{124}{5} + \frac{112}{3} = \frac{188}{10}
+\end{align*}
+\begin{align*}
+	\frac{\dx y}{\dx x} &= y(b-ay) \\
+	\frac{1}{y(b-ay)}\frac{\dx y}{\dx x} &= 1 \\
+	\int \frac{1}{y(b-ay)}\frac{\dx y}{\dx x}\ \dx x &= x \\
+	J=\int \frac{1}{y(b-ay)}\ \dx y &= x \\
+	\\
+	\frac{1}{y(b-ay)} &= \frac{A}{y}+\frac{B}{b-ay} \\
+					  &= \frac{A(b-ay)+By}{y(b-ay)}\\
+					1 &= A(b-ay)+By \\
+					  &= Ab - aAy+By, \text{ Let } A =\frac{1}{b} \\
+					0 &= By-\frac{ay}{b} \implies B = \frac{a}{b} \\
+	\\
+	J&= \frac{1}{b}\int\frac{\dx y}{y}+\frac{a}{b}\int\frac{1}{b-ay}\ \dx y \\
+	\text{Let } u = b-ay &\implies \dx u = -a\ \dx y \\
+	J&= \frac{\ln y}{b}-\frac{1}{b}\int\frac{\dx u}{u} \\
+	 &= \frac{\ln y}{b}-\frac{\ln b-ay}{b}\\
+	\frac{\ln y}{b}-\frac{\ln( b-ay)}{b} &= x \\
+	\ln y - \ln (b-ay) &= bx\\
+	\ln {\left(\frac{y}{b-ay}\right)} &= bx \\
+	\frac{y}{b-ay} &= e^{bx}\\
+	\frac{b-ay}{y} &= e^{-bx}\\
+	\frac{b}{y} &= a+e^{-bx}\\
+	\frac{y}{b} &=\frac{1}{a+e^{-bx}}\\
+	y &=\frac{b}{a+e^{-bx}}
+\end{align*}
+\begin{align*}
+	\frac{\dx N}{\dx t} &= rN\left(1-\frac{N}{K}\right) \\
+	\frac{1}{N\left(1-\frac{N}{K}\right)}\frac{\dx N}{\dx t} &= r \\
+	\int\frac{1}{N\left(1-\frac{N}{K}\right)}\frac{\dx N}{\dx t}\ \dx x&=rt+C \\
+	I = \int\frac{1}{N\left(1-\frac{N}{K}\right)}\ \dx N&=rt+C \\
+	\frac{1}{N\left(1-\frac{N}{K}\right)}
+	&=\frac{A}{N}+\frac{B}{1-\frac{N}{K}}\\
+	&=\frac{A\left(1-\frac{N}{K}\right)+BN}{N\left(1-\frac{N}{K}\right)}\\
+	1&=A-\frac{AN}{K}+BN, \text{ Let } A= 1\\
+	0&=BN-\frac{N}{K} \implies B= \frac{1}{K} \\
+	I&=\int \frac{\dx N}{N}+\frac{1}{K}\int \frac{1}{1-\frac{N}{K}}\ \dx N\\
+	\text{Let } u = 1-\frac{N}{K}&\implies \dx u = -\frac{1}{K}\ \dx N\\
+	I&= \ln N - \int \frac{\dx u}{u}\\
+	 &= \ln N - \ln \left(1-\frac{N}{K}\right) \\
+	\ln N - \ln \left(1-\frac{N}{K}\right) &= rt+C\\
+	\ln \left(\frac{N}{1-\frac{N}{K}}\right) &= rt+C\\
+	\frac{N}{1-\frac{N}{K}} &= Ce^{rt}\\
+	\frac{1-\frac{N}{K}}{N} &= Ce^{-rt}\\
+	\frac{1}{N} &=\frac{1}{K}+ Ce^{-rt}\\
+	N(t) &=\frac{1}{\frac{1}{K}+ Ce^{-rt}}\\
+	N_0 = N(0) = \frac{1}{\frac{1}{K}+C} &\implies C = \frac{1}{N_0}-\frac{1}{K}
+\end{align*}
+\newpage
+\begin{theorem}
+	Let $f$ be a real function which is continues on $[a,b]$ such that
+	$f(a)<f(b)$. Then for $f(a)<k<f(b)$:
+	\begin{equation}
+	\begin{aligned}
+		\exists c \in (a,b):f(c) =k
+	\end{aligned}
+	\end{equation}
+\end{theorem}
+\begin{proof}
+\end{proof}
+\begin{theorem}
+	Let $f$ be a real function which is continues on $[a,b]$ and differntiable
+	on $(a,b)$. Then:
+	\begin{equation}
+	\begin{aligned}
+		\exists \xi \in (a,b):f'(\xi) =\frac{f(b)-f(a)}{b-a}
+	\end{aligned}
+	\end{equation}
+\end{theorem}
+\begin{proof}
+\end{proof}
+\begin{theorem}
+	Let $f$ be a continues real function on the closed interval $[a,b]$. Then:
+	\begin{equation}
+	\begin{aligned}
+		\exists k \in [a,b]: \int_a^b f(x) \dx x = f(k)(b-a)
+	\end{aligned}
+	\end{equation}
+\end{theorem}
+\begin{proof}
+\end{proof}
+\newpage
+\begin{align*}
+	\cos 2\theta + i \sin 2\theta &= e^{2i\theta } \\
+								  &= {\left(e^{i\theta }\right)}^2 \\
+								  &= {\left(\cos \theta+i\sin \theta\right)}^2\\
+								  &= \cos^2 \theta 
+									 + 2i \sin \theta \cos \theta - \sin^2 \\
+	\implies &\cos 2\theta = \cos^2 \theta - \sin^2 \theta \\
+	\implies &\sin 2\theta = 2 \sin \theta \cos \theta \\
+	\implies &\cos \theta = \frac{\sin 2\theta}{2\sin \theta}
+\end{align*}
+\begin{theorem}
+\begin{align*}
+	\forall n \in \N: \forall z\in \C:  
+	z^n = 1 \implies \exists k \in \N_n : z = e^{2i k\pi / n}
+\end{align*}
+\end{theorem}
+\begin{proof}
+\begin{align*}
+	&P_1:=
+	\forall n \in \N: \forall z\in \C: \exists U_n= \{z_1,\dots,z_n\} 
+	\subseteq \C:
+	\forall 1 \leq i \leq n: z_i^n = 1 
+	&& \text{(FTA)} \\
+	&\forall k \in \N_n: {\left(e^{2ik \pi /n}\right)}^n = e^{2\pi i k} = 1,\
+	\therefore \exists \{c_1,\dots,c_n\} \subseteq
+	\C,\ \because\left|\N_n\right|=n \\
+	&\exists z\in U_n : \nexists k \in \N_n: e^{2ik \pi /n} = z \implies
+	\exists c \notin U_n: c^n = 1 \implies \bot\ \because P_1
+\end{align*}
+\end{proof}
+\begin{definition}
+\begin{align*}
+	U_n := \{z\in \C: z^n = 1\} \\
+\end{align*}
+\end{definition}
+\begin{theorem}
+\begin{align*}
+	&\forall x,y \in U_n: xy \in U_n \\
+	&\forall x,y,z \in U_n: x(yz) = (xy)z \\
+	&\exists e \in U_n: \forall x \in U_n: ex=xe = x \\
+	&\forall x \in U_n:\exists x^{-1}\in U_n: x^{-1}x=xx^{-1} = e \\
+	&\forall x,y \in U_n: xy = yx 
+\end{align*}
+\end{theorem}
+\begin{proof}
+\begin{align*}
+	&x^n y^n = 1 \Leftrightarrow {(xy)}^n=1 \implies xy \in U_n \\
+	&\forall x',y',z' \in \C: x'(y'z') = (x'y')z' \implies x(yz) = (xy)z\\
+	&1^n=1 \implies 1 \in U_n \implies \forall x \in U_n: 1x = x 1 = x \\
+	&\forall x \in U_n: {\left(\frac{1}{x}\right)}^n = \frac{1}{x^n} = 1 
+	\implies \frac{1}{n} \in U_n \\
+	&\forall x',y' \in \C : x'y' = y' x' \implies xy =yx
+\end{align*}
+\end{proof}
+\newpage
+\begin{definition}[Polynomial vector space]
+	Given some polynomial 
+	\begin{equation}
+	\begin{aligned}	
+		P(x) = a_n x^n+a_{n-1} x^{n-1}+\cdots+a_1x+a_0
+	\end{aligned}	
+	\end{equation}
+	Where $a_i$ is non zero. We define the corresponding vector as follows
+	\begin{equation}
+	\begin{aligned}	
+		\begin{pmatrix}
+			a_0 \\
+			a_1 \\
+			\vdots \\
+			a_n \\
+			0 \\
+			\vdots
+		\end{pmatrix}
+	\end{aligned}	
+	\end{equation}
+	Addition is defined in the usual way for polynomials and the same for
+	multiplication by a scalar. It's easy then to see that it forms a vector
+	space.
+\end{definition}
+\end{document}

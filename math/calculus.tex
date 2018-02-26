@@ -5,9 +5,25 @@
 \usepackage{amsthm}
 \usepackage{amsfonts}
 %\usepackage[margin=0.5in]{geometry}
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{corollary}{Corollary}[theorem]
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem*{observation}{Observation}
+\newtheorem*{example}{Example}
+\newtheorem*{remark}{Remark}
+\newtheorem{definition}[theorem]{Definition} 
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\dx}{\text{d}}
 
 \title{Calculus}
 \author{eriksgimsing }
@@ -607,6 +623,32 @@ $\Delta$ called a \textit{norm of subdivision} as follows
 \begin{align}
 	\|\Delta \| = \max \{x_{i}-x_{i-1}|x_i \in \Delta\}
 \end{align}
+\subsection{Real sequence}
+Let $f: A \rightarrow \R$ be a mapping with $A \subseteq \N$. Choose some
+symbol, for instance $a$, then for all $k\in A$ we define $a_k = f(k)$ and we
+let ${\langle a_k\rangle}_{k\in A}=f$. Note that $k\in A$ may be replaced with
+any condition that holds if and only if $k\in A$.
+\subsection{Riemann sum and integral}
+Let $f:[a,b]\rightarrow \R$, let $\Delta$ be a subdivision of $[a,b]$
+with length $n$ denoting elements of $\Delta$ as $x_i$, and let $C$
+be a sequence $\langle c_i \rangle_{1\leq i\leq n}$ such that $c_i \in
+[x_{i-1},x_i]$. Let $\Delta x_i = x_i-x_{i-1}$ then the \textit{Riemann sum} is
+defined as
+\begin{align}
+	S(f;\Delta,C)= \sum_{i=1}^n f(c_i)\Delta x_i
+\end{align}
+Then $f$ is said to be \textit{Riemann integrable} on $[a,b]$ if and only if
+\begin{align*}
+	\exists L\in\R:\forall\varepsilon\in\R_{>0}:\exists\delta\in\R_{>0}:
+	\forall\Delta:\forall C:\|\Delta\|<\delta\implies
+	|S(f;\Delta,C)-L|<\varepsilon
+\end{align*}
+The number $L$ is called the \textit{Riemann integral} of $f$ over $[a,b]$ and
+is denoted
+\begin{align*}
+	\int_a^b f(x)\ \dx x
+\end{align*}
+\subsection{Properties of integrals}
 
 \section{Results}
 
@@ -665,15 +707,6 @@ $\Delta$ called a \textit{norm of subdivision} as follows
 \end{align}
 \end{proof}
 
-\begin{align*}
-	F(x) &= \int f(x)\ dx \\
-	D_x(F \circ \varphi)(x) &= (f \circ \varphi)(x) \cdot D_x\varphi(x) \\
-	\int_a^b  (f \circ \varphi)(t) \cdot D_x\varphi(t)\ dt
-	&= (F \circ \varphi)(b) - (F \circ \varphi)(a) \\
-	&= F(\varphi(b)) - F(\varphi(a)) \\
-	&= \int_{\varphi(a)}^{\varphi(b)} f(x)\ dx
-\end{align*}
-
 \section{An idea}
 Let $\mathcal{F}$ be the set of function on a field $F$ and let $D:
 \mathcal{F} \rightarrow \mathcal{F}$ such that for $f,g \in \mathcal{F}$
@@ -704,4 +737,37 @@ $(\mathbb{R},+,\cdot)$
 	=n$, then $p_n \implies p_0$. By induction $p_0 \implies p_i $. By
 	transitivity of implications $p_j \implies p_i$, which completes the proof.
 \end{proof}
+Does there exists a function $f: \mathbb{R}^2 \rightarrow \mathbb{R}$
+such that 
+\begin{align}
+	\forall \varepsilon \in \mathbb{R}_{>0}
+	\exists \delta \in \mathbb{R}_{>0}&: \|x-a\| < \delta \implies
+	|f(x)-f(a)|<\varepsilon \\
+	\forall y \in \mathbb{R} \exists x \in \mathbb{R}^2&: f(x)=y \\
+	\forall x,x' \in \mathbb{R}^2&: x = x' \implies f(x)=f(x')
+\end{align}
+\newpage
+\section{TL:DR}
+\subsection{The derivative}
+\begin{align*}
+	f'(x) &= \lim_{h \rightarrow 0} \frac{f(x+h)-f(x)}{h}\\
+	(af(x))' &= af'(x)\\
+	(f+g)'(x) &= (f'+g')(x)\\
+	(f\cdot g)'(x) &= (f'\cdot g)(x)+(f\cdot g')(x)\\
+	(f\circ g)'(x) &= ((f'\circ g)\cdot g')(x)
+\end{align*}
+\subsection{The integral}
+\begin{align*}
+	\frac{\dx}{\dx x}\int f(x)\ \dx x &= f(x) \\
+	\int_a^b f(x)\ \dx x &= F(x)\big|_a^b=F(b)-F(a)\\
+	\int af(x)\ \dx x&= a \int f(x)\ \dx x\\
+	\int f(x)+g(x)\ \dx x&= \int f(x)\ \dx x+\int g(x)\ \dx x\\
+	\int f(x)g'(x)\ \dx x &= f(x)g(x)-\int f'(x)g(x)\ \dx x\\
+	\int f(\varphi(t))\varphi'(t)\ \dx t&=\int f(x)\ \dx x\\
+	\int_a^b f(\varphi(t))\varphi'(t)\ \dx t&=\int_{\varphi(a)}^{\varphi(b)} 
+	f(x)\ \dx x\\
+	\frac{1}{f(x)g(x)} &= \frac{A}{f(x)}+\frac{B}{g(x)}\\
+	\frac{\dx}{\dx x}\int_a^b f(x,y)\ \dx y &= \int_a^b \frac{\partial f}
+	{\partial x}(x,y)\ \dx y
+\end{align*}
 \end{document}
