@@ -1,0 +1,79 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}{theorem}[Lemma]
+
+\title{Automatisk sortering af opgaver til ICS format}
+\author{Erik. S. Gimsing}
+\date{januar 15, 2018} 
+\begin{document}
+\maketitle
+\section{Design}
+En opgave beskrives som $o = (d,t,v,e)$, hvor $d$ er datoen den er for til, $t$
+er hvor lang tid den forventes at tage, $v$ er vigtigheden og $e$ er hvor
+kr{\ae}det er. Der defineres en total orden $\preceq$ p{\aa} et s{\ae}t $O$ af
+s{\aa}dane objekter. Lad $o,o' \in O$
+\begin{align*}
+	&1:d < d' \implies o \prec o' \\
+	&2:(d = d' \land t < t') \implies o \prec o' \\
+	&3:(d = d' \land t = t' \land v < v') \implies o \prec o' \\
+	&4:(d = d' \land t = t' \land v = v' \land e < e') \implies o \prec o' \\
+	&4:(d = d' \land t = t' \land v = v' \land e = e') \implies o = o'
+\end{align*}
+\begin{align*}
+	f: O \rightarrow \mathbb{R} \\
+	d < d' \implies f(d',t,v,e) < f(d,t,v,e) \\
+	v < v' \implies \frac{\partial}{\partial t} f(d,t,v,e) <
+	\frac{\partial}{\partial t} f(d,t,v',e)
+\end{align*}
+\begin{align*}
+	f(d,t,v,e) = \frac{4v_i+2t_i+e_i}{|d-t|+\varepsilon}
+\end{align*}
+Algorime:
+\begin{enumerate}
+	\item Lav 3 arrays.
+	\item Kopier listen af opgaver til de 3 arrays.
+	\item Soter array 1 efter vigtighed, 2 efter tid og 3 efter energi.
+	\item Set vi til index i array 1, og ligne for de andre.
+	\item udregn score med formlen.
+	\item dump til et sidste array og soter efter score.
+	\item kopier r{\ae}kkef{\o}lge til listen.
+	\item return listen.
+\end{enumerate}
+Note: Hardcoder navn pga det ikke er pointen. Kunne v{\ae}re bedere, men eh.
+
+Note: Lav en skriv array til liste ting.
+\newpage
+Algortimen er da som f{\o}lger
+\begin{enumerate}
+	\item Sorter ud fra dato
+	\item Indel sub-s{\ae}ts efter ens dato
+	\item Sorter sub-s{\ae}ts efter tid
+	\item Indel sub-s{\ae}ts efter ens tid
+	\item Sorter sub-s{\ae}ts efter vigtighed
+	\item Indel sub-s{\ae}ts efter ens vigtighed
+	\item Sorter sub-s{\ae}ts efter hvor kr{\ae}vende det er
+	\item Hvis to opgaver er ens, men har forskelligt navn, sorter
+		tilf{\ae}ldigt
+\end{enumerate}
+For at lave det kr{\ae}ver det derfor en sorterings algoritme, en dynamisk liste
+at gemme opgaver i, en ICS l{\ae}ser, og et program der skriver til en ICS fil
+uden at {\ae}ndre p{\aa} hvad der allerede st{\aa}r.
+\section{Sorterings algoritme}
+Den valgte sorterings algoritme er \textit{merge sort}. Merge sort er en
+sorterings algortime der g{\o}r brug af f{\o}lgende egenskaber:
+\begin{enumerate}
+	\item Et eller nul element er altid sorteret
+	\item At kombinere to sorteret lister er simpelt
+\end{enumerate}
+\section{Dynamisk liste}
+\section{Permanent datalagering}
+\subsection{Fil format}
+\subsection{L{\ae}se}
+\subsection{Skrive}
+\end{document}
