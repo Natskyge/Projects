@@ -1,10 +1,12 @@
-\documentclass{article}
+\documentclass[a4paper,11pt]{article}
+\usepackage[scale=0.7,vmarginratio={1:2},heightrounded]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{amsfonts}
 \usepackage{tikz}
+\usetikzlibrary{graphs,graphs.standard}
 %\usepackage[margin=0.5in]{geometry}
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}
@@ -18,14 +20,54 @@
 \newtheorem*{example}{Example}
 \newtheorem*{remark}{Remark}
 \newtheorem{definition}[theorem]{Definition} 
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\cod}{\text{cod}}
+\newcommand{\dom}{\text{dom}}
+\newcommand{\Ro}{R_{\circ}}
+\newcommand{\iff}{\Longleftrightarrow}
 
 \title{Movement on graphs}
-\author{Erik. S. Gimsing}
+\author{Isol. T. Hontoph}
+% Encrypted: Make list of konsonater and vokaler in alphabetical order and do a
+% Cesar cipher using them (one to the right).
 \date{January 2018}
 
 \begin{document}
 \maketitle
+\begin{center}
+	\begin{tikzpicture}
+	  \graph[circular placement, radius=5.5cm,
+			 empty nodes, nodes={circle,draw}] {
+		\foreach \x in {0,...,5} {
+		  \foreach \y in {\x,...,5} {
+			\x -- \y;
+		  };
+		};
+		0 --["3"'] 1;
+		0 --["2"' near start] 2;
+		0 --["1", near start] 4;
+		0 --["1",] 5;
+		4 --["2"'] 5;
+	  };
+	  \foreach \x [count=\idx from 0] in {0,...,5} {
+		\pgfmathparse{90 + \idx * (360 / 6)}
+		\node at (\pgfmathresult:5.9cm) {\x};
+	  };
+	\end{tikzpicture}
+\end{center}
+\newpage
+\tableofcontents
+\newpage
 \section{Abstract}
+In this paper an algebraic structure is defined based on an underlying
+digraph and graph.  It is shown that this algebraic structure has identity
+and is associative. Further properties of some special cases of graphs
+are considered, where it is shown that symmetric digraphs and graphs have
+inverse and complete graphs have have closure. Different applications
+are presented with the intention of giving an idea of possible uses for
+this algebraic structure.
+
 \section{Graphs}
 The object of study in this paper is a graph. For this reason a small
 write up on the necessary definitions are included. If one is already
@@ -63,22 +105,15 @@ Two sorts of graphs are considered in this paper. \textit{Graphs} and
 	digraph} if $(u,v)\in V$ implies that $(v,u) \notin V$.
 \end{definition}
 \begin{definition}[Notation]\label{def notation}
-	From this point $(a,b)$ will be abreviated to $ab$ if it is a
-	move. Further more let
-	\begin{equation}
-	\begin{aligned}
-		\pi_1(p) &= \bigcup \bigcap p \\
-		\pi_2(p) &= \bigcup \{x \in \bigcup p: \bigcup p \neq
-		\bigcap p \implies x \notin \bigcap p\} \\
-	\end{aligned}
-	\end{equation}
-	That is $\pi_1$ is the first coordinate of $p$ and $\pi_2$
-	the second
+	From this point $(a,b)$ will be abreviated to $ab$ if it is
+	a move. Further more for an ordered pair $p$ let $\pi_1(p)$
+	denote the first coordinate of $p$ and $\pi_2(p)$ the second.
 \end{definition}
 \section{Movement on graphs}
 \subsection{Definitions}
-I will be defining movement on graphs separately. However, as will be
-shown, graph movement is the same as movement on a symmetric digraph.
+Movement on graphs and digraphs will be defined separately. However,
+as will be shown, graph movement is the same as movement on a symmetric
+digraph.
 \begin{definition}[Movement on graph]\label{def graph movement}
 	Movement on a graph is an ordered pair $\mathcal{M} = (M,+)$,
 	where $+$ is a binary operator on $M$, and the properties
@@ -103,16 +138,6 @@ shown, graph movement is the same as movement on a symmetric digraph.
 	\end{itemize}
 	Then we call $D_M=(V,E,\mathcal{M})$ a digraph with movement.
 \end{definition}
-\begin{definition}[Applying move to vertices]\label{def apply movement}
-	Let $f: M \times V \rightarrow V$ such that 
-	\begin{equation}
-	\begin{aligned}
-		f(m,v) = \pi_2(m) \Leftrightarrow \pi_1(m) = v
-	\end{aligned}
-	\end{equation}
-	This will be abbreviated to $m[v]$ going forward.
-\end{definition}
-\newpage
 \subsection{Results}
 \begin{proposition}[Graph movement is 
 					symmetric digraph movement]\label{prop1}
@@ -242,8 +267,7 @@ shown, graph movement is the same as movement on a symmetric digraph.
 \begin{proof}
 	By Definition~\ref{def graph movement}, $\{\pi_1(x),\pi_2(x)\}
 	\in E$ and $\{\pi_1(y),\pi_2(y)\} \in E$. Therefore by
-	Definition~\ref{def graph} we have $\pi_1(x)\in V$ and
-	$\pi_2(y) \in V$. By the definition of a complete graph (See
+	Definition~\ref{def graph} we have $\pi_1(x)\in V$ and $\pi_2(y) \in V$. By the definition of a complete graph (See
 	Definition~\ref{def graph}) we have $\{\pi_1(x),\pi_2(y)\} \in
 	E$. By Definition~\ref{def graph movement}, $\pi_1(x)\pi_2(y)
 	\in M$. Since $x+y$ is defined $x+y=\pi_1(x)\pi_2(y)$ which
@@ -258,12 +282,33 @@ shown, graph movement is the same as movement on a symmetric digraph.
 	has inverse.
 \end{corollary}
 \subsection{Applications}
+Before proceeding with the applications, it is worth mentioning one of
+the more interesting uses of movement structures, namely as a means for
+generating digraphs of algebraic structures. The process is as follows
+\begin{definition}[Associated digraph]\label{as digraph}
+	Let $(A,*)$ be an algebraic structure with binary operator $*$. Let the
+	movement structure have the following property:
+	\begin{equation}
+	\begin{aligned}
+		\forall x,y,z\in A: x*y=z\in A\implies xz,yz\in M
+	\end{aligned}
+	\end{equation}
+	then the graph generated by the movement structure is called the
+	\textit{associated digraph}.
+\end{definition}
+The reason for using movement structures, instead of just defining edges and
+vertices's directly is that it turns the question into a question of the
+behavior of the movement structure which might be more elegant to work with. For
+instance, note that Corollary~\ref{cor1} implies that to show the associated
+graph is a complete graph, it is sufficient to show that the movement structure
+has closure and inverse. Further more movement structures provide an interesting 
+interface with Category Theory.
 \subsubsection{Graph Theory}
 Since movement is defined in terms of graphs, it should be no surprise
 that it finds great use in graph theory. Thus far, it is in the form
 of nicer definitions of several concepts, phrased in the language of
 operators. Below are a few examples.
-\begin{proposition}[Equivlance of cycle definition]\label{prop7}
+\begin{theorem}[Equivlance of cycle definition]\label{the1}
 	The digraph $D=(V,E)$ contains a cycle if and only if the movement
 	structure of $D$ contains a sequence $a_0,a_1,\dots,a_n\in M$
 	of unique moves such that
@@ -273,17 +318,17 @@ operators. Below are a few examples.
 	\end{aligned}
 	\end{equation}
 	Where $e_l$ is the left identity of $a_0$.
-\end{proposition}
+\end{theorem}
 \begin{proof}
 	\textbf{Necessary condition}: 
 	Assume that $D$ contains a cycle. Then there exists a sequence
 	$v_0,v_1, \dots,v_n \in V$ of unique vertices such that for $0\leq
 	i < n$, $(v_i,v_{i+1}) \in E$ and $(v_n,v_0) \in E$. Let $a_i =
-	v_iv_{i+1}$ and $a_n =v_n v_0$ which exists by definition. Then
+	v_i v_{i+1}$ and $a_n=v_n v_0$ which exists by definition. Then
 	we have
 	\begin{equation}
 	\begin{aligned}
-		a_0+a_1+\cdots + a_n &= v_0v_1+v_1v_2+\cdots+v_nv_0 \\
+		a_0+a_1+\cdots + a_n &= v_0 v_1+v_1 v_2+\cdots+v_n v_0 \\
 							 &= v_0v_0 = e_l
 	\end{aligned}
 	\end{equation}
@@ -297,22 +342,98 @@ operators. Below are a few examples.
 	$\pi_2(a_n) = \pi_1(a_0)$ thus $(v_n,v_0)\in E$.
 \end{proof}
 \begin{remark}
-	Note that this definition extends to ordinary graphs by requiring that
-	a given vertex only appears in two moves.
+	Note that this definition extends to ordinary graphs by requiring
+	that a given vertex only appears in two moves.
 \end{remark}
 The above proposition is representative of the general use of movement
 structures of graphs, that is more compact definitions.
-\subsubsection{Aritmethic}
-\subsubsection{Computer Science}
 \subsubsection{Group Theory}
-\subsubsection{Category Theory}
-\begin{theorem}[Equivlance of categories and digraphs]
-	For every graph, there exists a category isomorphic to the movement
-	structure of the graph and for every category there exists a graph with
-	isomorphic movement structure.
+As was noted in Corollary~\ref{cor1}, movement on a complete graph is
+group-like. This leads to an intriguing visual for groups, namely the
+following.
+\begin{theorem}[Associated digraph of group is 
+	complete symmetric digraph]\label{the2}
+	Let $(G,*)$ be a group. Then the digraph $D_M=(V,E,\mathcal{M})$,
+	where $\mathcal{M}$ is the associated movement structure as
+	defined in Definition~\ref{as digraph}, is a complete symmetric
+	digraph with movement.
 \end{theorem}
-\begin{corollary}
-	Every category has an equivalent graph, and vice versa.
+\begin{proof}
+	As can be seen in Corollary~\ref{cor1}, it is sufficient to show that
+	$\mathcal{M}$ has inverse and closure. Note that if we have $ab\in M$, then
+	it must be the case that there is some $c\in G$ such that $a*c=b$ or
+	$c*a=b$. Then
+	\begin{equation}
+	\begin{aligned}
+		a*c=b &\iff b*c^{-1}=a &&&\text{(Inverse in group)}\\
+		c*a=b &\iff c^{-1}*b=a &&&\text{(Inverse in group)}\\
+	\end{aligned}
+	\end{equation}
+	Next, let $v\in M$ and $u\in M$. Note that $v+u=\pi_1(v)\pi_2(u)$. Since a
+	group has inverse, there is ${\pi_1(v)}^{-1} \in G$, and by assumption
+	$\pi_2(u)\in G$. Let $c={\pi_1(v)}^{-1}*\pi_2(u)$, then
+	\begin{equation}
+	\begin{aligned}
+		\pi_1(v)*c=\pi_2(u)
+	\end{aligned}
+	\end{equation}
+	Therefore, $v+u\in M$, which completes the proof.
+\end{proof}
+\begin{corollary}[Equivlant graph of associated digraph of group]
+	By Theorem~\ref{the2} and Proposition~\ref{prop1} there is a graph with
+	identical movement structure for every associated digraph of a group.
 \end{corollary}
+Using this, we can visualize finite groups more easily. Consider for instance
+$\Z/6\Z$, then this is represented as the graph in Figure 1
+
+\begin{figure}[h]\label{fig:ZmodN}
+	\centering
+	\begin{tikzpicture}
+	  \graph[circular placement, radius=1.8cm,
+			 empty nodes, nodes={circle,draw}] {
+		\foreach \x in {0,...,5} {
+		  \foreach \y in {\x,...,5} {
+			\x -- \y;
+		  };
+		};
+		0 --["3"'] 1;
+		0 --["2"' near start] 2;
+		0 --["1", near start] 4;
+		0 --["1",] 5;
+		4 --["2"'] 5;
+	  };
+	  \foreach \x [count=\idx from 0] in {0,...,5} {
+		\pgfmathparse{90 + \idx * (360 / 6)}
+		\node at (\pgfmathresult:2.2cm) {\x};
+	  };
+	\end{tikzpicture}
+	\caption{Graph of the group of integers modulo 6}
+\end{figure}
+
+\subsubsection{Category Theory}
+The reader might have noticed a few parallels between movement structures
+and categories. To elaborate on these, notice that the axioms of
+$\mathcal{MOCT}$ (Morphism-only category theory) are the same as what was
+shown to hold for movement composition. This becomes even more clear if
+we write $\pi_1$ as $\cod$, $\pi_2$ as $\dom$, and $+$ as $\circ$. This
+connection would be restricted somewhat, due to Russell's paradox which
+would appear with the category of sets. However, further explorations
+of these connections are outside the scope of this paper.
+
 \section{Conclusion}
+In this paper an algebraic structure $(M,+)$, called a \textit{movement
+structure}, is defined by the vertexes of it's underlying digraph or
+graph. The composition of \textit{moves} (elements of $M$) is shown
+to be associative and have identity. Further more, if the underlying
+digraph is symmetric it has inverse and if it is a complete graph it has
+closure. This movement structure is used to give an alternative definition
+of a cycle in a graph. It is also shown how one might make a graph of
+an algebraic structure and that this implies that the graph of a group
+is a complete symmetric digraph. Further more it is suggested that the
+movement structure might have relations with category theory due to the
+similarity of the movement structure and the axioms of $\mathcal{MOCT}$
+(Morphism-only category theory).
+
+In conclusion, the movement structure of a graph provide a novel visual
+way to look at graphs and various other mathematical objects.
 \end{document}

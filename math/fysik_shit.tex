@@ -1,0 +1,57 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+%\usepackage[margin=0.5in]{geometry}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem*{observation}{Observation}
+\newtheorem*{example}{Example}
+\newtheorem*{remark}{Remark}
+\newtheorem{definition}[theorem]{Definition} 
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\dx}{\text{d}}
+
+
+\title{B{\aa}d opgave}
+\author{Erik. S. Gimsing}
+\date{Februar 2018}
+
+\begin{document}
+\maketitle
+\begin{center}
+\begin{tikzcd}
+ & {} &  &  &  \\
+ &  &  &  & {} \\
+ &  & \circ \arrow[rru, "F_s"] \arrow[luu, "F_N"] \arrow[lld, "F_{\mu}"] \arrow[dd, "F_t"] &  &  \\
+{} &  &  &  &  \\
+ &  & {} &  & 
+\end{tikzcd}
+\end{center}
+Vi {\o}nsker at $F_s=F_t+F{\mu}+F_N$ da kraften er nul grundet at
+b{\aa}den bev{\ae}ger sig med konstant hastighed. Vi indl{\ae}ger et
+koordinat system s{\aa}ledes at $F_N$ er parallel med $y$-aksen, samt
+$F_{\mu}$ og $F_s$ er langs $x$-aksen. 
+
+\begin{equation}
+\begin{aligned}
+	\hat{f}(\xi) = \int_{-\infty}^{+\infty}f(t)e^{-2\pi i\xi t}\ \dx t\\
+\end{aligned}
+\end{equation}
+
+\end{document}

@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <math.h>
 #include <stdbool.h>
+#include <time.h>
+#include <string.h>
 
 /* Structs {{{*/
 typedef struct Task {
@@ -25,15 +27,25 @@ typedef struct List {
 /*}}}*/
 
 /* Functions {{{*/
+/* Task */
+/* NOTE: Order on tasks in the form < */
+bool sortBy(Task task1, Task task2, int TYPE);
 bool sortBy_v(Task task1, Task task2);
 bool sortBy_t(Task task1, Task task2);
 bool sortBy_e(Task task1, Task task2);
 bool sortBy_score(Task task1, Task task2);
-
 Task makeTask(char *name, size_t v, size_t d, size_t t, size_t e);
 void addTask(Task task, List *taskList);
-List* sortTasks(List *taskList);
+void sortTasks(List *taskList);
 
+/* Input/Output */
+void writeTaskList(List *taskList);
+List* readTaskList(void);
+void login(void);
+void userInputLoop(void);
+void shutdown(void);
+
+/* List */
 List* listInit(void);
 Item* makeItem(Task data, Item *prev);
 int cons(Task data, List *list);
@@ -42,7 +54,7 @@ Task car(List *list);
 int freeList(List *list);
 Task* dumpToArray(List *list);
 
-/* NOTE: Order in the form < */
+/* Mergesortsort */
 void merge(Task *A, int mid, int high, bool (*order)(Task, Task));
 void mergeSort(Task *A, int len, bool (*order)(Task, Task));
 /*}}}*/
@@ -95,34 +107,54 @@ addTask(Task task, List *taskList)
 	cons(task, taskList);
 }
 
-List*
+void
 sortTasks(List *taskList)
 {
+	/* Init */
 	size_t len = taskList->size;
 	Task *A = dumpToArray(taskList);
 
+	/* Get function pointers */
 	bool (*sortV)(Task, Task) = sortBy_v;
 	bool (*sortT)(Task, Task) = sortBy_t;
 	bool (*sortE)(Task, Task) = sortBy_e;
+	bool (*sortScore)(Task, Task) = sortBy_score;
 
+	/* Get V index */
 	mergeSort(A, len, sortV);
 	for (int i = 0; i<len; ++i) {
 		A[i].v_i = i;
 	}
 
+	/* Get T index */
 	mergeSort(A, len, sortT);
 	for (int i = 0; i<len; ++i) {
 		A[i].t_i = i;
 	}
 	
+	/* Get E index */
 	mergeSort(A, len, sortE);
 	for (int i = 0; i<len; ++i) {
 		A[i].e_i = i;
 	}
 
-//	for (int i = 0; i<len; ++i) {
-//		A[i].score = ()/(abs());
-//	}
+	/* Calculate score and sort by score */
+	for (int i = 0; i<len; ++i) {
+		A[i].score = (4*A[i].v_i+2*A[i].t_i+A[i].e_i)/(abs(A[i].d-A[i].t)+0.1);
+	}
+	mergeSort(A, len, sortScore);
+	
+	/* Empty taskList */
+	while (0 < taskList->size) {
+		cdr(taskList);
+	}
+
+	/* Dump sorted array */
+	for (int i = 0; i<len; ++i) {
+		cons(A[i],taskList);
+	}
+
+	return;
 }
 
 /*}}}*/
@@ -165,6 +197,71 @@ mergeSort(Task *A, int len, bool (*order)(Task, Task))
 	mergeSort(A+mid,len-mid,order);
 	merge(A,mid,len,order);
 }
+/*}}}*/
+
+/* Input/Output{{{*/
+
+void
+writeTaskList(List *taskList)
+{
+	/* Get array of tasks */
+	Task *taskArray = dumpToArray(taskList);
+
+	/* Open file */
+	FILE *outfile;
+	outfile = fopen("tasks.dat","wb+");
+
+	if (outfile == NULL) {
+		printf("Error reading file\n");
+		exit(1);
+	}
+
+	/* Write array to file */
+	fwrite(taskArray, sizeof(Task), taskList->size, outfile);
+	fclose(outfile);
+	return;
+}
+
+
+List*
+readTaskList(void)
+{
+	FILE *infile;	
+	//List *taskList;
+	Task task;
+
+	infile = fopen("tasks.dat","rb");
+
+	if (infile == NULL) {
+		printf("Error reading file\n");
+		exit(1);
+	}
+
+	while(fread(&task, sizeof(Task), 1, infile)){
+		printf("Score:%f\n", task.score);
+	}
+	fclose(infile);
+	return NULL;
+}
+
+void
+login(void)
+{
+
+}
+
+void
+userInputLoop(void)
+{
+
+}
+
+void
+shutdown(void)
+{
+
+}
+
 /*}}}*/
 
 /* List {{{*/
@@ -250,21 +347,25 @@ dumpToArray(List *list)
 int
 main(void)
 {
-	Task myTask = makeTask("lmao", 1, 2, 3, 4);
-	Task myTask2 = makeTask("mao", 2, 3, 4, 5);
 	List *myTaskList = listInit();
 
-	addTask(myTask, myTaskList);
-	addTask(myTask2, myTaskList);
+	Task myTask = makeTask("lmao", 4, 3, 2, 1);
+	Task myTask2 = makeTask("mao", 2, 3, 4, 5);
+	cons(myTask, myTaskList);
+	cons(myTask2, myTaskList);
 
-	Task *test = dumpToArray(myTaskList);
-
-	printf("%zu\n", test[0].v);
-	printf("%zu\n", test[1].v);
+	for (int i=0;i<100000;++i) {
+		cons(makeTask("aa", rand()%100000, rand()%100000, rand()%100000, rand()%100000), myTaskList);
+	}
 
 	sortTasks(myTaskList);
 
+	writeTaskList(myTaskList);
+	readTaskList();
+
 	printf("Didn't crash!\n");
+	printf("Score top: %f\n", myTaskList->top->data.score);
+	printf("Score below: %f\n", myTaskList->top->prev->data.score);
 
 	return 1;
 }

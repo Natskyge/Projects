@@ -1,0 +1,830 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+%\usepackage[margin=0.5in]{geometry}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem*{observation}{Observation}
+\newtheorem*{example}{Example}
+\newtheorem*{remark}{Remark}
+\newtheorem{definition}[theorem]{Definition} 
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\dx}{\text{d}}
+\newcommand{\Sin}{\text{Sin}}
+\newcommand{\del}{\partial}
+
+
+\title{Topology and Homology}
+\author{Erik. S. Gimsing}
+\date{February 2018}
+
+\begin{document}
+\maketitle
+\section{Continuity}
+We wish to arrive at a general definition of continuity that does not appeal to
+the real numbers. To start with we have.
+\begin{definition}[Continuity I]
+	Let $f:I\rightarrow\R$ be a real function, where $I\subseteq\R$. Let
+	$a\in I$. Then $f$ is continues at $a$ iff
+	\begin{equation}
+	\begin{aligned}
+		\forall\varepsilon\in\R_{>0}:\exists\delta\in\R_{>0}:|x-a|<\delta
+		\implies|f(x)-f(a)|<\varepsilon
+	\end{aligned}
+	\end{equation}
+\end{definition}
+\begin{remark}
+The above definition has a natural extension if we consider the definition of
+Euclidean distance.
+\end{remark}
+\begin{definition}[Euclidean distance]
+	Let $x=(x_1,\dots,x_n)\in\R^n$ and $y=(y_1,\dots,x_n)\in\R^n$. Then the
+	euclidean distance between $x$ and $y$ is given by
+	\begin{equation}
+	\begin{aligned}
+		d(x,y)=\|x-y\|=\sqrt{{(x_1-y_1)}^2+\cdots+{(x_n-y_n)}^2}
+	\end{aligned}
+	\end{equation}
+\end{definition}
+\begin{remark}
+	We note that in the case of $\R^1$ the above definition reduces to
+	$\sqrt{{(x-y)}^2}=|x-y|$. This observation leads us to the following
+	definition.
+\end{remark}
+\begin{definition}[Continuity II]
+	Let $f:I\rightarrow\R^m$ be a real function, where $I\subseteq\R^n$. Let
+	$a\in I$. Then $f$ is continues at $a$ iff
+	\begin{equation}
+	\begin{aligned}
+		\forall\varepsilon\in\R_{>0}:\exists\delta\in\R_{>0}:\|x-a\|<\delta
+		\implies\|f(x)-f(a)\|<\varepsilon
+	\end{aligned}
+	\end{equation}
+\end{definition}
+\begin{remark}
+	Note that Continuity II reduces to Continuity I when $m=n=1$ due to
+	$\|x-a\|=|x-a|$ and like wise with $\|f(x)-f(a)\|=|f(x)-f(a)|$. Therefore
+	Continuity II is an extension of Continuity I.
+\end{remark}
+Euclidean distance derives from Pythoagoras' Theorem which is about triangles.
+Triangles are closely related to spheres in all dimensions. Motivated by this we
+will seek to define continuity in terms of spheres. At the same time we will try
+to free ourselves from euclidean space using the following definition.
+\begin{definition}[Metric space]\label{def:metric space}
+	A metric space $M=(A,d)$ is an ordered pair consisting of\newline
+	$(1):\quad \text{a non-empty set }A$\newline
+	together with:\newline
+		$(2):\quad \text{a real-valued function } d:A^2\rightarrow\R \text{
+		satisfying:}$
+	\begin{equation}
+	\begin{aligned}
+		(M1)\; &:\forall x\in A &&:d(x,x)=0&&\\
+		(M2)\; &:\forall x,y,z\in A &&:d(x,y)+d(y,z)\leq d(x,z)&&\\
+		(M3)\; &:\forall x,y\in A &&:d(x,y)=d(y,x)&&\\
+		(M4)\; &:\forall x,y\in A &&: x\neq y\implies d(x,y)>0&&\\
+	\end{aligned}
+	\end{equation}
+\end{definition}
+\begin{remark}
+	The ordered pair $(\R^n,\|\cdot\|)$ satisfies
+	Definition~\ref{def:metric space}, and thus euclidean space is
+	a metric space. This is not a coincidence, since the definition
+	of a metric space is based on how euclidean space behaves.
+\end{remark}
+\begin{definition}[Open-ball]\label{def:open-ball}
+	Let $M=(A,d)$ be a metric space. Let $a\in A$ and let
+	$\varepsilon\in\R_{>0}$. The \textbf{open $\varepsilon$-ball of $a$ in $M$}
+	is defined as
+	\begin{equation}
+	\begin{aligned}
+		B_{\varepsilon}(a):=\left\{x\in A: d(x,a)<\varepsilon\right\}
+	\end{aligned}
+	\end{equation}
+\end{definition}
+\begin{remark}
+	In the case of $M=(\R^n,\|\cdot\|)$ the above is the same as the inside of a
+	sphere with radius $\varepsilon$ and center $a$ without the border. The
+	missing border will turn out to be the most important property, but first we
+	will use it the extend the definition of continuity.
+\end{remark}
+\begin{definition}[Continuity III]
+	Let $(A,d_1)$ and $(B,d_2)$ be metric spaces. Let $f:I\rightarrow B$ where
+	$I\subseteq A$. Let $a\in I$. Then $f$ is continues at $a$ iff
+	\begin{equation}
+	\begin{aligned}
+		\forall\varepsilon\in\R_{>0}:\exists\delta\in\R_{>0}:
+		f(B_{\delta}(a))\subseteq B_{\varepsilon}(f(a))
+	\end{aligned}
+	\end{equation}
+\end{definition}
+\begin{theorem}[Continuity III is extension of Continuity II]
+	A real function $f:I\rightarrow\R^m$, where $I\subseteq\R^n$
+	is Continuity II continues at $a\in I$ iff it's Continuity III
+	continues at $a$.
+\end{theorem}
+\begin{proof}$\ $\newline
+	\textbf{Necessary Condition}\newline
+	Suppose $f$ is Continuity II continues at $a\in
+	I\subseteq\R^n$. Let $\varepsilon\in\R_{>0}$ be given.
+	Then there is $\delta\in\R_{>0}$ such that $\|x-a\|<\delta$
+	implies $\|f(x)-f(a)\|<\varepsilon$. Consider now the open-ball
+	with radius $\delta$ and center $a$.
+	\begin{equation}
+	\begin{aligned}
+		B_{\delta}(a)=\{x\in I:\|x-a\|<\delta\}
+	\end{aligned}
+	\end{equation}
+	Then for all $x\in B_{\delta}(a)$ we have $\|x-a\|<\delta$, which implies
+	that $\|f(x)-f(a)\|<\varepsilon$ and thus $f(x)\in B_{\varepsilon}(f(a))$.
+	Since $x$ was arbitrary, $f(B_{\delta}(a))\subseteq B_{\varepsilon}(f(a))$
+	meaning that $f$ is Continuity III continues at $a$.
+	\newline\newline
+\textbf{Sufficient Condition}\newline
+	Suppose $f$ is Continuity III continues at $a\in
+	I\subseteq\R^n$. Let $\varepsilon\in\R_{>0}$ be given.	Then there
+	is $\delta\in\R_{>0}$ such that $f(B_{\delta}(a))\subseteq
+	B_{\varepsilon}(f(a))$. Let $x\in B_{\delta}(a)$ be arbitrary. Then
+	$\|x-a\|<\delta$ and $f(x)\in B_{\varepsilon}(f(a))$, that is
+	$\|f(x)-f(a)\|<\varepsilon$. Therefore $\|x-a\|<\delta$ implies
+	$\|f(x)-f(a)\|$ meaning that $f$ is Continuity II continues at $a$.
+\end{proof}
+\begin{remark}
+	The reason the above is useful is because among the subsets of $\R^n$ are
+	sets with nice properties called \textbf{open} and \textbf{closed} sets.
+\end{remark}
+\begin{definition}[Open Set I]
+	Let $M=(A,d)$ be a metric space. Let $U\subseteq A$. Then $U$ is an
+	\textbf{open set in $M$} if and only if for all $y\in U$ there is
+	$\varepsilon\in\R_{>0}$ such that $B_{\varepsilon}(y)\subseteq U$. That is
+	\begin{equation}
+	\begin{aligned}
+		\forall y\in U:\exists\varepsilon\in\R_{>0}: 
+		B_{\varepsilon}(y)\subseteq U
+	\end{aligned}
+	\end{equation}
+\end{definition}
+\begin{definition}[Closed Set I]
+	Let $M=(A,d)$ be a metric space. Let $H\subseteq A$. Then $H$ is an
+	\textbf{closed set in $M$} if and only if its complement $A\backslash H$ is
+	open in $M$
+\end{definition}
+Using this we may define continuity in terms of open sets.
+\begin{definition}[Continuity IV]
+	Let $M_1=(A_1,d_1)$ and $M_2=(A_2,d_2)$ be metric spaces. Let
+	$f:A_1\rightarrow A_2$. Then $f$ is continues at all $x\in A_1$
+	if and only if $f^{-1}(U)$ is an open set in $M$ when $U$ is an
+	open set in $N$.
+\end{definition}
+\begin{theorem}[Continuity VI iff Continuity III]
+	Let $M_1=(A_1,d_1)$ and $M_2=(A_2,d_2)$ be metric spaces. Let
+	$f:A_1\rightarrow A_2$. Then $f$ is Continuity III continues iff its
+	Continuity IV continues.
+\end{theorem}
+\begin{proof}$\ $\newline
+	\textbf{Necessary Condition}\newline
+	Suppose $f$ is Continuity III continues. Let $U$ be an open set in $M_2$.
+	Let $x\in f^{-1}(U)$. Since $f(x)\in U$ which is open there is
+	$\varepsilon\in\R_{>0}$ such that $B_{\varepsilon}(f(x))\subseteq U$. Since
+	$f$ is Continuity III continues there is $\delta\in\R_{>0}$ such that
+	$f(B_{\delta}(x))\subseteq B_{\varepsilon}(f(x))$. Therefore
+	\begin{equation}
+	\begin{aligned}
+		B_{\delta}(x)\subseteq f^{-1}(f(B_{\delta}(x))) \subseteq 
+		f^{-1}(B_{\varepsilon}(f(x)))\subseteq f^{-1}(U)
+	\end{aligned}
+	\end{equation}
+	$x$ was arbitrary and therefore $f^{-1}(U)$ is open in $M_1$. Therefore $f$
+	is Continuity IV continues.
+	\newline\newline
+	\textbf{Sufficient Condition}\newline
+	Suppose now that $f$ is Continuity IV continues. Let $x\in A_1$, and let
+	$\varepsilon\in\R_{>0}$. Then $B_{\varepsilon}(f(x))$ is an open set in
+	$M_2$. Therefore since $f$ is Continuity IV continues,
+	$f^{-1}(B_{\varepsilon}(f(x)))$ is an open set in $M_1$. Notice that
+	$x\in f^{-1}(B_{\varepsilon}(f(x)))$. Therefore since
+	$f^{-1}(B_{\varepsilon}(f(x)))$ is an open set in $M_1$ there is
+	$\delta\in\R_{>0}$ such that $B_{\delta}(x)\subseteq
+	f^{-1}(B_{\varepsilon}(f(x)))$. Then for all $x_0\in B_{\delta}(x)$ there is
+	$y_0\in B_{\varepsilon}(f(x))$ such that $f(x_0)=y_0$. Therefore
+	$f(B_{\delta}(x))\subseteq B_{\varepsilon}(f(x))$, so $f$ is Continuity III
+	continues.
+\end{proof}
+The only place where we still use the real numbers in Continuity IV is with the
+definition of an open set. But it turns out there is a suitably generalization
+of what it means for at set to be open. This leads to the following.
+\begin{theorem}[Open set properties]\label{Openball is openset}
+	Let $M=(A,d)$ be a metric space. Then the open sets in $M$
+	satisfy the following properties. 
+	\begin{equation}
+	\begin{aligned}
+		&(O1)\; :\quad \text{The arbitrary union of open sets is open}\\
+		&(O2)\; :\quad \text{If $U$ and $O$ are open, then so is $U\cap O$}\\
+		&(O3)\; :\quad \text{$A$ is an open set}\\
+	\end{aligned}
+	\end{equation}
+\end{theorem}
+\begin{proof}$\ $\newline
+\begin{itemize}
+	\item[(\textit{O}1)] Let $I$ be an index set and let $i\in I$ and $A_i$ be
+		an open set in $M$. Let $x\in \bigcup_{i\in I} A_i$. Then there must be
+		$i'\in I$ such that $x\in A_{i'}$, and since $A_{i'}$ is open in $M$
+		there is $\varepsilon\in\R_{>0}$ such that $B_{\varepsilon}(x)\subseteq
+		A_{i'}\subseteq \bigcup_{i\in I} A_i$. Since $x$ was arbitrary, the
+		arbitary union must be open.
+	\item[(\textit{O}2)] let $x\in U\cap O$, since $U$ and $O$ are open there
+		are $\varepsilon_1\in\R_{>0}$ and $\varepsilon_2\in\R_{>0}$ such that 
+		$B_{\varepsilon_1}(x)\subseteq U$ and $B_{\varepsilon_2}(x)\subseteq O$.
+		Let $\varepsilon = \min(\varepsilon_1,\varepsilon_2)$, then if
+		$\varepsilon_1\leq\varepsilon_2$ we have
+	\begin{equation}
+	\begin{aligned}
+		B_{\varepsilon}(x)= B_{\varepsilon_1}(x)
+		\subseteq B_{\varepsilon_2}(x)\subseteq O
+	\end{aligned}
+	\end{equation}
+		therefore
+	\begin{equation}
+	\begin{aligned}
+		B_{\varepsilon}(x) = B_{\varepsilon_1}(x) \cap B_{\varepsilon}(x)
+		\subseteq B_{\varepsilon_1}(x) \cap B_{\varepsilon_2}(x)
+		\subseteq U \cap O 
+	\end{aligned}
+	\end{equation}
+		Since $x$ was arbitrary, $U\cap O$ is open.
+	\item[(\textit{O}3)] By definition any open-ball in $M$ is a subset of $A$.
+		Hence the result.
+\end{itemize}
+\end{proof}
+\begin{remark}
+	It turns out that the above properties are all we care about for open sets,
+	since we may always reconstruct our original concept of an open set. The
+	advantage is that the above properties do not appeal to real numbers in any
+	way. Hence the following definition.
+\end{remark}
+\begin{definition}[Topological Space]
+	Let $S$ be a set. Let $\tau \subseteq \mathcal{P}(S)$, called a topology on
+	$S$, satisfy the
+	\textbf{open set axioms}:
+	\begin{equation}
+	\begin{aligned}
+		&(O1)\; :\quad \text{The union of an abitary subset of $\tau$ is an
+				 element of $\tau$.}\\
+		&(O2)\; :\quad \text{The intersection of any two elements of $\tau$ is
+				 an element of $\tau$.}\\
+		&(O3)\; :\quad \text{$S$ is an element of $\tau$.}\\
+	\end{aligned}
+	\end{equation}
+	Then the ordered pair $(S,\tau)$ is called a \textbf{topological space} and
+	the elements of $\tau$ are called open sets of $(S,\tau)$.
+\end{definition}
+Using this we arrive at our final definition of continuity.
+\begin{definition}[Continuity V]
+	Let $(S_1,\tau_1)$ and $(S_2,\tau_2)$ be topological spaces. Let
+	$f:S_1\rightarrow S_2$ be a mapping. Then $f$ is continues on $S_1$ if and
+	only if
+	\begin{equation}
+	\begin{aligned}
+		U\in\tau_2 \implies f^{-1}(U)\in\tau_1
+	\end{aligned}
+	\end{equation}
+\end{definition}
+\begin{remark}
+	Note that Continuity IV is a special case of Continuity V
+	where the topology on a metric space $(A,d)$ is defined as
+	$\tau=\{B_{\varepsilon}(x):x\in\}$ and $\tau$ clearly satisfies
+	the open set axioms as was shown in Theorem~\ref{Openball is
+	openset}. So Continuity V is an extension of Continuity IV.
+\end{remark}
+When we extended the definition continuity with Continuity III we stopped
+considering point-wise continuity. However, we may now define point-wise
+continuity in general using our new definition of open sets.
+\begin{definition}[Neighborhood]
+	Let $(S,\tau)$ be a topological space. Let $z\in S$ be a point of $S$. Then
+	a neighborhood is a set $N_z\subseteq S$ such that there is a set $U\in
+	\tau$, such that $U\subseteq N_z$ and $z\in U$. That is
+	\begin{equation}
+	\begin{aligned}
+		\exists U\in\tau: z\in U\subseteq N_z \subseteq S
+	\end{aligned}
+	\end{equation}
+	We call $N_z$ an open neighborhood if $N_z\in\tau$.
+\end{definition}
+\begin{definition}[Continuity V, point-wise]
+	Let $T_1=(S_1,\tau_1)$ and $T_2=(S_2,\tau_2)$ be topological spaces. Let
+	$f:S_1\rightarrow S_2$ be a mapping. Then $f$ is continues at $x\in S_1$ 
+	if and only if for every neighborhood of $f(x)$ in $T_2$, there exists a
+	neighborhood $M$ of $x$ in $T_1$ such that $f(M)\subseteq N$.
+\end{definition}
+\begin{theorem}[Equivalence of Continuity V Definitions]
+	Let $T_1=(S_1,\tau_1)$ and $T_2=(S_2,\tau_2)$ be topological spaces. Let
+	$f:S_1\rightarrow S_2$ be a mapping. Then $f$ is continues on $S_1$ if and
+	only if it is point-wise continues for all $x\in S_1$.
+\end{theorem}
+\begin{proof}$\ $\newline
+	\textbf{Necessary Condition}\newline
+	Suppose that $f$ is continues for all points in $S_1$. Let
+	$U\in \tau_2$, we wish to show that $f^{-1}(U)$. If
+	$f^{-1}(U)=\emptyset$ we are done since $\emptyset\subseteq\tau_1$
+	(because $\emptyset$ is a subset of all sets) and by the
+	definition of a topological space $\emptyset=\bigcup \emptyset
+	\in \tau_1$. Assume therefore that $f^{-1}(U)\neq\emptyset$
+	and let $x\in f^{-1}(U)$. Then for all neighborhoods $N$ of $x$ in $T_1$
+	we have $f(N)\subseteq U$. By the definition of a neighborhood, there is
+	$X\in\tau_1$ such that $X\subseteq N$. Therefore $f(X)\subseteq
+	f(N)\subseteq U$. Let $\mathcal{C}=\{X\in\tau_1:f(X)\subseteq U\}$, and let
+	$H=\bigcup\mathcal{C}$. Then by the definition of a topological space,
+	$H\in\tau_1$ and clearly $f^{-1}(U)\subseteq H$. But $H\subseteq f^{-1}(U)$,
+	therefore $f^{-1}(U)=H$ meaning that $f^{-1}(U)\in\tau_1$.
+	\newline\newline
+	\textbf{Sufficient Condition}\newline
+	Suppose that
+	\begin{equation}
+	\begin{aligned}
+		U\in \tau_2 \implies f^{-1}(U)\in \tau_1
+	\end{aligned}
+	\end{equation}
+	Let $x\in S_1$ and let $N\subseteq S_2$ be a neighborhood of
+	$f(x)$ in $T_2$. By definition there is $U\in\tau_2$ such
+	that $U\subseteq N$. Then $f^{-1}(U)\in\tau_1$, which is a
+	neighborhood, and $f(f^{-1}(U))\subseteq U\subseteq N$ as desired.
+\end{proof}
+Our last major definition is one of the most important ones in topology,
+it is a way to tell if two topological spaces are equivalent.
+\begin{definition}[Homeomorphism]\label{homeomorphism}
+	Let $T_1=(S_1,\tau_1)$ and $T_2=(S_2,\tau_2)$ be topological spaces. Let
+	$f:S_1\rightarrow S_2$ be a continues mapping on $S_1$. We call $f$ a
+	\textit{homeomorphism} if there exists a continues mapping $g:S_2\rightarrow
+	S_1$ on $S_2$ such that
+	\begin{equation}
+	\begin{aligned}
+		g(f(x))=x \text{ and } f(g(y))=y
+	\end{aligned}
+	\end{equation}
+	for all $x\in S_1$ and $y\in S_2$. Then we call $T_1$ and $T_2$
+	\textit{homeomorphic}, written as $T_1 \simeq T_2$.
+\end{definition}
+It turns out that homeomorphism is actually an equivlance relation, just like
+ordinary equality.
+\begin{theorem}[Homeomorphism Relation is Equivalence]
+	Let $T_i$ for $i\in\N$ denote a topological space. Then the following
+	properties hold
+	\begin{equation}
+	\begin{aligned}
+		(1)\; &:\quad\forall T_1 &&: T_1\simeq T_1 &&&\text{(Reflexive)}\\
+		(2)\; &:\quad\forall T_1,T_2 &&: T_1\simeq T_2\implies T_2\simeq T_1 
+		&&&\text{(Symmetric)}\\
+		(3)\; &:\quad\forall T_1,T_2,T_3 &&: T_1\simeq T_2\land T_2\simeq T_3
+		\implies T_1\simeq T_3 &&&\text{(transitive)}\\
+	\end{aligned}
+	\end{equation}
+\end{theorem}
+\begin{proof}
+$\ $\newline
+\begin{itemize}
+	\item[(1)] Let $I:S_1\rightarrow S_1$ be defined by $I(x)=x$. Then
+		$I(I(x))=x$ so $I=I^{-1}$. Let $U_1\in \tau_1$, then
+		$I^{-1}(U_1)=I(U_1)=U_1\in\tau_1$. Therefore $T_1\simeq T_1$.
+	\item[(2)] The result follows trivially from
+		Definition~\ref{homeomorphism}. Simply note that $g$ in the definition
+		is also a homeomorphism.
+	\item[(3)] Let $f:S_1\rightarrow S_2$ with $f_*$ like $g$ in
+		Definition~\ref{homeomorphism}. Likewise for $g:S_2\rightarrow S_3$.
+		Let $U\in\tau_3$, then $g^{-1}(U)\in\tau_2$ and thus $(f^{-1}\circ
+		g^{-1})(U)\in\tau_1$. Next let $U'\in\tau_1$, then
+		$f_*^{-1}(U')\in\tau_2$ and thus $(g_*^{-1}\circ
+		f_*^{-1})(U)\in\tau_3$. So the functions $g\circ f$ and 
+		$f_*\circ g_*$ are continues. Next note that 
+		\begin{equation}
+		\begin{aligned}
+			((f_*\circ g_*)\circ (g\circ f))(x)&=x\\
+			((g\circ f)\circ (f_*\circ g_*))(y)&=y
+		\end{aligned}
+		\end{equation}
+		for $x\in S_1$ and $y\in S_3$ by hypothesis. Therefore $T_1\simeq T_3$.
+\end{itemize}
+\end{proof}
+There are few other relevant definitions, they will follow in no particular
+order.
+\begin{definition}[Limit Point]
+	Let $T=(S,\tau)$ be a topological space. Let $A\subset S$. A point $x\in S$
+	is a \textit{limit point of} $A$ if and only if every open neighborhood
+	$U\in\tau$ of $x$ satisfies:
+	\begin{equation}
+	\begin{aligned}
+		A\cap (U\backslash \{x\})\neq\emptyset
+	\end{aligned}
+	\end{equation}
+	That is there are atleast some points in the open neighborhoods
+	of $x$ are in $A$.
+\end{definition}
+\begin{definition}[Derived Set]
+	Let $T=(S,\tau)$ be a topological space. Let $X\subset S$. 
+	The \textit{derived set} of $X$ is the set of all limit points of $X$,
+	often denoted $X'$.
+\end{definition}
+\begin{definition}[Closure]
+	Let $T=(S,\tau)$ be a topological space. Let $H\subset S$. 
+	The \textit{closure of $H$ (in $T$)} is defined as:
+	\begin{equation}
+	\begin{aligned}
+		H^-:=H\cup H'
+	\end{aligned}
+	\end{equation}
+	Where $H$ is the derived set of $H$.
+\end{definition}
+\begin{definition}[Interior]
+	Let $T=(S,\tau)$ be a topological space. Let $H\subset S$. 
+	The \textit{interior} of $H$ is the union of all subsets of $H$ which are
+	open in $T$. That is the interior $H^\circ$ of $H$ is defined as:
+	\begin{equation}
+	\begin{aligned}
+		H^\circ:=\bigcup_{K\in\mathbb{K}} K
+	\end{aligned}
+	\end{equation}
+	where $\mathbb{K}=\{K\in\tau:K\subseteq H\}$
+\end{definition}
+\begin{definition}[Boundary]
+	Let $T=(S,\tau)$ be a topological space. Let $H\subset S$. 
+	The \textit{boundary of} $H$ consists of all the points in the closure of
+	$H$ that are not in the interior. Thus, the boundary of $H$ is defined as:
+	\begin{equation}
+	\begin{aligned}
+		\del H := H^-\backslash H^\circ
+	\end{aligned}
+	\end{equation}
+	where $H^-$ indicates the closure of $H$ and $H^\circ$ the interior of $H$.
+\end{definition}
+\newpage
+\section{Homology}
+Homology is about trying to understand topological spaces using group theory, to
+this effect we will need the following definition.
+\begin{definition}[Free abelian group]\label{Free abelian group}
+Let $X\neq \emptyset$ such that $\left|X\right|=n\in \N$. Define
+\begin{equation}
+\begin{aligned}
+	\Z X = \left\{\sum_{i=1}^n c_i\cdot x_i:c_i \in \Z \land x_i \in X\right\}
+\end{aligned}
+\end{equation}
+The sum of two elements $a,b\in \Z X$ is defined as
+\begin{equation}
+\begin{aligned}
+	a+b = \left(\sum_{i=1}^n a_i\cdot x_i\right)+
+	      \left(\sum_{i=1}^n b_i\cdot x_i\right)
+		= \left(\sum_{i=1}^n (a_i+b_i)\cdot x_i\right)
+\end{aligned}
+\end{equation}
+Then we call $\Z X$ the \textit{free abelian group generated by} $X$.
+\end{definition}
+\begin{definition}[Abelian group axioms]\label{Abelian group}
+Let $G$ be a set with an associated operation $+$. Then we call the ordered pair
+$(G,+)$ an \textit{abelian group} if the following holds
+	\begin{equation*}
+	\begin{aligned}
+		(G0)\; &:\quad \forall x,y\in G &&: x+y\in G 
+		&&&\text{(Closure)}\\
+		(G1)\; &:\quad \forall x,y,z\in G &&: x+(y+z)=(x+y)+z
+		&&&\text{(Associativity)}\\
+		(G3)\; &:\quad \exists 0\in G:\forall x\in G &&: 0+x=x+0=x
+		&&&\text{(Identity)}\\
+		(G4)\; &:\quad \forall x\in G:\exists -x\in G &&: x+(-x)=(-x)+x=0
+		&&&\text{(Inverse)}\\
+		(C)\; &:\quad \forall x,y\in G&&: x+y=y+x
+		&&&\text{(Commutativity)}\\
+	\end{aligned}
+	\end{equation*}
+\end{definition}
+\begin{theorem}[The free abelian group is abelian group]
+	The free abelian group (as defined in definition~\ref{Free abelian group})
+	satisfy the axioms in definition~\ref{Abelian group}
+\end{theorem}
+\begin{proof}
+	Clearly the axioms  are satisfied, since the operation on the free abelian
+	group is defined in terms of ordinary addition.
+\end{proof}
+\begin{definition}[Homomorphism]\label{Homomorphism}
+Let $(G,\circ)$ and $(H,*)$ be algebraic structures. We call a mapping
+$\varphi:G\rightarrow H$ a \textit{homomorphism} if for any $g,h \in G$
+\begin{equation}
+\begin{aligned}
+	\varphi(g\circ h)= \varphi(g)*\varphi(h)
+\end{aligned}
+\end{equation}
+\end{definition}
+\begin{theorem}[Homomorphism preserves abelian group structure]
+	Assume that $(G,\circ)$ is an abelian group and that there exists an
+	homomorphism $\varphi: G \rightarrow H$ where $(H,*)$ is an algebraic
+	structure. Then $(H,*)$ is an abelian group.
+\end{theorem}
+\begin{proof}
+	We will proves each axioms holds separately:
+	\begin{enumerate}
+		\item Clearly we have closure, since for all elements hit by $\varphi$. 
+			Otherwise it would not be a map from $G \rightarrow H$
+		\item Let $a,b,c \in G$ then we have
+			\begin{equation}
+			\begin{aligned}
+				\varphi(a)*(\varphi(b)*\varphi(c)) 
+											 &=\varphi(a)*\varphi(b\circ c)\\
+											 &= \varphi(a\circ(b\circ c))\\
+											 &= \varphi((a\circ b)\circ c) \\
+											 &= \varphi(a\circ b)*\varphi(c)\\
+											 &= (\varphi(a)*\varphi(b))*\varphi(c)
+			\end{aligned}
+			\end{equation}
+		\item Let $e_G\in G$ be the identity element of $G$, then for $a\in G$
+			\begin{equation}
+			\begin{aligned}
+				\varphi(a) = \varphi(a\circ e_G) = \varphi(a)*\varphi(e_G) \\
+				\varphi(a) = \varphi(e_G\circ a) = \varphi(e_G)*\varphi(a) \\
+			\end{aligned}
+			\end{equation}
+		\item Let $a^{-1} \in G$ be the inverse of $a\in G$, then
+			\begin{equation}
+			\begin{aligned}
+				\varphi(e_G)=\varphi(a\circ a^{-1})=\varphi(a)*\varphi(a^{-1})\\
+				\varphi(e_G)=\varphi(a^{-1}\circ a)=\varphi(a^{-1})*\varphi(a)\\
+			\end{aligned}
+			\end{equation}
+		\item Let $a,b\in G$ then
+			\begin{equation}
+			\begin{aligned}
+				\varphi(a)*\varphi(b) = \varphi(a\circ b) = \varphi(b\circ a)
+				= \varphi(b)*\varphi(a)
+			\end{aligned}
+			\end{equation}
+	\end{enumerate}
+\end{proof}
+\begin{definition}[Isomorphism]\label{Isomorphism}
+Let $(G,\circ)$ and $(H,*)$ be algebraic structures and let
+$\varphi:G\rightarrow H$ be a homomorphism. We call $\varphi$ an
+\textit{isomorphism} if there exists an homomorphism $\psi : H\rightarrow G$
+such that for all $g\in G$ and $h\in H$ we have
+\begin{equation}
+\begin{aligned}
+	\varphi(\psi(h))=h\land \psi(\varphi(g))=g
+\end{aligned}
+\end{equation}
+We say that $G$ and $H$ are isomorphic, writing $G\simeq H$.
+\end{definition}
+\begin{lemma}[Bijective homomorphism is isomorphism]\label{Bijective homomorphism is isomorphism}
+	Let $\varphi:G\rightarrow H$ be a homomorphism from an algebraic structure
+	$G$ to $H$. If $\varphi$ is bijective, then it is also a isomorphism.
+\end{lemma}
+\begin{proof}
+	It's sufficient to show there exists a $\psi$ as in
+	definition~\ref{Isomorphism}. We have by assumption that there is a
+	homomorphism $\varphi:G\rightarrow H$ that is surjective and injective, that
+	is
+	\begin{equation}
+	\begin{aligned}
+		&\forall g,g'\in G: \varphi(g)=\varphi(g')\implies g=g'\\
+		&\forall h\in H:\exists g\in G: \varphi(g)=h
+	\end{aligned}
+	\end{equation}
+	Define $\psi:H\rightarrow G$ by $\psi(\varphi(g))=g$, this is possible since
+	every $h\in H$ has a unique element in $g\in G$ such that $\varphi(g)=h$ by
+	definition.
+\end{proof}
+\begin{lemma}[Surjective homomorphism onto $\Z$ iff hits
+	identity]\label{surjective homomorphism condition}
+	A homomorphism $\varphi:G\rightarrow \Z$ from a group $G$ is
+	surjective iff there is some $g_1\in G$ such that $\varphi(g_1)=1\in\Z$
+\end{lemma}
+\begin{proof}
+\textbf{Necessary condition}: Suppose that $\varphi$ is surjective, then by
+definition there must be some $g_1\in G$ such that $\varphi(g_1)=1$.
+\newline\newline
+\textbf{Sufficient condition}: We will prove it by induction:
+
+\textit{Base case}: By assumption, We have some $g_1\in G$ such that
+$\varphi(g_1)=1$. Notice that since $\varphi$ preserves group structure there is
+also some element of $g_{-1}\in G$ that maps to $-1$.
+
+\textit{Inductive step}: Assume there is some $g\in G$ such that
+$\varphi(g)=n\in \Z$. Then
+\begin{equation}
+\begin{aligned}
+	n+1&=\varphi(g)+\varphi(g_1)=\varphi(g\circ g_1) \\
+	n-1&=\varphi(g)+\varphi(g_{-1})=\varphi(g\circ g_{-1})
+\end{aligned}
+\end{equation}
+By the closure property of groups this completes the proof.
+\end{proof}
+\begin{definition}[Singular $p$-simplex]\label{singular p-simplex}
+	Let $p\in\{0,1,2,3\}$ and let $\Delta^p$ be the topological space
+	\begin{equation}
+	\begin{aligned}
+		\Delta^p = \left\{ (t_0,\dots,t_p)\in\R^{p+1}:\sum_{i=0}^p t_i= 1\land
+		0\leq t_i\right\}
+	\end{aligned}
+	\end{equation}
+\end{definition}
+\begin{definition}[Wall-map]\label{Wall-map}
+	For $0\leq i\leq p$, for $p\in\{0,1,2,3\}$, let\newline 
+	$\delta^i: \Delta^{p-1}\rightarrow\Delta^p$ be the function defined by
+	\begin{equation}
+	\begin{aligned}
+		\delta^i(t_0,\dots,t_{p-1}) = (t_0,\dots,t_{i-1},0,t_{i},\dots,t_{p-1})
+	\end{aligned}
+	\end{equation}
+	Further more we set $\Delta^{-1}=\emptyset$. We call these maps
+	\textit{wall-maps}.
+\end{definition}
+\begin{definition}[The singular $p$-simplexs of $X$]\label{singular p-simplex x}
+	Let $X$ be a topological space, let $p \in \{0,1,2,3\}$ and define the set
+	\begin{equation}
+	\begin{aligned}
+		\Sin_p(X)=\{\sigma:\Delta^p\rightarrow X: \sigma \in C(\sigma^p,X)\}
+	\end{aligned}
+	\end{equation}
+	We call $\Sin_p(X)$ \textit{the singular $p$-simplexs of $X$}.
+\end{definition}
+\begin{definition}\label{di wall-map}
+	Let $X$ be a topological manifold. Let $0\leq i\leq p$, for\newline
+	$p\in\{0,1,2,3,4\}$, let $d_i:\Sin_p(X)\rightarrow \Sin_{p-1}(X)$ be given
+	by
+	\begin{equation}
+	\begin{aligned}
+		d_i(\sigma)=\sigma \circ\delta^i
+	\end{aligned}
+	\end{equation}
+\end{definition}
+\begin{theorem}
+	Let $X$ be a topological space. Let $\sigma\in \Sin_p(X)$ and $0\leq i<j\leq
+	p$. Then $d_i d_j(\sigma)=d_{j-1}d_i(\sigma)$.
+\end{theorem}
+\begin{proof}
+	First note that
+	\begin{equation}
+	\begin{aligned}
+		d_i d_j(\sigma) &=\sigma\circ\delta^j\circ\delta^i\\
+		d_{j-1}d_i(\sigma) &=\sigma\circ\delta^i\circ\delta^{j-1}
+	\end{aligned}
+	\end{equation}
+	For the first we write (by definition~\ref{singular p-simplex})
+	\begin{equation}
+	\begin{aligned}
+		(\sigma\circ\delta^j\circ\delta^i)(t_0,\dots,t_p) &=
+		(\sigma\circ\delta^j)(t_0,\dots,t_{i-1},0,t_{i},\dots,t_{p-1})\\
+		&= \sigma(t_0,\dots,t_{i-1},0,t_i,\dots,t_{j-1},0,t_j\dotsi,t_{p-1})
+	\end{aligned}
+	\end{equation}
+	For the second
+	\begin{equation}
+	\begin{aligned}
+		(\sigma\circ\delta^i\circ\delta^{j-1})(t_0,\dots,t_p) &=
+		(\sigma\circ\delta^i)(t_0,\dots,t_{j-2},0,t_{j-1},\dots,t_{p-1})\\
+		&= \sigma(t_0,\dots,t_{i-1},0,t_i,\dots,t_{j-1},0,t_j\dotsi,t_{p-1})
+	\end{aligned}
+	\end{equation}
+	Since the element was arbitrary, this completes the proof.
+\end{proof}
+\begin{definition}[Singular $p$-chain in $X$]\label{singular p-chain}
+	Let $X$ be a topological room. For $p\in\{0,1,2,3\}$, define
+	\begin{equation}
+	\begin{aligned}
+		C_p(X)=\Z\Sin_p(X)=\left\{\sum_{\sigma\in\Sin_p(X)}c_\sigma\cdot\sigma:
+		c_\sigma\in\Z:|\{c_\sigma:c_\sigma\neq0\}|\in\N\right\}
+	\end{aligned}
+	\end{equation}
+	that is the free abelian group generated by $\Sin_p(X)$. We call this
+	abelian group the \textit{singular $p$-chains in $X$}.
+\end{definition}
+\begin{definition}[$p^\text{th}$ chain map]\label{pth chain map}
+	Let $\del_p:C_p(X)\rightarrow C_{p-1}(X)$, for $p\in\{0,1,2,3\}$ be the map
+	given by
+	\begin{equation}
+	\begin{aligned}
+		\del_p\sigma=\sum^p_{i=0} {(-1)}^i d_i (\sigma)
+	\end{aligned}
+	\end{equation}
+	where $\sigma\in\Sin_p(X)$. We call this map the
+	\textit{$p^\text{th}$ chain map}. For $s\in C_p(X)$ the function the map is
+	given by
+	\begin{equation}
+	\begin{aligned}
+		\del_ps=\sum_{\sigma\in\Sin_p(X)}\left(\sum^p_{i=0} {(-1)}^i c_\sigma 
+			d_i(\sigma)\right)
+	\end{aligned}
+	\end{equation}
+\end{definition}
+\begin{theorem}
+	Let $\sigma\in\Sin_p(X)$, then
+	\begin{equation}
+	\begin{aligned}
+		\del_{p-1}\del_p(\sigma)=0
+	\end{aligned}
+	\end{equation}
+\end{theorem}
+\begin{proof}
+\end{proof}
+\begin{definition}[Subgroup]\label{subgroup}
+	Let $(G,*)$ be an abelian group. Let $H\subseteq G$, then $(H,*)$
+	is called a \textit{subgroup} of $(G,*)$ iff $(H,*)$ satisfies
+	the axioms in definition~\ref{Abelian group}. This we write as
+	$H\trianglelefteqG$. If $H=\{e_G\}$, that is $H$ contains only the
+	identity of $G$ we call this the \textit{trivial subgroup} of $G$.
+	We call $H$ a \textit{proper subgroup} if $H\subset G$.
+\end{definition}
+\begin{definition}[Coset]\label{coset}
+	Let $G$ be a abelian group and let $H$ be a subgroup of $G$. We define for
+	$g\in G$
+	\begin{equation}
+	\begin{aligned}
+		g+H &=\left\{g*h:h\in H\right\}\\
+		H+g &=\left\{h*g:h\in H\right\}
+	\end{aligned}
+	\end{equation}
+	We call these sets the \textit{cosets} of $H$.
+\end{definition}
+\begin{theorem}
+	Let $H$ be a subgroup of $G$. Let $g\in G$. Then
+	\begin{equation}
+	\begin{aligned}
+		g+H &=H+g
+	\end{aligned}
+	\end{equation}
+\end{theorem}
+\begin{proof}
+	Since $G$ is abelian, $H$ must be too. Therefore $g*h=h*g$ for $g\in G$ and
+	$h\in H$ which completes the proof.
+\end{proof}
+\begin{theorem}
+	Let $H$ be a subgroup of $G$. Let $g,g'\in G$. Then
+	\begin{equation}
+	\begin{aligned}
+		g'+(g+H) &= (g'*g)+H
+	\end{aligned}
+	\end{equation}
+\end{theorem}
+\begin{proof}
+	First note	
+	\begin{equation}
+	\begin{aligned}
+		g'+(g+H) &= g'+\{g*h:h\in H\}\\
+				 &= \{g'*(g*h):h\in H\}
+	\end{aligned}
+	\end{equation}
+	Since $G$ is an abelian group, we have
+	\begin{equation}
+	\begin{aligned}
+		\{g'*(g*h):h\in H\} &= \{(g'*g)*h:h\in H\}
+	\end{aligned}
+	\end{equation}
+	But that is just $(g'*g)+H$.
+\end{proof}
+\begin{definition}[Product of group subsets]\label{group product}
+	Let $S,T\subset G$ where $(G,*)$ is an abelian group. Then we define the
+	product
+	\begin{equation}
+	\begin{aligned}
+		ST = \left\{s*t:s\in S\land t\in T\right\}
+	\end{aligned}
+	\end{equation}
+\end{definition}
+\begin{theorem}
+	Let $H$ be a subgroup of $G$. Let $g,g'\in G$. Then
+	\begin{equation}
+	\begin{aligned}
+		(g+H)(g'+H) = (g*g')+H
+	\end{aligned}
+	\end{equation}
+\end{theorem}
+\begin{proof}
+	First we prove that $(g*g')+H\subseteq (g+H)(g'+H)$. Note that
+	\begin{equation}
+	\begin{aligned}
+		(g+H)(g'+H) &= \{a*b:a\in g+H\land b\in g'+H\}\\
+					&= \{(g*h)*(g'*h'):g,g'\in G\land h,h'\in H\}\\
+					&= \{(g*g')*(h*h'):g,g'\in G\land h,h'\in H\}
+	\end{aligned}
+	\end{equation}
+	The last step are justified since $(G,*)$ is an abelian group. Note that
+	since $(H,*)$ satisfies definition~\ref{Abelian group} we have $e_G\in H$,
+	therefore be setting $h=e_G$ we obtain that $(g*g')+H\subseteq (g+H)(g'+H)$.
+	Next we prove that $(g+H)(g'+H)\subseteq (g*g')+H$. 
+	\begin{equation}
+	\begin{aligned}
+		(g*g')+H &= \{(g*g')*h:h\in H\}
+	\end{aligned}
+	\end{equation}
+	We note that $h*h'\in H$ since $(H,*)$ has closure. Therefore we conclude
+	that $(g+H)(g'+H)\subseteq (g*g')+H$ and thus $(g+H)(g'+H)=(g*g')+H$.
+\end{proof}
+\end{document}

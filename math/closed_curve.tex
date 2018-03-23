@@ -1,10 +1,12 @@
-\documentclass{article}
+\documentclass[a4paper,11pt]{article}
+\usepackage[scale=0.7,vmarginratio={1:2},heightrounded]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{amsfonts}
 \usepackage{tikz}
+\usepackage{enumitem}
 %\usepackage[margin=0.5in]{geometry}
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}
@@ -24,7 +26,13 @@
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\Q}{\mathbb{Q}}
 \newcommand{\C}{\mathbb{C}}
+\newcommand{\cL}{\mathcal{L}}
 \newcommand{\dx}{\text{d}}
+\newcommand{\D}{\text{D}}
+\newcommand{\del}{\partial}
+\newcommand{\iff}{\Longleftrightarrow}
+\newcommand{\dd}{\text{..}}
+\newcommand{\lett}{\sqsupset}
 
 
 \title{Closed curves}
@@ -361,8 +369,43 @@
 	N(t) &=\frac{1}{\frac{1}{K}+ Ce^{-rt}}\\
 	N_0 = N(0) = \frac{1}{\frac{1}{K}+C} &\implies C = \frac{1}{N_0}-\frac{1}{K}
 \end{align*}
+\begin{align*}
+	J&=\int \frac{1}{1+e^x}\ \dx x\\
+	 &=\int \frac{e^{-x}}{e^{-x}}\frac{1}{1+e^x}\ \dx x\\
+	 &=\int \frac{e^{-x}}{1+e^{-x}}\ \dx x\\
+	\text{Let } u=1+e^{-x} &\implies \dx u = -e^{-x}\ \dx x\\
+	J&=-\int \frac{\dx u}{u}\\
+	 &= -\ln u = -\ln \left(1+e^{-x}\right)
+\end{align*}
+\begin{align*}
+	\int fg' = \int f'g+fg
+\end{align*}
+\begin{align*}
+	J&=\int_0^\infty \left(xe^{1-x}
+	-\lfloor x\rfloor e^{1-\lfloor x \rfloor}\right)\ \dx x\\
+	&=\int_0^\infty xe^{1-x}\ \dx x-
+	\int_0^\infty\lfloor x\rfloor e^{1-\lfloor x \rfloor}\ \dx x\\
+	I_1&=\int_0^\infty\lfloor x\rfloor e^{1-\lfloor x \rfloor}\ \dx x\\
+	&=\sum_{n=0}^\infty ne^{1-n}=e\sum_{n=1}^\infty ne^{-n}\\
+	\frac{1}{e^1}+\frac{2}{e^2}&=\frac{e^1+2}{e^2}\\
+	\frac{1}{e^1}+\frac{2}{e^2}+\frac{3}{e^3}&=\frac{e^2+2e^1+3}{e^3}\\
+	\sum_{n=1}^\infty ne^{-n}&=\lim_{m\rightarrow\infty}
+	\frac{1}{e^m}\sum_{n=0}^{m-1}(m-n)e^{n}\\
+\end{align*}
 \newpage
-\begin{theorem}
+\begin{theorem}[Continues Image of Closed Interval Is Closed Interval]
+	Let $I\subseteq \R$ be a set such that
+	\begin{equation}
+	\begin{aligned}
+		\forall x,y\in I: \forall z\in R: (x<z<y\implies z\in I)
+	\end{aligned}
+	\end{equation}
+	and let $f:I\rightarrow \R$ be a continues real function. Then the image of
+	$f$ also satisfies the above.
+\end{theorem}
+\begin{proof}
+\end{proof}
+\begin{theorem}[Intermediate Value Theorem]\label{th1}
 	Let $f$ be a real function which is continues on $[a,b]$ such that
 	$f(a)<f(b)$. Then for $f(a)<k<f(b)$:
 	\begin{equation}
@@ -372,8 +415,59 @@
 	\end{equation}
 \end{theorem}
 \begin{proof}
+	Let $A=\{x\in[a,b]:f(z)<k\}$. Then $A\neq\emptyset$ since
+	$a\in A$ and $\sup A$ exists since $b$ is an upper bound. Let
+	$c =\sup A$, we claim $f(c)=k$.  Since $c$ is the supremum,
+	there is $\delta_0\in\R_{>0}$ such that for $0<c-a'<\delta_0$
+	we have both $a'\in A$ and by the continuity of $f$
+	\begin{equation}
+	\begin{aligned}
+		|f(a')-f(c)|<\varepsilon
+	\end{aligned}
+	\end{equation}
+	for all $\varepsilon\in\R_{>0}$. Then 
+	\begin{equation}
+	\begin{aligned}
+		|f(a')-f(c)|&<\varepsilon\\
+		|f(c)-f(a')|&<\varepsilon\\
+		\implies f(c)&<f(a')+\varepsilon\\
+		\implies f(c)&<k+\varepsilon,\ \because f(a')<k
+	\end{aligned}
+	\end{equation}
+	we may also choose $\delta_1\in\R_{>0}$ such that for $0<b'-c<\delta_1$ we
+	have both $b'\notin A$ and
+	\begin{equation}
+	\begin{aligned}
+		|f(b')-f(c)|&<\varepsilon\\
+		|f(c)-f(b')|&<\varepsilon\\
+		\implies f(b')-\varepsilon&<f(c)\\
+		\implies k-\varepsilon&<f(c),\ \because k\leq f(b')
+	\end{aligned}
+	\end{equation}
+	let $\delta=\min(\delta_0,\delta_1)$, then we have
+	\begin{equation}
+	\begin{aligned}
+		0<|x-c|<\delta\implies |f(x)-k|<\varepsilon \iff \lim_{x\rightarrow
+		c}f(x)=k
+	\end{aligned}
+	\end{equation}
+	so by the continuity of $f$ we have $f(c)=k$.
 \end{proof}
-\begin{theorem}
+\begin{theorem}[Rolle's Theorem]
+	Let $f$ be a real function which is continues on $[a,b]$ and differntiable
+	on $(a,b)$ such that $f(a)=f(b)$. Then
+	\begin{equation}
+	\begin{aligned}
+		\exists \xi \in (a,b):f'(\xi) =0
+	\end{aligned}
+	\end{equation}
+\end{theorem}
+\begin{proof}
+	Proof sketch: Use that image of interval is interval, and that it has max
+	and min. Then consider the case of a constant function and when not use that
+	max and min have $f'=0$.
+\end{proof}
+\begin{theorem}[Mean Value Theorem]
 	Let $f$ be a real function which is continues on $[a,b]$ and differntiable
 	on $(a,b)$. Then:
 	\begin{equation}
@@ -383,8 +477,43 @@
 	\end{equation}
 \end{theorem}
 \begin{proof}
+	Let $g(x)=f(x)-\frac{f(b)-f(a)}{b-a}(x-a)$. Then $g$ is continues on
+	$[a,b]$, and differntiable on $(a,b)$. Note that $g(a)=f(a)$ and
+	$g(b)=f(a)$, therefore by Rolle's Theorem there is $\xi\in(a,b)$ such that
+	\begin{equation}
+	\begin{aligned}
+		g'(\xi) &= 0\\
+		f'(\xi)-\frac{f(b)-f(a)}{b-a} &= 0\\
+		f'(\xi) &= \frac{f(b)-f(a)}{b-a}
+	\end{aligned}
+	\end{equation}
+	Which completes the proof.
 \end{proof}
-\begin{theorem}
+\begin{theorem}[Cauchy Mean Value Theorem]
+	Let $f$ and $g$ be real functions which are continues on $[a,b]$ and 
+	differntiable on $(a,b)$. Then:
+	\begin{equation}
+	\begin{aligned}
+		\exists \xi \in (a,b):(f(b)-f(a))g'(\xi)=(g(b)-g(a))f'(\xi)
+	\end{aligned}
+	\end{equation}
+\end{theorem}
+\begin{proof}
+\end{proof}
+\begin{theorem}[L'H\^{o}pital's Rule]
+	Let $f$ and $g$ be real functions which are continues on $[a,b]$ and 
+	differntiable on $(a,b)$. Let $g'(x)\neq 0$ for all $x\in(a,b)$ and suppose
+	there is some $c\in(a,b)$ such that $f(c)=g(c)=0$, then
+	\begin{equation}
+	\begin{aligned}
+		\lim_{x\rightarrow c}\frac{f(x)}{g(x)}
+		=\lim_{x\rightarrow c}\frac{f'(x)}{g'(x)}
+	\end{aligned}
+	\end{equation}
+\end{theorem}
+\begin{proof}
+\end{proof}
+\begin{theorem}[Mean Value Theorem for Integrals]
 	Let $f$ be a continues real function on the closed interval $[a,b]$. Then:
 	\begin{equation}
 	\begin{aligned}
@@ -396,6 +525,49 @@
 \end{proof}
 \newpage
 \begin{align*}
+	f(x)=x^3-x^2-8x+1 &\implies f'(x)=3x^2-2x-8\\
+	3x^2-2x-8 &= 0\\
+	\therefore x &= -4/3,\ 2\\
+	\therefore \max(f([-2,2]))&=\max(\{f(-4/3),f(2),f(-2)\})=f(-4/3)\\
+	\land \min(f([-2,2]))&=\min(\{f(-4/3),f(2),f(-2)\})=f(2)
+\end{align*}
+\begin{align*}
+	\lett a_1<\cdots<a_n\land \lett f(x)=\sum_{i=1}^n {(x-a_i)}^2\\
+	\therefore \D_x f(x)=\sum_{i=1}^n \D_x{(x-a_i)}^2=
+	\sum_{i=1}^n 2(x-a_i)\\
+	\therefore 0=\sum_{i=1}^n 2(x'-a_i)=2nx'-\sum_{i=1}^n 2a_i\\
+	\implies x'=\frac{1}{n}\sum_{i=1}^n a_i \implies \min f = f(x')\because
+	0\leq {(x-a_i)}^2
+\end{align*}
+\begin{align*}
+	&\lett a_1<\cdots<a_n\land \lett f(x)=\sum_{i=1}^n |x-a_i|\\
+	\forall i<j:&x<a_i<a_j \implies 0<|x-a_i|+|x-a_j|=-2x+a_i+a_j\\
+				&a_i\leq x'\leq a_j\implies0<|x-a_i|+|x-a_j|=a_j-a_i\\
+				& a_i<a_j<x'' \implies 0<|x-a_i|+|x-a_j|=2x-a_i-a_j\\
+	\therefore& a_j-a_i=2a_j-a_i-a_j<2x''-a_i-a_j\\
+	\therefore& a_j-a_i=-2a_i+a_i+a_j<-2x+a_i+a_j\\
+	\therefore\min f &= \min \sum_{i=1}^n |x-a_i| 
+	= a_n-a_1+\min \sum_{i=2}^{n-1} |x-a_i|\\
+	\therefore 2\mid n &\implies \min f= a_n-a_i+\cdots+a_{n/2+1}-a_{n/2-1}\\
+	\therefore 2\nmid n &\implies \min f=a_n-a_i+\cdots+a_{n-\lfloor n/2\rfloor}
+\end{align*}
+\begin{align*}
+	\lett 0<a \land \lett &f(x)=\frac{1}{1+|x|}+\frac{1}{1+|x-a|}\\
+	\lett x< 0 &\implies f(x)=\frac{1}{1-x}+\frac{1}{1-x+a}\\&\implies
+	f'(x)=\frac{1}{{(1-x)}^2}+\frac{1}{{(a+1-x)}^2}>0\\
+	\lett 0<x< a &\implies f(x)=\frac{1}{1+x}+\frac{1}{1-x+a}\\&\implies
+	f'(x)=-\frac{1}{{(1+x)}^2}+\frac{1}{{(a+1-x)}^2}\\
+	&\therefore f'(x)=0\implies x=a/2\\
+	\lett a< x &\implies f(x)=\frac{1}{1+x}+\frac{1}{1+x-a}\\&\implies
+	f'(x)=-\frac{1}{{(1+x)}^2}-\frac{1}{{(x+1-a)}^2}<0\\
+	\therefore \min f=\min \{f(a/2),f(a),f(0)\}&=\min\{f(a/2),f(0)\}\because
+	f(0)=f(a)\\
+	f(0)=1+\frac{1}{1+a}=\frac{a+2}{a+1}&\land f(a/2)=\frac{4}{2+a}\\
+	0<a^2\iff 4a+4&<{(a+2)}^2\iff \frac{4}{2+a}<\frac{a+2}{a+1}\\
+	\therefore \min f =\frac{a+2}{a+1}
+\end{align*}
+\newpage
+\begin{align*}
 	\cos 2\theta + i \sin 2\theta &= e^{2i\theta } \\
 								  &= {\left(e^{i\theta }\right)}^2 \\
 								  &= {\left(\cos \theta+i\sin \theta\right)}^2\\
@@ -405,10 +577,15 @@
 	\implies &\sin 2\theta = 2 \sin \theta \cos \theta \\
 	\implies &\cos \theta = \frac{\sin 2\theta}{2\sin \theta}
 \end{align*}
+\begin{definition}
+\begin{align*}
+	U_n := \{z\in \C: z^n = 1\} \\
+\end{align*}
+\end{definition}
 \begin{theorem}
 \begin{align*}
 	\forall n \in \N: \forall z\in \C:  
-	z^n = 1 \implies \exists k \in \N_n : z = e^{2i k\pi / n}
+	(z^n = 1 \implies \exists k \in \N_n : z = e^{2i k\pi / n})
 \end{align*}
 \end{theorem}
 \begin{proof}
@@ -421,35 +598,122 @@
 	&\forall k \in \N_n: {\left(e^{2ik \pi /n}\right)}^n = e^{2\pi i k} = 1,\
 	\therefore \exists \{c_1,\dots,c_n\} \subseteq
 	\C,\ \because\left|\N_n\right|=n \\
-	&\exists z\in U_n : \nexists k \in \N_n: e^{2ik \pi /n} = z \implies
+	&\exists z\in U_n : \forall k \in \N_n: e^{2ik \pi /n} = z \implies
 	\exists c \notin U_n: c^n = 1 \implies \bot\ \because P_1
 \end{align*}
 \end{proof}
-\begin{definition}
-\begin{align*}
-	U_n := \{z\in \C: z^n = 1\} \\
-\end{align*}
-\end{definition}
 \begin{theorem}
 \begin{align*}
-	&\forall x,y \in U_n: xy \in U_n \\
-	&\forall x,y,z \in U_n: x(yz) = (xy)z \\
-	&\exists e \in U_n: \forall x \in U_n: ex=xe = x \\
-	&\forall x \in U_n:\exists x^{-1}\in U_n: x^{-1}x=xx^{-1} = e \\
-	&\forall x,y \in U_n: xy = yx 
+	(U_n,\cdot) \cong (\Z/n\Z,+)
 \end{align*}
 \end{theorem}
 \begin{proof}
 \begin{align*}
-	&x^n y^n = 1 \Leftrightarrow {(xy)}^n=1 \implies xy \in U_n \\
-	&\forall x',y',z' \in \C: x'(y'z') = (x'y')z' \implies x(yz) = (xy)z\\
-	&1^n=1 \implies 1 \in U_n \implies \forall x \in U_n: 1x = x 1 = x \\
-	&\forall x \in U_n: {\left(\frac{1}{x}\right)}^n = \frac{1}{x^n} = 1 
-	\implies \frac{1}{n} \in U_n \\
-	&\forall x',y' \in \C : x'y' = y' x' \implies xy =yx
+	\lett\varphi:\Z/n\Z \rightarrow U_n: \varphi(k)=e^{2ik \pi /n}\\
+	\lett k,m\in\Z/n\Z\land\varphi(k+m)=e^{2i(k+m) \pi /n}
+	=e^{2ik \pi /n}e^{2im \pi/n}
+	=\varphi(k)\varphi(m)\\
+	\lett k,m\in\Z/n\Z\land \varphi(k)=\varphi(m)\iff e^{2ik \pi /n}
+	=e^{2im \pi/n}
+	\iff e^{2i(k-m) \pi /n}=1\\
+	\therefore k=m\ \because -n<k-m<n \land e^0=1\\
+	\text{Theorem 10}\implies\forall \omega\in U_n:\exists 
+	k\in\Z/n\Z:\varphi(k)=\omega\\
+	\therefore \exists \gamma:U_n\rightarrow \Z/n\Z:\forall \omega\in U_n,k\in
+	\Z/n\Z:(\gamma(\varphi(\omega))=\omega\land\varphi(\gamma(k))=k)
 \end{align*}
 \end{proof}
-\newpage
+\begin{theorem}
+	Let $f$ be continues on $[a,b]$ and $f(a)<f(b)$. Then $f$ is
+	injective on $[a,b]$ if and only if $f$ is strictly increasing
+	on $[a,b]$
+\end{theorem}
+\begin{proof}
+	\textbf{Necessary condition} (Injective $\implies$ Strictly increasing)
+
+	First we show that $f(a)<f(x)$ for all $x\in (a,b)$. Assume
+	for contradiction that $f(x)<f(a)$, note that $f(x)<f(a)<f(b)$
+	so per the Intermediate Value Theorem there is $\xi\in(x,b)$
+	such that $f(\xi)=f(a)$, contradicting $f$ being injective. So
+	therefore $f(a)\leq f(x)$, but $f$ is injective, so $f(a)<f(x)$.
+
+	Next let $x\in(a,b]$, then $f(a)<f(x)$, and let $x'\in(a,x)$. Aiming
+	for contradiction, assume that $f(x)<f(x')$. We have that
+	$f(a)<f(x)<f(x')$, so therefore per the Intermediate Value Theorem
+	there is $\xi\in(a,x')$ such that $f(\xi)=f(x)$,  contradicting
+	$f$ being injective. So therefore $f(x')\leq f(x)$, but since $f$ is
+	injective, it must be the case that $f(x')<f(x)$.
+
+	\textbf{Sufficient condition} (Strictly increasing $\implies$ Injective)
+
+	Let $x\neq x'$ and without loss of generality assume $x<x'$,
+	then since $f$ is strictly increasing it must be the case that
+	$f(x)<f(x')$. That is $f(x)\neq f(x')$, which completes the proof.
+\end{proof}
+\begin{corollary}
+	Let $f$ be continues on $[a,b]$ and $f(b)<f(a)$. Then $f$ is
+	injective on $[a,b]$ if and only if $f$ is strictly decreasing
+	on $[a,b]$. To see why, note that for $-f$ the above Theorem applies.
+\end{corollary}
+\begin{corollary}
+	Let $f$ be continues on $[a,b]$ and $f(b)\neq f(a)$. Then $f$
+	is injective on $[a,b]$ if and only if $f$ is strictly increasing
+	or decreasing on $[a,b]$.
+\end{corollary}
+\begin{theorem}
+	Let $f$ be continues and even on $\R$. Then there is $N\in\R$ such that for
+	all $x\in\R$ we have either $f(x)\leq N$ or $N\leq f(x)$.
+\end{theorem}
+\begin{proof}
+	Assume first that $f$ is unbounded above. We note that since
+	the continues image of a closed interval is bounded, that $f$
+	cannot be unbounded near some $a\in\R$. Therefore it must be
+	the case that
+	\begin{equation}
+	\begin{aligned}
+		\lim_{x\rightarrow +\infty}f(x)=+\infty\text{ or }
+		\lim_{x\rightarrow -\infty}f(x)=+\infty
+	\end{aligned}
+	\end{equation}
+	Note that
+	\begin{equation}
+	\begin{aligned}
+		\lim_{x\rightarrow -\infty}f(x)=\lim_{x\rightarrow \infty}f(-x)=
+		\lim_{x\rightarrow \infty}f(x)
+	\end{aligned}
+	\end{equation}
+	therefore $f$ must be bounded below. It is easy to see that a similar
+	argument holds when $f$ is unbounded below, showing that $f$ is bounded
+	above. Lastly if $f$ is bounded, there is nothing to show.
+\end{proof}
+\begin{align*}
+	i^i&=e^{i\ln i}\\
+	i&=e^{\pi i/2}\\
+	\ln i&=\pi i/2\\
+	i^i&=e^{-\pi/2}\\
+	\\
+	\sqrt{i}&=i^{1/2}\\
+			&=e^{\pi i/4}\\
+	\\
+	e^{\ln\left(x^y\right)}=x^y&={\left(e^{\ln x}\right)}^y=e^{y\ln x}\\
+	\therefore \ln\left(e^{\ln\left(x^y\right)}\right)
+	&=\ln\left(e^{y\ln x}\right)\\
+	\implies \ln\left(x^y\right)&=y\ln x
+\end{align*}
+\begin{align*}
+	i^i&=e^{i\ln i}\\
+	i&=e^{\pi i/2}\\
+	\ln i&=\pi i/2\\
+	i^i&=e^{-\pi/2}\\
+	\\
+	\sqrt{i}&=i^{1/2}\\
+			&=e^{\pi i/4}\\
+	\\
+	e^{\ln\left(x^y\right)}=x^y&={\left(e^{\ln x}\right)}^y=e^{y\ln x}\\
+	\therefore \ln\left(e^{\ln\left(x^y\right)}\right)
+	&=\ln\left(e^{y\ln x}\right)\\
+	\implies \ln\left(x^y\right)&=y\ln x
+\end{align*}
 \begin{definition}[Polynomial vector space]
 	Given some polynomial 
 	\begin{equation}
@@ -474,4 +738,298 @@
 	multiplication by a scalar. It's easy then to see that it forms a vector
 	space.
 \end{definition}
+\begin{equation}
+\begin{aligned}	
+	\begin{bmatrix}a & b\\c & d\end{bmatrix}\begin{pmatrix}x \\y\end{pmatrix}
+					 &=
+	\begin{bmatrix}
+		a & b \\
+		c & d
+	\end{bmatrix}
+	\left(
+	x
+	\begin{pmatrix}
+		1 \\
+		0
+	\end{pmatrix}
+	+
+	y
+	\begin{pmatrix}
+		0 \\
+		1
+	\end{pmatrix}
+	\right)\\
+	&=
+	x\begin{pmatrix}a \\c\end{pmatrix}
+	+y\begin{pmatrix}b \\d\end{pmatrix}\\
+	&=\begin{pmatrix}ax+by \\cx+dy\end{pmatrix}
+
+
+\end{aligned}	
+\end{equation}
+\begin{equation}
+\begin{aligned}	
+	\mathcal{F}\{f(t)\}&:=\int_{-\infty}^\infty f(t)e^{-2\pi it\xi}\ \dx t\\
+	\mathcal{L}\{f(t)\}&:=\int_0^\infty e^{-st}f(t)\ \dx t\\
+	\mathcal{B}\{f(t)\}&:=\int_{-\infty}^{\infty}e^{-st}f(t)\ \dx t\\
+	\mathcal{M}\{f(t)\}&:=\int_0^\infty t^{s-1}f(t)\ \dx t\\
+\end{aligned}	
+\end{equation}
+\begin{equation}
+\begin{aligned}	
+	\mathcal{L}\{\cos (at)\} &= \int_0^\infty \cos(at)e^{-st}\ \dx t\\
+	 					   &= \int_0^\infty \cos(at)e^{-st}\ \dx t\\
+						   &=-\frac{1}{s}\cos(at)e^{-st}\big|_0^\infty
+	-\frac{a}{s}\int_0^\infty \sin(at)e^{-st}\ \dx t\\
+	&= \frac{1}{s}-\frac{a}{s}\left(-\frac{1}{s}\sin(at)e^{-st}\big|_0^\infty
++\frac{a}{s}\int_0^\infty \cos(at)e^{-st}\right)\\
+&=\frac{1}{s}-\frac{a^2}{s^2}\mathcal{L}\{\cos (at)\}\\
+\therefore \mathcal{L}\{\cos (at)\} &=\frac{1}{s}
+					-\frac{a^2}{s^2}\mathcal{L}\{\cos (at)\}\\
+\mathcal{L}\{\cos (at)\}\frac{s^2+a^2}{s^2} &=\frac{1}{s}\\		
+\mathcal{L}\{\cos (at)\} &= \frac{s}{a^2+s^2}
+\end{aligned}	
+\end{equation}
+\begin{equation}
+\begin{aligned}	
+	\mathcal{L}\{e^{at}\} &= \int_0^\infty e^{at} e^{-st}\ \dx t\\
+						 &= \int_0^\infty e^{(a-s)t}\ \dx t\\
+						 &= \frac{e^{(a-s)t}}{(a-s)}\bigg|_0^\infty
+	= \frac{1}{s-a}
+\end{aligned}	
+\end{equation}
+\begin{equation}
+\begin{aligned}	
+	\frac{\dx}{\dx t}\int_a^b f(x,t)\ \dx x = 
+	\int_a^b \frac{\del f}{\del t}(x,t)\ \dx x
+\end{aligned}	
+\end{equation}
+\begin{equation}
+\begin{aligned}	
+	\mathcal{L}\{tf(t)\} &= \int_0^\infty tf(t)e^{-st}\ \dx t\\
+	\frac{\dx}{\dx s} \int_0^\infty f(t)e^{-st}\ \dx t
+	&=\int_0^\infty \frac{\del}{\del s} f(t)e^{-st}\ \dx t\\
+	&=-\int_0^\infty tf(t)e^{-st}\ \dx t\\
+	\therefore \mathcal{L}\{tf(t)\}&=-\frac{\dx }{\dx s}\mathcal{L}\{f(t)\}
+\end{aligned}	
+\end{equation}
+\begin{equation}
+\begin{aligned}	
+	\mathcal{L}\left\{\frac{f(t)}{t}\right\} 
+	&= \int_0^\infty \frac{f(t)}{t}e^{-st}\ \dx t\\
+	\lett tg(t) &= f(t)\\
+	\mathcal{L}\{tg(t)\}&=-\frac{\dx }{\dx s}\mathcal{L}\{g(t)\}\\
+	\therefore \mathcal{L}\{f(t)\}&=-\frac{\dx }{\dx s}
+	\mathcal{L}\left\{\frac{f(t)}{t}\right\} \\
+	\int_s^\infty \mathcal{L}\{f(t)\}\ \dx s
+	&=-\mathcal{L}\left\{\frac{f(t)}{t}\right\} \bigg|^\infty_s\\
+	&=\lim_{s\rightarrow\infty}\mathcal{L}\left\{\frac{f(t)}{t}\right\}
+	+\mathcal{L}\left\{\frac{f(t)}{t}\right\}\\
+	&=\mathcal{L}\left\{\frac{f(t)}{t}\right\}
+\end{aligned}	
+\end{equation}
+\begin{align*}
+	\cL\{t\} &= -\frac{\dx}{\dx s}\cL\{1\}\\
+			 &= -\frac{\dx}{\dx s}\int_0^\infty e^{-st}\ \dx t\\
+			 &= -\frac{\dx}{\dx s}{\left[-\frac{e^{-st}}{s}\right]}_0^\infty\\
+			 &= -\frac{\dx}{\dx s}\frac{1}{s}=\frac{1}{s^2}\\
+\end{align*}
+\begin{align*}
+	\cL\{t^{n-1}\} &= \frac{(n-1)!}{s^n}\\
+	\cL\{t^n\} &= \cL\{tt^{n-1}\}\\
+			   &= -\frac{\dx}{\dx s}\cL\{t^{n-1}\}\\
+			   &= -\frac{\dx}{\dx s}\frac{(n-1)!}{s^n}\\
+			   &= \frac{n!}{s^{n+1}}\\
+\end{align*}
+\begin{align*}
+	\Gamma(z)&=\int_0^\infty x^{z-1}e^{-x}\ \dx x\\
+	\Gamma(1)&=\int_0^\infty e^{-x}\ \dx x={\left[-e^{-x}\right]}_0^\infty=1\\
+	\text{Assume }\Gamma(n-1)&=(n-2)!\\
+	\Gamma(n)&=\int_0^\infty x^{n-1}e^{-x}\ \dx x\\
+			 &={\left[-x^{n-1}e^{-x}\right]}_0^\infty
+	+(n-1)\int_0^\infty x^{n-2}e^{-x}\ \dx x\\
+	&=(n-1)\int_0^\infty x^{n-2}e^{-x}\ \dx x\\
+	&=(n-1)!\\
+	\\
+	\Gamma'(z)&=\frac{\dx}{\dx z}\int_0^\infty x^{z-1}e^{-x}\ \dx x\\
+	          &=\int_0^\infty \frac{\del}{\del z}x^{z-1}e^{-x}\ \dx x\\
+			  &=\int_0^\infty \ln(x)e^{z-1}e^{-x}\ \dx x\\
+\end{align*}
+\begin{align*}
+	I&=\int_0^\infty \frac{\sin^2 x}{x^2(x^2+1)}\ \dx x\\
+	I(t)&=\int_0^\infty \frac{\sin^2 (tx)}{x^2(x^2+1)}\ \dx x\\
+	I'(t)
+	&=\int_0^\infty\frac{\del}{\del t}\frac{\sin^2(tx)}{x^2(x^2+1)}\ \dx x\\
+	&=\int_0^\infty\frac{2x\sin(tx)\cos(tx)}{x^2(x^2+1)}\ \dx x\\
+	&=2\int_0^\infty\frac{\sin(tx)\cos(tx)}{x(x^2+1)}\ \dx x\\
+	&=\int_0^\infty\frac{\sin(2tx)}{x(x^2+1)}\ \dx x\\
+	I''(t)&=\int_0^\infty\frac{\del}{\del t}\frac{\sin(2tx)}{x(x^2+1)}\ \dx x\\
+	      &=\int_0^\infty\frac{2\cos(2tx)}{x^2+1}\ \dx x\\
+	I^{(3)}(t)&=\int_0^\infty\frac{\del}{\del t}
+	\frac{2\cos(2tx)}{x^2+1}\ \dx x\\
+	&=\int_0^\infty-\frac{4x\sin(2tx)}{x^2+1}\ \dx x\\
+\end{align*}
+\begin{align*}
+	\int_{\del \Omega} \omega = \int_{\Omega} \dx \omega
+\end{align*}
+\newpage
+\section{Construction of $\N$}
+\begin{definition}[Axioms of $\N$]\label{nat axioms}
+	Let $\N$ be a set with the following properties
+	\begin{align*}
+		(P1)\; &:\quad \exists 0\in\N\\
+		(P2)\; &:\quad \exists S &&:\N\rightarrow\N\\
+		(P3)\; &:\quad \forall m,n\in\N &&: S(m)=S(n)\implies m=n\\
+		(P4)\; &:\quad \forall n\in\N &&: S(n)\neq 0\\
+		(P5)\; &:\quad \forall N\subseteq\N &&: 
+		(0\in N\land(\forall n\in N:s(n)\in N))\implies N=\N\\
+	\end{align*}
+\end{definition}
+\begin{theorem}\label{nat proof}
+	There exists a set $\N$ satisfying the axioms of
+	definition~\ref{nat axioms}.
+\end{theorem}
+\begin{proof}
+	Let $0=\emptyset$ and let $S(n)=\{n\}\cup n$. We claim that the set
+	\begin{align*}
+		\N =\{n:n=0\lor\exists m\in\N:S(m)=n\}
+	\end{align*}
+	satisfies the axioms of definition~\ref{nat axioms}. First note
+	that $(P1)$ and $(P2)$ are already satisfied. For $(P3)$ we let
+	$m,n\in\N$. Then assume
+	\begin{align*}
+		S(m)&=S(n)\iff \{m\}\cup m=\{n\}\cup n
+	\end{align*}
+	thus we have $n\in S(m)$. If $n\in\{m\}$ then we are done, so assume $n\in
+	m$. Then $m\neq n$ by the Axiom of Foundation. We have $m\in \{m\}$ so by
+	the Axiom of Extension and Axiom of Unions we have $m\in S(n)$. Since $n\neq
+	m$ we must have $m\in n$ contradicting the Axiom of Foundation. We therefore
+	conclude that $n=m$. $(P4)$ is trivially satisfied by the Axiom of the Empty
+	Set. For the last $(P5)$ we can see that $\forall n\in N:s(n)\in N$ implies
+	that $\exists m\in N$ such that $S(m)=n$ for all $n \in N$. But that is just
+	the definition of $\N$ which completes the proof.
+\end{proof}
+\begin{theorem}[Proof by induction]\label{induction}
+	Let $p(n)$ be a proposition defined for all $n\in \N$. If
+	\begin{align*}
+		p(0) \land p(n)\implies p(S(n))\\
+	\end{align*}
+	Then $p$ is true for all $n\in \N$.
+\end{theorem}
+\begin{proof}
+	Consider the set $A$ defined as
+	\begin{align*}
+		A=\{n\in\N:p(n)\}
+	\end{align*}
+	By assumption $0\in A$ and for any $n\in A$, we have that $S(n)\in\N$ since
+	\newline$p(n)\implies p(S(n))$. Therefore $A$ may equivilantly be defined as
+	\begin{align*}
+		A=\{n\in\N:n=0\lor\exists m\in\N:S(m)=n\}
+	\end{align*}
+	But that is the definition of $\N$, so since $A$ may equivalently be defined
+	as the set of $n\in\N$ such that $p(n)$ this completes the proof.
+\end{proof}
+\begin{definition}[Addition on $\N$]\label{addition}
+	Let $+:\N^2\rightarrow\N$ we define \textit{addition} as
+	follows
+	\begin{align*}
+	\forall n,m\in\N:
+	\begin{cases}
+		m+0 & = m \\
+		m+S(n) &= S(m+n)
+	\end{cases}
+	\end{align*}
+\end{definition}
+\begin{theorem}
+	Let $+$ be the operator as defined in definition~\ref{addition}. Then $+$
+	satisfies
+	\begin{align*}
+		&(G0)\ :\ \forall n,m\in\N &&:n+m\in\N 
+		&&&\text{(Totality)}\\
+		&(G1)\ :\ \forall n,m,k\in\N&&:n+(m+k)=(n+m)+k
+		&&&\text{(Associativity)}\\
+		&(G2)\ :\ \exists 0:\forall n\in\N &&: n+0=0+n=n 
+		&&&\text{(Identity)}\\
+		&(C0)\ :\ \forall n,m\in\N &&: n+m=m+n
+		&&&\text{(Commutativity)}\\
+	\end{align*}
+\end{theorem}
+\begin{proof}\
+\begin{itemize}
+	\item[] $(G0)\ $: This property follows from Theorem~\ref{nat
+		proof}. Notice that in the case $m+0=m$, by definition
+		$m+0\in\N$. Assume then for $n\in\N$ that $m+n\in\N$,
+		then we have $m+S(n)=S(m+n)$ and since $m+n\in\N$,
+		by Theorem~\ref{nat proof}. By Theorem~\ref{induction}
+		and that $m$ was arbitrary this shows $(G0)$.
+	\item[] $(G1)\ $: Notice that if any of $n,m,k\in\N$ this 
+		property holds. So assume $n,m,k\neq 0$. This implies that
+		for all of them there is some $n',m',k'\in\N$ such that
+		$n=S(n')$ and equivalently for the others. So we may write
+		\begin{align*}
+			n+(m+k) &= S(n')+(m+k)\\
+					&= S(n'+(m+k))\\
+			(n+m)+k &= (n+m)+S(k')\\
+					&= S((n+m)+k')\\
+		\end{align*}
+		So if $n'+(m+k)=(n+m)+k'$ this property follows. If
+		$n'=0$ then
+		\begin{align*}
+			n'+(m+k)=m+k&=(n'+m)+k\\
+						&=(n'+m)+S(k')\\
+						&=S((n'+m)+k')\\
+						&=S(n'+m)+k'\\
+						&=n+m+k'\\
+		\end{align*}
+		the argument if $k'=0$ is similarly. If, on the other
+		hand $k',n'\neq0$ repeat the process described earlier
+		and note that eventually one of the must be equal to $0$.
+	\item[] $(G2)\ $: This property follows trivially.
+	\item[] $(C0)\ $:
+\end{itemize}
+\end{proof}
+\begin{definition}[Order on $\N$]\label{order}
+	We define an order on $\N$ as follows
+	\begin{align*}
+		\forall n,m\in\N:n\leq m:= \exists c\in\N:n+c=m
+	\end{align*}
+\end{definition}
+\begin{theorem}[Order on $\N$ is total order]\label{well-ordered}
+	Let $\leq$ be the order as defined in definition~\ref{order}. Then $\leq$
+	satisfies
+	\begin{align*}
+		&(0)\ :\ \forall n\in\N &&: n\leq n
+		&&&\text{(Reflexive)}\\
+		&(1)\ :\ \forall n,m,k\in\N&&:n\leq m\land m\leq k\implies n\leq k
+		&&&\text{(Transitive)}\\
+		&(2)\ :\ \forall n,m\in\N &&:n\leq m\land m\leq n \implies n=m
+		&&&\text{(Antisymmetric)}\\
+		&(2)\ :\ \forall n,m\in\N &&:n\leq m\lor m\leq n
+		&&&\text{(Connected)}\\
+	\end{align*}
+\end{theorem}
+\begin{proof}
+\end{proof}
+\begin{theorem}[$\N$ is well-ordered]\label{well-ordered}
+	Every subset of $N$ contains a least member.
+	\begin{align*}
+		\forall N\subseteq \N: \exists n\in N: \forall m\in\N: n\leq m
+	\end{align*}
+\end{theorem}
+\begin{proof}
+\end{proof}
+\newpage
+\begin{align*}
+	&\forall a,b\in\R^n:S(x,y)=\prod_{i=1}^n [x_i,y_i]\\
+	&\forall a,b\in\R^n:\mu (x,y)=\prod_{i=1}^n |x_i-y_i|\\
+	&\forall X\subseteq\R^n: \lambda(X)
+	=\inf \left\{\sum_{i=1}^n \mu(x,y):X\subseteq \bigcup_{i=1}^n S(x,y)\land
+	n\in\N\right\}
+\end{align*}
+\section{Euclidean algebra}
+Point: $A\in\R^2$.\newline
+Distance: $A,B\in\R^2:|AB|:=\sqrt{{(A_1-B_1)}^2+{(A_2-B_2)}^2}$\newline
+Line: $A,B\in\R^2: \overline{AB}:=\{tx+sy:t+s=1\land 0\leq t,s\leq 1\}$\newline
+Circle: $A,B,O\in\R^2:c(A,B,):=\{C\in\R^2:|OC|=|AB|\}$\newline
+Intersection: $A,B\in\R^2: A\mid B:= C:C
 \end{document}
