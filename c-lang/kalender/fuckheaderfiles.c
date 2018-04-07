@@ -28,14 +28,13 @@ typedef struct List {
 
 /* Functions {{{*/
 /* Task */
-/* NOTE: Order on tasks in the form < */
+/* NOTE: Order must strict */
 bool sortBy(Task task1, Task task2, int TYPE);
 bool sortBy_v(Task task1, Task task2);
 bool sortBy_t(Task task1, Task task2);
 bool sortBy_e(Task task1, Task task2);
 bool sortBy_score(Task task1, Task task2);
 float scoreFunc(Task task);
-
 Task makeTask(char *name, size_t v, time_t d, size_t t, size_t e);
 void sortTasks(List *taskList);
 
@@ -90,6 +89,7 @@ sortBy_score(Task task1, Task task2)
 	return task1.score < task2.score;
 }
 
+/* Wrapper function for Task struct */
 Task
 makeTask(char name[140], size_t v, time_t d, size_t t, size_t e)
 {
@@ -110,6 +110,7 @@ makeTask(char name[140], size_t v, time_t d, size_t t, size_t e)
 float
 scoreFunc(Task task)
 {
+	/* The scoring formula, decides how to priorities tasks */
 	return ((4*task.v_i+2*task.t_i+task.e_i)*3600)
 		/(abs(abs(difftime(task.d,time(NULL)))-task.t)+0.1);
 }
@@ -117,7 +118,7 @@ scoreFunc(Task task)
 void
 sortTasks(List *taskList)
 {
-	/* Init */
+	/* Init variables */
 	size_t len = taskList->size;
 	Task *A = dumpToArray(taskList);
 
@@ -151,7 +152,7 @@ sortTasks(List *taskList)
 	}
 	mergeSort(A, len, sortScore);
 	
-	/* Empty taskList */
+	/* Empty taskList, avoid duplicates */
 	emptyList(taskList);
 
 	/* Dump sorted array */
@@ -159,6 +160,8 @@ sortTasks(List *taskList)
 		cons(A[i],taskList);
 	}
 
+	/* No memory leaks allowed */
+	free(A);
 	return;
 }
 
@@ -225,6 +228,7 @@ writeTaskList(List *taskList)
 	/* Write array to file */
 	fwrite(taskArray, sizeof(Task), taskList->size, outfile);
 	fclose(outfile);
+	free(taskArray);
 	return;
 }
 
@@ -259,13 +263,17 @@ readTaskList(void)
 void
 userInputLoop(List *taskList)
 {
+	/* Get user input */
 	int choice;
 	printf("\n");
 	printf("What do you want to do?\n");
-	printf("1: Quit, 2: Add task, 3: Edit task, 4: Remove task, 5: Make new task list, 6: Display tasks\n");
+	printf("1: Quit, 2: Add task, 3: Edit task\n");
+	printf("4: Remove task, 5: Make new task list, 6: Display tasks\n");
     printf("Enter the number of what you wish to do: ");
 	scanf("%d",&choice);
 
+	/* Call the appropriate function, always tail call itself to
+	 * make multiple input output actions possible. Except to quit */
 	switch(choice) {
 		case 1 :
 			shutdown(taskList);
@@ -300,6 +308,7 @@ userInputLoop(List *taskList)
 void
 shutdown(List *taskList)
 {
+	/* Sort, write and frees list */
 	sortTasks(taskList);
 	writeTaskList(taskList);
 	freeList(taskList);
@@ -348,7 +357,6 @@ addTask(List *taskList)
 	/* Make task and add to list */
 	Task newTask = makeTask(name, V, D, T, E);
 	cons(newTask,taskList);
-	printf("%zu\n", car(taskList).v);
 	sortTasks(taskList);
     return; 
 }
@@ -356,12 +364,14 @@ addTask(List *taskList)
 void
 editTask(List *taskList)
 {
+	/* Variables */
 	int index;
 	int choice;
 	int year, month, day;
 	time_t D;
 	struct tm *timeinfo;
 
+	/* Display list and let user choose element */
 	displayTasklist(taskList);
 
     printf("Enter the number of the task: ");
@@ -376,10 +386,13 @@ editTask(List *taskList)
 		ptr = ptr->prev;
 	}
 
+	/* Let user choose what to edit */
 	printf("1: Name, 2: Importance, 3: Deadline, 4: Time, 5: Energy\n");
     printf("Enter the number of what you wish to edit: ");
 	scanf("%d",&choice);
 
+	/* Request appropriate input and change corresponding values
+	 * Code lifted from makeTask */
 	switch(choice) {
 		case 1 :
     		printf("Enter name: ");
@@ -421,18 +434,20 @@ editTask(List *taskList)
 void
 removeTask(List *taskList)
 {
+	/* Variables */
 	int index;
 	int size = taskList->size;
 	Task *A = dumpToArray(taskList);
 
+	/* Display list and request item to be removed */
 	displayTasklist(taskList);
 
     printf("Enter the number of the task: ");
 	scanf("%d",&index);
 	index = index - size;
 
+	/* Empty task list and only copy over task if not at index */
 	emptyList(taskList);
-
 	for (int i = 0; i<size; i++) {
 		if (i == index) {
 			// Nothing
@@ -442,12 +457,14 @@ removeTask(List *taskList)
 	}
 
 	sortTasks(taskList);
+	free(A);
 	return;
 }
 
 void
 displayTasklist(List *taskList)
 {
+	/* Dump to temp array and loop through printing tasks */
 	Task *A = dumpToArray(taskList);
 	int size = taskList->size;
 	for (int i = size-1; 0 <= i; i--) {
@@ -460,6 +477,7 @@ displayTasklist(List *taskList)
 		printf("\n");
 	}
 
+	/* Free to avoid memory leaks */
 	free(A);
 	return;
 }
@@ -467,9 +485,11 @@ displayTasklist(List *taskList)
 /*}}}*/
 
 /* List {{{*/
+/* Wrapper function for List struct */
 List*
 listInit(void)
 {
+	/* Allocates ram and sets temporary values */
 	List *newList = (List*)malloc(sizeof(List));
 
 	newList->top  = NULL;
@@ -478,9 +498,11 @@ listInit(void)
 	return newList;
 }
 
+/* Wrapper function for Item struct */
 Item*
 makeItem(Task data, Item *prev)
 {
+	/* Allocates ram and sets values */
 	Item *newItem = (Item*)malloc(sizeof(Item));
 
 	newItem->data = data;
@@ -489,6 +511,7 @@ makeItem(Task data, Item *prev)
 	return newItem;
 }
 
+/* Add task to list top */
 int
 cons(Task data, List *list)
 {
@@ -498,6 +521,7 @@ cons(Task data, List *list)
 	return 0;
 }
 
+/* Removes top item from list */
 int
 cdr(List *list)
 {
@@ -508,12 +532,14 @@ cdr(List *list)
 	return 0;
 }
 
+/* Return top data */
 Task
 car(List *list)
 {
 	return list->top->data;
 }
 
+/* Free list from memory */
 int
 freeList(List *list)
 {
@@ -525,6 +551,7 @@ freeList(List *list)
 	return 0;
 }
 
+/* Empty list */
 int
 emptyList(List *list)
 {
@@ -535,9 +562,11 @@ emptyList(List *list)
 	return 0;
 }
 
+/* Dump to array for manipulations */
 Task*
 dumpToArray(List *list)
 {
+	/* Hacky as hell, but works, somehow */
     int size = list->size;
     Task A[size];
     Item *itemPtr = list->top;
