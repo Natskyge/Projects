@@ -7,9 +7,9 @@
 
 /* Structs {{{*/
 typedef struct Task {
-	char *name;
+	char name[140];
 	size_t v, v_i;
-	size_t d;
+	time_t d;
 	size_t t, t_i;
 	size_t e, e_i;
 	float score;
@@ -34,16 +34,21 @@ bool sortBy_v(Task task1, Task task2);
 bool sortBy_t(Task task1, Task task2);
 bool sortBy_e(Task task1, Task task2);
 bool sortBy_score(Task task1, Task task2);
-Task makeTask(char *name, size_t v, size_t d, size_t t, size_t e);
-void addTask(Task task, List *taskList);
+float scoreFunc(Task task);
+
+Task makeTask(char *name, size_t v, time_t d, size_t t, size_t e);
 void sortTasks(List *taskList);
 
 /* Input/Output */
 void writeTaskList(List *taskList);
 List* readTaskList(void);
-void login(void);
-void userInputLoop(void);
-void shutdown(void);
+void userInputLoop(List *taskList);
+void shutdown(List *taskList);
+void addTask(List *taskList);
+void editTask(List *taskList);
+void removeTask(List *taskList);
+void newTasklist(List *taskList);
+void displayTasklist(List *taskList);
 
 /* List */
 List* listInit(void);
@@ -52,6 +57,7 @@ int cons(Task data, List *list);
 int cdr(List *list);
 Task car(List *list);
 int freeList(List *list);
+int emptyList(List *list);
 Task* dumpToArray(List *list);
 
 /* Mergesortsort */
@@ -85,10 +91,10 @@ sortBy_score(Task task1, Task task2)
 }
 
 Task
-makeTask(char *name, size_t v, size_t d, size_t t, size_t e)
+makeTask(char name[140], size_t v, time_t d, size_t t, size_t e)
 {
 	Task newTask;
-	newTask.name = name;
+	strcpy(newTask.name, name);
 	newTask.v = v;
 	newTask.d = d;
 	newTask.t = t;
@@ -101,10 +107,11 @@ makeTask(char *name, size_t v, size_t d, size_t t, size_t e)
 	return newTask;
 }
 
-void
-addTask(Task task, List *taskList)
+float
+scoreFunc(Task task)
 {
-	cons(task, taskList);
+	return ((4*task.v_i+2*task.t_i+task.e_i)*3600)
+		/(abs(abs(difftime(task.d,time(NULL)))-task.t)+0.1);
 }
 
 void
@@ -123,31 +130,29 @@ sortTasks(List *taskList)
 	/* Get V index */
 	mergeSort(A, len, sortV);
 	for (int i = 0; i<len; ++i) {
-		A[i].v_i = i;
+		A[i].v_i = i+1;
 	}
 
 	/* Get T index */
 	mergeSort(A, len, sortT);
 	for (int i = 0; i<len; ++i) {
-		A[i].t_i = i;
+		A[i].t_i = i+1;
 	}
 	
 	/* Get E index */
 	mergeSort(A, len, sortE);
 	for (int i = 0; i<len; ++i) {
-		A[i].e_i = i;
+		A[i].e_i = i+1;
 	}
 
 	/* Calculate score and sort by score */
 	for (int i = 0; i<len; ++i) {
-		A[i].score = (4*A[i].v_i+2*A[i].t_i+A[i].e_i)/(abs(A[i].d-A[i].t)+0.1);
+		A[i].score = scoreFunc(A[i]);
 	}
 	mergeSort(A, len, sortScore);
 	
 	/* Empty taskList */
-	while (0 < taskList->size) {
-		cdr(taskList);
-	}
+	emptyList(taskList);
 
 	/* Dump sorted array */
 	for (int i = 0; i<len; ++i) {
@@ -211,6 +216,7 @@ writeTaskList(List *taskList)
 	FILE *outfile;
 	outfile = fopen("tasks.dat","wb+");
 
+	/* Check if no errors */
 	if (outfile == NULL) {
 		printf("Error reading file\n");
 		exit(1);
@@ -226,40 +232,236 @@ writeTaskList(List *taskList)
 List*
 readTaskList(void)
 {
+	/* Init file, tasklist and temp task */
 	FILE *infile;	
-	//List *taskList;
+	List *taskList = listInit();
 	Task task;
 
+	/* Open file */
 	infile = fopen("tasks.dat","rb");
 
+	/* Check if no errors */
 	if (infile == NULL) {
 		printf("Error reading file\n");
 		exit(1);
 	}
 
+	/* Load into list */
 	while(fread(&task, sizeof(Task), 1, infile)){
-		printf("Score:%f\n", task.score);
+		cons(task,taskList);
 	}
+
+	/* Close and return */
 	fclose(infile);
-	return NULL;
+	return taskList;
 }
 
 void
-login(void)
+userInputLoop(List *taskList)
 {
+	int choice;
+	printf("\n");
+	printf("What do you want to do?\n");
+	printf("1: Quit, 2: Add task, 3: Edit task, 4: Remove task, 5: Make new task list, 6: Display tasks\n");
+    printf("Enter the number of what you wish to do: ");
+	scanf("%d",&choice);
 
+	switch(choice) {
+		case 1 :
+			shutdown(taskList);
+			break;
+		case 2 :
+			addTask(taskList);
+			userInputLoop(taskList);
+			break;
+		case 3 :
+			editTask(taskList);
+			userInputLoop(taskList);
+			break;
+		case 4 :
+			removeTask(taskList);
+			userInputLoop(taskList);
+			break;
+		case 5 :
+			emptyList(taskList);
+			userInputLoop(taskList);
+			break;
+		case 6 :
+			displayTasklist(taskList);
+			userInputLoop(taskList);
+			break;
+		default :
+			userInputLoop(taskList);
+	}
+
+	return;
 }
 
 void
-userInputLoop(void)
+shutdown(List *taskList)
 {
-
+	sortTasks(taskList);
+	writeTaskList(taskList);
+	freeList(taskList);
+	return;
 }
 
 void
-shutdown(void)
+addTask(List *taskList)
 {
+	/* Input variables*/
+    char name[140]; 
+	size_t V, E, T;
+	int year, month, day;
+	time_t D;
+	struct tm *timeinfo;
 
+	/* Input name */
+    printf("Please enter the name of your task (max 140): ");
+	scanf("%s",name);
+
+	/* Input importance */
+    printf("Please enter the (relative) importance of your task: ");
+	scanf("%zu",&V);
+
+	/* Input deadline */
+    printf("Please enter the deadline of your task:\n");
+	printf ("Enter year: "); fflush(stdout); scanf ("%d",&year);
+	printf ("Enter month: "); fflush(stdout); scanf ("%d",&month);
+	printf ("Enter day: "); fflush(stdout); scanf ("%d",&day);
+	time ( &D );
+	timeinfo = localtime ( &D );
+	timeinfo->tm_year = year - 1900;
+	timeinfo->tm_mon = month - 1;
+	timeinfo->tm_mday = day;
+	D = mktime(timeinfo);
+
+	/* Input energy */
+    printf("Please enter the the energy required by your task: ");
+	scanf("%zu",&E);
+
+	/* Input time */
+    printf("Please enter the required time to complete your task in minutes: ");
+	scanf("%zu",&T);
+	T = 60*T;
+
+	/* Make task and add to list */
+	Task newTask = makeTask(name, V, D, T, E);
+	cons(newTask,taskList);
+	printf("%zu\n", car(taskList).v);
+	sortTasks(taskList);
+    return; 
+}
+
+void
+editTask(List *taskList)
+{
+	int index;
+	int choice;
+	int year, month, day;
+	time_t D;
+	struct tm *timeinfo;
+
+	displayTasklist(taskList);
+
+    printf("Enter the number of the task: ");
+	scanf("%d",&index);
+	index = index - taskList->size;
+
+	if (taskList->size-1 < index)
+		printf("Numbers to high\n");
+
+	Item *ptr = taskList->top;
+	for (int i=0; i<=index; i++) {
+		ptr = ptr->prev;
+	}
+
+	printf("1: Name, 2: Importance, 3: Deadline, 4: Time, 5: Energy\n");
+    printf("Enter the number of what you wish to edit: ");
+	scanf("%d",&choice);
+
+	switch(choice) {
+		case 1 :
+    		printf("Enter name: ");
+			scanf("%s",ptr->data.name);
+			break;
+		case 2 :
+    		printf("Enter importance: ");
+			scanf("%zu",&ptr->data.v);
+			break;
+		case 3 :
+    		printf("Enter deadline: ");
+			printf ("Enter year: "); fflush(stdout); scanf ("%d",&year);
+			printf ("Enter month: "); fflush(stdout); scanf ("%d",&month);
+			printf ("Enter day: "); fflush(stdout); scanf ("%d",&day);
+			time ( &D );
+			timeinfo = localtime ( &D );
+			timeinfo->tm_year = year - 1900;
+			timeinfo->tm_mon = month - 1;
+			timeinfo->tm_mday = day;
+			D = mktime(timeinfo);
+			ptr->data.d	= D;
+			break;
+		case 4 :
+    		printf("Enter time: ");
+			scanf("%zu",&ptr->data.v);
+			break;
+		case 5 :
+    		printf("Enter energy: ");
+			scanf("%zu",&ptr->data.v);
+			break;
+		default :
+			printf("Invalid choice\n");
+	}
+
+	sortTasks(taskList);
+	return;
+}
+
+void
+removeTask(List *taskList)
+{
+	int index;
+	int size = taskList->size;
+	Task *A = dumpToArray(taskList);
+
+	displayTasklist(taskList);
+
+    printf("Enter the number of the task: ");
+	scanf("%d",&index);
+	index = index - size;
+
+	emptyList(taskList);
+
+	for (int i = 0; i<size; i++) {
+		if (i == index) {
+			// Nothing
+		} else {
+			cons(A[i],taskList);
+		}
+	}
+
+	sortTasks(taskList);
+	return;
+}
+
+void
+displayTasklist(List *taskList)
+{
+	Task *A = dumpToArray(taskList);
+	int size = taskList->size;
+	for (int i = size-1; 0 <= i; i--) {
+		printf("%d : ", size-i);
+		printf("name: %s, ", A[i].name);
+		printf("importance: %zu, ", A[i].v);
+		printf("time: %zu, ", A[i].t);
+		printf("energy: %zu, ", A[i].e);
+		printf("date: %s ", asctime(localtime(&A[i].d)));
+		printf("\n");
+	}
+
+	free(A);
+	return;
 }
 
 /*}}}*/
@@ -323,6 +525,16 @@ freeList(List *list)
 	return 0;
 }
 
+int
+emptyList(List *list)
+{
+	while (0 < list->size) {
+		cdr(list);
+	}
+
+	return 0;
+}
+
 Task*
 dumpToArray(List *list)
 {
@@ -347,25 +559,8 @@ dumpToArray(List *list)
 int
 main(void)
 {
-	List *myTaskList = listInit();
-
-	Task myTask = makeTask("lmao", 4, 3, 2, 1);
-	Task myTask2 = makeTask("mao", 2, 3, 4, 5);
-	cons(myTask, myTaskList);
-	cons(myTask2, myTaskList);
-
-	for (int i=0;i<100000;++i) {
-		cons(makeTask("aa", rand()%100000, rand()%100000, rand()%100000, rand()%100000), myTaskList);
-	}
-
-	sortTasks(myTaskList);
-
-	writeTaskList(myTaskList);
-	readTaskList();
-
-	printf("Didn't crash!\n");
-	printf("Score top: %f\n", myTaskList->top->data.score);
-	printf("Score below: %f\n", myTaskList->top->prev->data.score);
+	List *myTaskList = readTaskList();
+	userInputLoop(myTaskList);
 
 	return 1;
 }
