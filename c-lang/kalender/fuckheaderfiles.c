@@ -567,21 +567,21 @@ Task*
 dumpToArray(List *list)
 {
 	/* Hacky as hell, but works, somehow */
-    int size = list->size;
-    Task A[size];
-    Item *itemPtr = list->top;
+	int size = list->size;
+	Task A[size];
+	Item *itemPtr = list->top;
 
-    for (int i = 0; i < size; ++i) {
-        A[size-i-1] = itemPtr->data;
-        itemPtr = itemPtr->prev;
-    }
+	for (int i = 0; i < size; ++i) {
+		A[size-i-1] = itemPtr->data;
+		itemPtr = itemPtr->prev;
+	}
 
 	Task *r = malloc(size*sizeof(Task));
 	for (int i = 0; i < size; i++) {
 		r[i] = A[i];
 	}
 
-    return r;
+	return r;
 }
 /*}}} End List */
 
