@@ -28,7 +28,6 @@ typedef struct List {
 
 /* Functions {{{*/
 /* Task */
-/* NOTE: Order must strict */
 bool sortBy(Task task1, Task task2, int TYPE);
 bool sortBy_v(Task task1, Task task2);
 bool sortBy_t(Task task1, Task task2);
@@ -37,7 +36,6 @@ bool sortBy_score(Task task1, Task task2);
 float scoreFunc(Task task);
 Task makeTask(char *name, size_t v, time_t d, size_t t, size_t e);
 void sortTasks(List *taskList);
-
 /* Input/Output */
 void writeTaskList(List *taskList);
 List* readTaskList(void);
@@ -48,7 +46,6 @@ void editTask(List *taskList);
 void removeTask(List *taskList);
 void newTasklist(List *taskList);
 void displayTasklist(List *taskList);
-
 /* List */
 List* listInit(void);
 Item* makeItem(Task data, Item *prev);
@@ -58,8 +55,7 @@ Task car(List *list);
 int freeList(List *list);
 int emptyList(List *list);
 Task* dumpToArray(List *list);
-
-/* Mergesortsort */
+/* Mergesortsort, NOTE: Order must strict */
 void merge(Task *A, int mid, int high, bool (*order)(Task, Task));
 void mergeSort(Task *A, int len, bool (*order)(Task, Task));
 /*}}}*/
@@ -299,6 +295,7 @@ userInputLoop(List *taskList)
 			userInputLoop(taskList);
 			break;
 		default :
+			printf("Invalid input, try again.\n");
 			userInputLoop(taskList);
 	}
 
@@ -335,9 +332,9 @@ addTask(List *taskList)
 
 	/* Input deadline */
     printf("Please enter the deadline of your task:\n");
-	printf ("Enter year: "); fflush(stdout); scanf ("%d",&year);
-	printf ("Enter month: "); fflush(stdout); scanf ("%d",&month);
-	printf ("Enter day: "); fflush(stdout); scanf ("%d",&day);
+	printf ("Enter year: "); scanf("%d",&year);
+	printf ("Enter month: "); scanf("%d",&month);
+	printf ("Enter day: "); scanf("%d",&day);
 	time ( &D );
 	timeinfo = localtime ( &D );
 	timeinfo->tm_year = year - 1900;
@@ -365,25 +362,24 @@ void
 editTask(List *taskList)
 {
 	/* Variables */
+	int size = taskList->size;
 	int index;
 	int choice;
 	int year, month, day;
 	time_t D;
 	struct tm *timeinfo;
+	Task *A = dumpToArray(taskList);
 
 	/* Display list and let user choose element */
 	displayTasklist(taskList);
 
     printf("Enter the number of the task: ");
 	scanf("%d",&index);
-	index = index - taskList->size;
+	index = size-index;
 
-	if (taskList->size-1 < index)
+	if (taskList->size-1 < index) {
 		printf("Numbers to high\n");
-
-	Item *ptr = taskList->top;
-	for (int i=0; i<=index; i++) {
-		ptr = ptr->prev;
+		return;
 	}
 
 	/* Let user choose what to edit */
@@ -396,35 +392,40 @@ editTask(List *taskList)
 	switch(choice) {
 		case 1 :
     		printf("Enter name: ");
-			scanf("%s",ptr->data.name);
+			scanf("%s",A[index].name);
 			break;
 		case 2 :
     		printf("Enter importance: ");
-			scanf("%zu",&ptr->data.v);
+			scanf("%zu",&A[index].v);
 			break;
 		case 3 :
     		printf("Enter deadline: ");
-			printf ("Enter year: "); fflush(stdout); scanf ("%d",&year);
-			printf ("Enter month: "); fflush(stdout); scanf ("%d",&month);
-			printf ("Enter day: "); fflush(stdout); scanf ("%d",&day);
+			printf ("Enter year: "); scanf ("%d",&year);
+			printf ("Enter month: "); scanf ("%d",&month);
+			printf ("Enter day: "); scanf ("%d",&day);
 			time ( &D );
 			timeinfo = localtime ( &D );
 			timeinfo->tm_year = year - 1900;
 			timeinfo->tm_mon = month - 1;
 			timeinfo->tm_mday = day;
 			D = mktime(timeinfo);
-			ptr->data.d	= D;
+			A[index].d	= D;
 			break;
 		case 4 :
     		printf("Enter time: ");
-			scanf("%zu",&ptr->data.v);
+			scanf("%zu",&A[index].v);
 			break;
 		case 5 :
     		printf("Enter energy: ");
-			scanf("%zu",&ptr->data.v);
+			scanf("%zu",&A[index].v);
 			break;
 		default :
 			printf("Invalid choice\n");
+	}
+
+	emptyList(taskList);
+	for (int i = 0; i<size; ++i) {
+		cons(A[i],taskList);
 	}
 
 	sortTasks(taskList);
@@ -444,7 +445,12 @@ removeTask(List *taskList)
 
     printf("Enter the number of the task: ");
 	scanf("%d",&index);
-	index = index - size;
+	index = size-index;
+
+	if (taskList->size-1 < index) {
+		printf("Numbers to high\n");
+		return;
+	}
 
 	/* Empty task list and only copy over task if not at index */
 	emptyList(taskList);
