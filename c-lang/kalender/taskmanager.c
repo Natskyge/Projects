@@ -254,7 +254,7 @@ userInputLoop(List *taskList)
 	printf("What do you want to do?\n");
 	printf("1: Quit, 2: Add task, 3: Edit task\n");
 	printf("4: Remove task, 5: Make new task list, 6: Display tasks\n");
-    printf("Enter the number of what you wish to do: ");
+	printf("Enter the number of what you wish to do: ");
 	scanf("%d",&choice);
 
 	/* Call the appropriate function, always tail call itself to
@@ -305,22 +305,22 @@ void
 addTask(List *taskList)
 {
 	/* Input variables*/
-    char name[140]; 
+	char name[140]; 
 	size_t V, E, T;
 	int year, month, day;
 	time_t D;
 	struct tm *timeinfo;
 
 	/* Input name */
-    printf("Please enter the name of your task (max 140): ");
+	printf("Please enter the name of your task (max 140): ");
 	scanf("%s",name);
 
 	/* Input importance */
-    printf("Please enter the (relative) importance of your task: ");
+	printf("Please enter the (relative) importance of your task: ");
 	scanf("%zu",&V);
 
 	/* Input deadline */
-    printf("Please enter the deadline of your task:\n");
+	printf("Please enter the deadline of your task:\n");
 	printf ("Enter year: "); scanf("%d",&year);
 	printf ("Enter month: "); scanf("%d",&month);
 	printf ("Enter day: "); scanf("%d",&day);
@@ -332,11 +332,11 @@ addTask(List *taskList)
 	D = mktime(timeinfo);
 
 	/* Input energy */
-    printf("Please enter the energy required by your task: ");
+	printf("Please enter the energy required by your task: ");
 	scanf("%zu",&E);
 
 	/* Input time */
-    printf("Please enter the required time to complete your task in minutes: ");
+	printf("Please enter the required time to complete your task in minutes: ");
 	scanf("%zu",&T);
 	T = 60*T;
 
@@ -362,7 +362,7 @@ editTask(List *taskList)
 	/* Display list and let user choose element */
 	displayTasklist(taskList);
 
-    printf("Enter the number of the task: ");
+	printf("Enter the number of the task: ");
 	scanf("%d",&index);
 	index = size-index;
 
@@ -373,7 +373,7 @@ editTask(List *taskList)
 
 	/* Let user choose what to edit */
 	printf("1: Name, 2: Importance, 3: Deadline, 4: Time, 5: Energy\n");
-    printf("Enter the number of what you wish to edit: ");
+	printf("Enter the number of what you wish to edit: ");
 	scanf("%d",&choice);
 
 	/* Request appropriate input and change corresponding values
@@ -432,7 +432,7 @@ removeTask(List *taskList)
 	/* Display list and request item to be removed */
 	displayTasklist(taskList);
 
-    printf("Enter the number of the task: ");
+	printf("Enter the number of the task: ");
 	scanf("%d",&index);
 	index = size-index;
 
