@@ -236,7 +236,7 @@ readTaskList(void)
 	}
 
 	/* Load into list */
-	while(fread(&task, sizeof(Task), 1, infile)){
+	while (fread(&task, sizeof(Task), 1, infile)) {
 		cons(task,taskList);
 	}
 
@@ -259,7 +259,7 @@ userInputLoop(List *taskList)
 
 	/* Call the appropriate function, always tail call itself to
 	 * make multiple input output actions possible. Except to quit */
-	switch(choice) {
+	switch (choice) {
 		case 1 :
 			shutdown(taskList);
 			break;
@@ -378,17 +378,17 @@ editTask(List *taskList)
 
 	/* Request appropriate input and change corresponding values
 	 * Code lifted from makeTask */
-	switch(choice) {
+	switch (choice) {
 		case 1 :
-    		printf("Enter name: ");
+    			printf("Enter name: ");
 			scanf("%s",A[index].name);
 			break;
 		case 2 :
-    		printf("Enter importance: ");
+    			printf("Enter importance: ");
 			scanf("%zu",&A[index].v);
 			break;
 		case 3 :
-    		printf("Enter deadline: ");
+    			printf("Enter deadline: ");
 			printf ("Enter year: "); scanf ("%d",&year);
 			printf ("Enter month: "); scanf ("%d",&month);
 			printf ("Enter day: "); scanf ("%d",&day);
@@ -401,11 +401,11 @@ editTask(List *taskList)
 			A[index].d	= D;
 			break;
 		case 4 :
-    		printf("Enter time: ");
+    			printf("Enter time: ");
 			scanf("%zu",&A[index].v);
 			break;
 		case 5 :
-    		printf("Enter energy: ");
+    			printf("Enter energy: ");
 			scanf("%zu",&A[index].v);
 			break;
 		default :
