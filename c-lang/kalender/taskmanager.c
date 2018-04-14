@@ -165,7 +165,7 @@ merge(Task *A, int mid, int high, bool (*order)(Task, Task))
 	/* h pointer from middel in A, m from bottom in A, k places in x */
 	int m,h,k;
 	for (h = mid, m = 0, k = 0; k < high; ++k) {
-		x[k] = m >= mid          ? A[h++]  /* m has reached mid    */
+		x[k] = m >= mid              ? A[h++]  /* m has reached mid    */
 			 : h >= high         ? A[m++]  /* h has reached high   */
 			 : order(A[h],A[m])  ? A[h++]  /* h < m, so we take h  */
 			 :                     A[m++]; /* h >= m, so we take m */
