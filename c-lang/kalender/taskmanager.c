@@ -103,7 +103,7 @@ scoreFunc(Task task)
 {
 	/* The scoring formula, decides how to priorities tasks */
 	return ((4*task.v_i+2*task.t_i+task.e_i)*3600)
-		/(abs(abs(difftime(task.d,time(NULL)))-task.t)+0.1);
+		/(fabs(difftime(task.d,time(NULL)))-task.t+0.1);
 }
 
 void
@@ -226,8 +226,8 @@ readTaskList(void)
 	List *taskList = listInit();
 	Task task;
 
-	/* Open file */
-	infile = fopen("tasks.dat","rb");
+	/* Open file, create if necessary */
+	infile = fopen("tasks.dat","ab+");
 
 	/* Check if no errors */
 	if (infile == NULL) {
@@ -580,6 +580,7 @@ int
 main(void)
 {
 	List *myTaskList = readTaskList();
+	sortTasks(myTaskList);
 	userInputLoop(myTaskList);
 
 	return 1;
