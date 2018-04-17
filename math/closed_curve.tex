@@ -5,7 +5,8 @@
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{amsfonts}
-\usepackage{tikz}
+\usepackage{pgf,tikz}
+\usepackage{pgfplots}
 \usepackage{enumitem}
 %\usepackage[margin=0.5in]{geometry}
 \theoremstyle{plain}
@@ -855,19 +856,43 @@
 	          &=\int_0^\infty \frac{\del}{\del z}x^{z-1}e^{-x}\ \dx x\\
 			  &=\int_0^\infty \ln(x)e^{z-1}e^{-x}\ \dx x\\
 \end{align*}
+\newline
+\begin{align*}
+	I&=\int_0^\infty \frac{\sin t}{t}\ \dx t\\
+	\cL\left\{\frac{\sin t}{t}\right\}(s)
+	&=\int_0^\infty\frac{\sin t}{t}e^{-st}\ \dx t \\
+	\therefore \cL\left\{\frac{\sin t}{t}\right\}(0)
+	&=\int_0^\infty\frac{\sin t}{t}\ \dx t \\
+	\cL\left\{\frac{\sin t}{t}\right\}(s)
+	&=\int_s^\infty\cL\{\sin t\}(u)\ \dx u \\
+	&=\int_s^\infty\frac{1}{1+u^2}\ \dx u \\
+	&={\left[\arctan u\right]}_s^\infty \\
+	&=\frac{\pi}{2}-\arctan s \\
+	\therefore \int_0^\infty\frac{\sin t}{t}\ \dx t
+	&=\cL\left\{\frac{\sin t}{t}\right\}(0)\\
+	&=\frac{\pi}{2}
+\end{align*}
+\newline
 \begin{align*}
 	I&=\int_0^\infty \frac{\sin^2 x}{x^2(x^2+1)}\ \dx x\\
-	I(t)&=\int_0^\infty \frac{\sin^2 (tx)}{x^2(x^2+1)}\ \dx x\\
-	I'(t)
-	&=\int_0^\infty\frac{\del}{\del t}\frac{\sin^2(tx)}{x^2(x^2+1)}\ \dx x\\
-	&=\int_0^\infty\frac{2x\sin(tx)\cos(tx)}{x^2(x^2+1)}\ \dx x\\
-	&=2\int_0^\infty\frac{\sin(tx)\cos(tx)}{x(x^2+1)}\ \dx x\\
-	&=\int_0^\infty\frac{\sin(2tx)}{x(x^2+1)}\ \dx x\\
-	I''(t)&=\int_0^\infty\frac{\del}{\del t}\frac{\sin(2tx)}{x(x^2+1)}\ \dx x\\
-	      &=\int_0^\infty\frac{2\cos(2tx)}{x^2+1}\ \dx x\\
-	I^{(3)}(t)&=\int_0^\infty\frac{\del}{\del t}
-	\frac{2\cos(2tx)}{x^2+1}\ \dx x\\
-	&=\int_0^\infty-\frac{4x\sin(2tx)}{x^2+1}\ \dx x\\
+	\frac{A}{x^2}+\frac{B}{x^2+1}&=\frac{1}{x^2(x^2+1)}\\
+	A+Ax^2+Bx^2&=1\implies B=-A\\
+	\therefore A&=1\\
+	I&=\int_0^\infty \frac{\sin^2 x}{x^2}\ \dx x
+	-\int_0^\infty \frac{\sin^2 x}{x^2+1}\ \dx x\\
+	J_1(a)&=\int_0^\infty \frac{\sin^2 (ax)}{x^2}\ \dx x\\
+	J_1'(a)&=\int_0^\infty \frac{2\sin(ax)\cos(ax)}{x}\ \dx x\\
+		   &=\int_0^\infty \frac{\sin(2ax)}{x}\ \dx x=\frac{\pi}{2}\\
+	\int_0^a J_1'(a')\ \dx a'&=J_1(a)-J_1(0)=J_1(a)=\frac{\pi a}{2}\\
+	\therefore J_1(1)=\frac{\pi}{2}&=\int_0^\infty\frac{\sin^2x}{x^2}\ \dx x\\
+	I&=\frac{\pi}{2}
+	-\int_0^\infty \frac{\sin^2 x}{x^2+1}\ \dx x\\
+	J_1&=\int_0^\infty \frac{\sin^2 x}{x^2+1}\ \dx x\\
+	&=\frac{1}{2}\int_0^\infty \frac{1-\cos (2x)}{x^2+1}\ \dx x\\
+	&=\frac{\pi}{4}-\frac{1}{2}\int_0^\infty \frac{\cos (2x)}{x^2+1}\ \dx x\\
+	&=\frac{\pi}{4}-\frac{1}{2}\int_0^\infty \frac{2\cos^2 x-1}{x^2+1}\ \dx x\\
+	&=\frac{\pi}{2}-\int_0^\infty \frac{\cos^2 x}{x^2+1}\ \dx x\\
+	&=\frac{\pi}{2}-\frac{1}{2}\int_0^\infty \frac{e^{2xi}+e^{-2xi}+2}{x^2+1}\ \dx x\\
 \end{align*}
 \begin{align*}
 	\int_{\del \Omega} \omega = \int_{\Omega} \dx \omega
@@ -878,7 +903,7 @@
 	Let $\N$ be a set with the following properties
 	\begin{align*}
 		(P1)\; &:\quad \exists 0\in\N\\
-		(P2)\; &:\quad \exists S &&:\N\rightarrow\N\\
+		(P2)\; &:\quad \exists S:\N\rightarrow\N\\
 		(P3)\; &:\quad \forall m,n\in\N &&: S(m)=S(n)\implies m=n\\
 		(P4)\; &:\quad \forall n\in\N &&: S(n)\neq 0\\
 		(P5)\; &:\quad \forall N\subseteq\N &&: 
@@ -900,14 +925,16 @@
 	\begin{align*}
 		S(m)&=S(n)\iff \{m\}\cup m=\{n\}\cup n
 	\end{align*}
-	thus we have $n\in S(m)$. If $n\in\{m\}$ then we are done, so assume $n\in
-	m$. Then $m\neq n$ by the Axiom of Foundation. We have $m\in \{m\}$ so by
-	the Axiom of Extension and Axiom of Unions we have $m\in S(n)$. Since $n\neq
-	m$ we must have $m\in n$ contradicting the Axiom of Foundation. We therefore
-	conclude that $n=m$. $(P4)$ is trivially satisfied by the Axiom of the Empty
-	Set. For the last $(P5)$ we can see that $\forall n\in N:s(n)\in N$ implies
-	that $\exists m\in N$ such that $S(m)=n$ for all $n \in N$. But that is just
-	the definition of $\N$ which completes the proof.
+	thus we have $n\in S(m)$. If $n\in\{m\}$ then we are done, so
+	assume $n\in m$. Then $m\neq n$ by the Axiom of Foundation. We
+	have $m\in \{m\}$ so by the Axiom of Extension and Axiom of
+	Unions we have $m\in S(n)$. Since $n\neq m$ we must have $m\in
+	n$ contradicting the Axiom of Foundation. We therefore conclude
+	that $n=m$. $(P4)$ is trivially satisfied by the Axiom of the
+	Empty Set. For the last $(P5)$ we can see that $\forall n\in
+	N:s(n)\in N$ implies that $\exists m\in N$ such that $S(m)=n$
+	for all $n \in N$. But that is just the definition of $\N$
+	which completes the proof.
 \end{proof}
 \begin{theorem}[Proof by induction]\label{induction}
 	Let $p(n)$ be a proposition defined for all $n\in \N$. If
@@ -921,13 +948,15 @@
 	\begin{align*}
 		A=\{n\in\N:p(n)\}
 	\end{align*}
-	By assumption $0\in A$ and for any $n\in A$, we have that $S(n)\in\N$ since
-	\newline$p(n)\implies p(S(n))$. Therefore $A$ may equivilantly be defined as
+	By assumption $0\in A$ and for any $n\in A$, we have that
+	$S(n)\in\N$ since \newline$p(n)\implies p(S(n))$. Therefore $A$
+	may equivilantly be defined as
 	\begin{align*}
 		A=\{n\in\N:n=0\lor\exists m\in\N:S(m)=n\}
 	\end{align*}
-	But that is the definition of $\N$, so since $A$ may equivalently be defined
-	as the set of $n\in\N$ such that $p(n)$ this completes the proof.
+	But that is the definition of $\N$, so since $A$ may equivalently
+	be defined as the set of $n\in\N$ such that $p(n)$ this completes
+	the proof.
 \end{proof}
 \begin{definition}[Addition on $\N$]\label{addition}
 	Let $+:\N^2\rightarrow\N$ we define \textit{addition} as
@@ -944,13 +973,13 @@
 	Let $+$ be the operator as defined in definition~\ref{addition}. Then $+$
 	satisfies
 	\begin{align*}
-		&(G0)\ :\ \forall n,m\in\N &&:n+m\in\N 
+		(G0)\; &:\quad \forall n,m\in\N &&:n+m\in\N 
 		&&&\text{(Totality)}\\
-		&(G1)\ :\ \forall n,m,k\in\N&&:n+(m+k)=(n+m)+k
+		(G1)\; &:\quad \forall n,m,k\in\N&&:n+(m+k)=(n+m)+k
 		&&&\text{(Associativity)}\\
-		&(G2)\ :\ \exists 0:\forall n\in\N &&: n+0=0+n=n 
+		(G2)\; &:\quad \exists 0:\forall n\in\N &&: n+0=0+n=n 
 		&&&\text{(Identity)}\\
-		&(C0)\ :\ \forall n,m\in\N &&: n+m=m+n
+		(C)\; &:\quad \forall n,m\in\N &&: n+m=m+n
 		&&&\text{(Commutativity)}\\
 	\end{align*}
 \end{theorem}
@@ -998,13 +1027,13 @@
 	Let $\leq$ be the order as defined in definition~\ref{order}. Then $\leq$
 	satisfies
 	\begin{align*}
-		&(0)\ :\ \forall n\in\N &&: n\leq n
+		(0)\; &:\quad \forall n\in\N &&: n\leq n
 		&&&\text{(Reflexive)}\\
-		&(1)\ :\ \forall n,m,k\in\N&&:n\leq m\land m\leq k\implies n\leq k
+		(1)\; &:\quad \forall n,m,k\in\N&&:n\leq m\land m\leq k\implies n\leq k
 		&&&\text{(Transitive)}\\
-		&(2)\ :\ \forall n,m\in\N &&:n\leq m\land m\leq n \implies n=m
+		(2)\; &:\quad \forall n,m\in\N &&:n\leq m\land m\leq n \implies n=m
 		&&&\text{(Antisymmetric)}\\
-		&(2)\ :\ \forall n,m\in\N &&:n\leq m\lor m\leq n
+		(2)\; &:\quad \forall n,m\in\N &&:n\leq m\lor m\leq n
 		&&&\text{(Connected)}\\
 	\end{align*}
 \end{theorem}
@@ -1031,5 +1060,113 @@ Point: $A\in\R^2$.\newline
 Distance: $A,B\in\R^2:|AB|:=\sqrt{{(A_1-B_1)}^2+{(A_2-B_2)}^2}$\newline
 Line: $A,B\in\R^2: \overline{AB}:=\{tx+sy:t+s=1\land 0\leq t,s\leq 1\}$\newline
 Circle: $A,B,O\in\R^2:c(A,B,):=\{C\in\R^2:|OC|=|AB|\}$\newline
-Intersection: $A,B\in\R^2: A\mid B:= C:C
+Intersection: $A,B\in\R^2: A\mid B:= C:C$
+\newpage
+\begin{definition}[Gradient]
+	Let $f:\R^n\rightarrow\R$, $\mathbf{x}\mapsto f(\mathbf{x})$ where:
+\begin{align*}
+	\mathbf{x}=
+		\begin{bmatrix}
+			x_1 \\
+			x_2 \\
+			\vdots \\
+			x_n \\
+		\end{bmatrix}
+\end{align*}
+Let $\frac{\del f}{\del x_i}$ exists for all $x_i$. The \textbf{gradient of $f$
+(at $\mathbf{x}$)} is defined as the column matrix:
+\begin{align*}
+	\nabla f(\mathbf{x})=
+		\begin{bmatrix}
+			\frac{\del f(\mathbf{x})}{\del x_1} \\
+			\frac{\del f(\mathbf{x})}{\del x_2} \\
+			\vdots \\
+			\frac{\del f(\mathbf{x})}{\del x_n} \\
+		\end{bmatrix}
+\end{align*}
+\end{definition}
+\begin{align*}
+	\underset{i=k\rightarrow n}{[+a_i]} &= 
+	\begin{cases}
+		\underset{i=k\rightarrow n-1}{[+a_i]}+a_n & k\leq n\\
+		0 & n < k
+	\end{cases}
+\end{align*}
+\begin{align*}
+	\underset{i=1\rightarrow n}{[+i]}=\frac{n(n+1)}{2}\\
+	\underset{i=k\rightarrow n}{[+a_i]}+\underset{i=k\rightarrow n}{[+b_i]}
+	=\underset{i=k\rightarrow n}{[+a_i+b_i]}\\
+	\underset{i=k\rightarrow n}{[+a_i]}\cdot\underset{i=k\rightarrow n}{[+b_i]}=
+	\underset{i=k\rightarrow n,\ i=k\rightarrow n}{[+a_i\cdot[+b_i]]}
+\end{align*}
+\newpage
+\begin{enumerate}
+	\item First postulate (principle of relativity)
+
+		The laws of physics are the same in all inertial frames of reference.
+	\item Second postulate (invariance of $c$)
+
+		The speed of light in free space has the same value $c$
+		in all inertial frames of reference.
+\end{enumerate}
+\begin{definition}[Space time]
+	Space time is the Cartesian product $\R^3\times \mathbb{T}$ where
+	$\mathbb{T}$ is the time domain $\mathbb{T}=\R$. That is any event may be
+	indicated by its $xyz$-coordiantes and the time at which it occurred,
+	formally:
+	\begin{align*}
+		(x,y,z,t)\in\R^3 \times \mathbb{T}\\
+	\end{align*}
+\end{definition}
+\begin{definition}[Reference frame]
+	A reference frame is a function $F$ such that for all $t\in\mathbb{T}$ we
+	have $F(t)=(0,0,0)$. Intuitively this means that any object is distance zero
+	from itself.
+\end{definition}
+\begin{definition}[World line]
+	A world line is a function $W:\mathbb{T}\rightarrow \R^3$ such that if
+	$W(t)=(x,y,z)$ then
+	\begin{align*}
+	v^2 t^2=x^2+y^2+z^2 \\
+	\end{align*}
+	where $v$ is the velocity of the object relative to the reference
+	frame. This is equivalent to saying that the distance traveled
+	from $t=0$ at speed $v$ equals the distance from the reference frame.
+\end{definition}
+Note that the reference frame is a special world line.
+\begin{definition}[Transformation of reference frame]
+	Given a world line $W$ there exists a transformation $L:
+	\R^3\times\mathbb{T}\rightarrow\R^3\times\mathbb{T}$ 
+	such that:
+	\begin{enumerate}
+		\item $L(W)$ is a reference frame.
+		\item If world lines $W_1$ and $W_2$ have relative velocity $v$, then so
+			do $L(W_1)$ and $L(W_2)$.
+		\item For some constant $c\in\R_{>0}$ describe the world line $W$ with
+			relative velocity $c$ to the reference frame $F$. Then the relative
+			velocity to $L(W)$ is also $c$.
+	\end{enumerate}
+\end{definition}
+\subsection{Special case}
+\newpage
+\begin{align*}
+	a^2-a&=a(a-1)\\
+	a^2-a&\equiv a(a-1) \pmod{2}\\
+	a^2-a&\equiv 0 \pmod{2}\\
+	a^2&\equiv a \pmod{2}\\
+\end{align*}
+\begin{align*}
+	a,b,c\in\N: a^2+b^2&=4c+3\\
+	a^2+b^2&\equiv 3 \pmod{4}\\
+	a^2,b^2 &\in \{0,1,0,1\}
+\end{align*}
+\begin{align*}
+	\forall n\in\N:\forall a\in\N: a^n &\equiv a \pmod{n}\\
+\end{align*}
+\begin{enumerate}
+	\item Open-source, github like, paper writing.
+	\item Issue tracker with monetary awards?
+	\item Programming build in, jupyter like.
+\end{enumerate}
+\newpage
 \end{document}

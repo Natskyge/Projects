@@ -8,6 +8,11 @@
 		(summation-iter (next a) (+ sum (func a)))))
   (summation-iter a 0))
 
+(summation (lambda (x) (+ x 1))
+		   0
+		   10
+		   (lambda (x) (+ x 1)))
+
 ;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^;
 ;                              Exercise 1.29								   ;
 ;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^;
@@ -133,6 +138,13 @@
 	(+ (* x (square a))
 	   (* y b)
 	   (* a b))))
+
+(define (facto n)
+  (let loop ((ptr 1)
+			 (prod 1))
+	(if (< n ptr)
+	    prod
+		(loop (+ ptr 1) (* prod ptr)))))
 ; so what happens is the let copies in the definitions of a and b into the
 ; expression. Like with lambda, but in reverse.
 
@@ -163,6 +175,12 @@
 		(append (rev-iter (cdr lst)) (list (car lst)))))
   (rev-iter lst))
 
+(define (reverss lst)
+  (let loop ((res lst))
+	(if (null? res)
+	    '()
+		(append (loop (cdr res)) (list (car res))))))
+
 ; 2.20
 (define (same-parity num . lst)
   (define parity (modulo num 2))
@@ -174,6 +192,16 @@
 		  (#t
 		   (par-iter (cdr lst)))))
   (cons num (par-iter lst)))
+
+(define (same-parityy num . inlst)
+  (let loop ((parity (modulo num 2))
+			 (lst (cons num inlst)))
+	(cond ((null? lst)
+		   '())
+		  ((= (modulo (car lst) 2) parity)
+		   (cons (car lst) (loop parity (cdr lst))))
+		  (else
+			(loop parity (cdr lst))))))
 
 (define (prim-map proc items)
   (if (null? items)
@@ -275,6 +303,7 @@
 					   (append (list (car s)) x)) 
 					 rest)))))
 
+; Takes  a sequenc with an initial value and accumulates using op.
 (define (accumulate op initial sequence)
   (if (null? sequence)
 	  initial
@@ -324,3 +353,129 @@
   (iter initial sequence))
 
 ;; Fold-left and fold-right will only be equal if op is commutiative
+
+;; Notes:
+(define (flatmap proc seq)
+  (accumulate append '() (map proc seq)))
+
+(define (remove item sequence)
+  (filter (lambda (x) (not (= x item)))
+		  sequence))
+
+(define (permut s)
+  (if (null? s)
+	  (list '())
+	  (flatmap (lambda (x)
+				 (map (lambda (p) (cons x p))
+					  (permut (remove x s))))
+			   s)))
+
+; a <= b
+(define (enum-seq a b)
+  (let loop ((ptr a))
+	(if (< b ptr)
+	    '()
+		(cons ptr (loop (+ ptr 1))))))
+
+(define (prime? n)
+  (define (F n i)
+    (cond ((< n (* i i)) #t)
+          ((zero? (remainder n i)) #f)
+          (else
+           (F n (+ i 1)))))
+ (cond ((< n 2) #f)
+     (else
+      (F n 2))))
+
+(define (prime-sum? pair)
+  (prime? (+ (car pair) (cadr pair))))
+
+(define (unique-pairs n)
+  (flatmap (lambda (i) 
+			 (map (lambda (j) (list j i))
+				  (enum-seq 1 (- i 1))))
+		   (enum-seq 1 n)))
+
+(define (make-sum-triplet lst)
+  (map (lambda (pair)
+		 (list (car pair) (cadr pair) (+ (car pair) (cadr pair))))
+	   lst))
+
+(define (prime-sum-pairs n)
+  (make-sum-triplet (filter prime-sum? (unique-pairs n))))
+
+(define (unique-triplets n)
+  (flatmap (lambda (i)
+			 (map (lambda (j) (cons j i))
+				  (enum-seq 1 (- (car i) 1))))
+		   (unique-pairs n)))
+
+(define (sum-to-s? triplet s)
+  (= s 
+	 (+ (car triplet) 
+		(cadr triplet) 
+		(caddr triplet))))
+
+(define (make-sum-4let lst)
+  (map (lambda (triplet)
+		 (list (car triplet) 
+			   (cadr triplet) 
+			   (caddr triplet) 
+			   (+ (car triplet) 
+				  (cadr triplet) 
+				  (caddr triplet))))
+	   lst))
+
+(define (sum-to-s-triplets n s)
+  (make-sum-4let (filter (lambda (triplet)
+						   (sum-to-s? triplet s))
+				   (unique-triplets n))))
+
+; E:2.46
+(define (make-vect x y)
+  (list x y))
+
+(define xcor-vect car)
+(define ycor-vect cadr)
+
+(define (add-vect vect1 vect2)
+  (make-vect (+ (xcor-vect vect1) (xcor-vect vect2))
+			 (+ (ycor-vect vect1) (ycor-vect vect2))))
+
+(define (sub-vect vect1 vect2)
+  (make-vect (- (xcor-vect vect1) (xcor-vect vect2))
+			 (- (ycor-vect vect1) (ycor-vect vect2))))
+
+(define (scale-vect scale vect)
+  (make-vect (* scale (xcor-vect vect))
+			 (* scale (ycor-vect vect))))
+
+(define (make-frame origin edge1 edge2)
+  (list origin edge1 edge2))
+
+(define frame-origin car)
+(define frame-edge1 cadr)
+(define frame-edge2 caddr)
+
+;(define (make-frame origin edge1 edge2)
+;  (list origin (cons edge1 edge2)))
+;
+;(define frame-origin car)
+;(define (frame-edge1 frame)
+;  (car (cadr frame)))
+;(define (frame-edge2 frame)
+;  (cadr (cadr frame)))
+
+; p(n,k)=p(n-k,n-k)+p(n,k-1)
+; p(0,k)=1
+; p(1,k)=1
+
+(define (part n)
+  (define (p n k)
+	(cond ((< n k) 0)
+	  	  ((<= n 1) 1)
+		  ((<= k 1) 1)
+		  (else
+			(+ (p (- n k) (- n k))
+			   (p n (- k 1))))))
+  (p n n))

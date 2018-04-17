@@ -1,0 +1,81 @@
+\usepackage{lastpage}
+\usepackage{amsmath,amssymb}
+\usepackage[pdftex]{graphicx}
+\usepackage{fancyhdr}
+\usepackage{geometry}
+\usepackage{wrapfig}
+\usepackage{color}
+\usepackage{pdfpages}
+\usepackage{ulem}
+\usepackage{float}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{chemmacros}
+\usepackage[danish]{babel}
+\usechemmodule{redox,reactions}
+\usepackage[draft,danish]{fixme} %Skriv en kommentar med fixme{blabla}
+\graphicspath{{./figures/}}
+\setlength{\parindent}{0pt}
+
+
+%\linespread{1.3}
+\numberwithin{equation}{section}
+
+\geometry{top=3cm}
+\geometry{bottom=3cm}
+\geometry{left=2.5cm}
+\geometry{right=2.5cm}
+%\geometry{headsep=1cm}
+
+\fancyhf{}
+\fancyhead[OR]{Af: Erik. S. gimsing}
+\fancyhead[OL]{Projekt: Automatisk opgave sortering}
+\fancyfoot[OL]{}
+\fancyfoot[OR]{\thepage \\}
+\rfoot{Side \thepage \hspace{1pt} af \pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\newcommand{\unit}[1]{\ensuremath{\, \mathrm{#1}}}
+	% Command for writing units in math mode, makes space before unit and text unslanted
+	
+\pagestyle{fancy}
+
+%Navn på indholdsfortegnelse
+\AtBeginDocument{\renewcommand{\contentsname}{Indholdsfortegnelse}}
+
+%Opdater dato form
+	\renewcommand*\today{\number\day.\space
+	\ifcase\month\or januar\or februar\or marts\or april\or maj\or juni\or
+	juli\or august\or september\or oktober\or november\or december\fi\space
+	\number\year}
+
+
+\usepackage{hyperref}
+
+\usepackage{etoolbox}
+\patchcmd{\thebibliography}{\section*{\refname}}{}{}{}
+
+\usepackage{oubraces}
+
+%Undertryk tal ved equations
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs}
+
+
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+
+%Kode visning
+%\usepackage{listings}
+
+%fiks kilder
+\usepackage{url}
+\makeatletter
+\g@addto@macro{\UrlBreaks}{\UrlOrds}
+\makeatother
+
+\usepackage[backend=biber,style=numeric,citestyle=authoryear,autocite=footnote]{biblatex}
+
+% File is created and written to disk by the above package
+\addbibresource{/home/natskyge/usr/Projects/c-lang/kalender/doc/Bibliotek.bib}

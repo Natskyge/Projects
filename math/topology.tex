@@ -25,6 +25,7 @@
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\Q}{\mathbb{Q}}
 \newcommand{\C}{\mathbb{C}}
+\newcommand{\U}{\mathbb{U}}
 \newcommand{\dx}{\text{d}}
 \newcommand{\Sin}{\text{Sin}}
 \newcommand{\del}{\partial}
@@ -37,8 +38,8 @@
 \begin{document}
 \maketitle
 \section{Continuity}
-We wish to arrive at a general definition of continuity that does not appeal to
-the real numbers. To start with we have.
+We wish to arrive at a general definition of continuity that does not
+appeal to the real numbers. To start with we have.
 \begin{definition}[Continuity I]
 	Let $f:I\rightarrow\R$ be a real function, where $I\subseteq\R$. Let
 	$a\in I$. Then $f$ is continues at $a$ iff
@@ -54,8 +55,9 @@ The above definition has a natural extension if we consider the definition of
 Euclidean distance.
 \end{remark}
 \begin{definition}[Euclidean distance]
-	Let $x=(x_1,\dots,x_n)\in\R^n$ and $y=(y_1,\dots,x_n)\in\R^n$. Then the
-	euclidean distance between $x$ and $y$ is given by
+	Let $x=(x_1,\dots,x_n)\in\R^n$ and \newline
+	$y=(y_1,\dots,x_n)\in\R^n$. Then the euclidean distance between
+	$x$ and $y$ is given by
 	\begin{equation}
 	\begin{aligned}
 		d(x,y)=\|x-y\|=\sqrt{{(x_1-y_1)}^2+\cdots+{(x_n-y_n)}^2}
@@ -82,10 +84,11 @@ Euclidean distance.
 	$\|x-a\|=|x-a|$ and like wise with $\|f(x)-f(a)\|=|f(x)-f(a)|$. Therefore
 	Continuity II is an extension of Continuity I.
 \end{remark}
-Euclidean distance derives from Pythoagoras' Theorem which is about triangles.
-Triangles are closely related to spheres in all dimensions. Motivated by this we
-will seek to define continuity in terms of spheres. At the same time we will try
-to free ourselves from euclidean space using the following definition.
+Euclidean distance derives from Pythoagoras' Theorem which is
+about triangles. Triangles are closely related to spheres in all
+dimensions. Motivated by this we will seek to define continuity in terms
+of spheres. At the same time we will try to free ourselves from euclidean
+space using the following definition.
 \begin{definition}[Metric space]\label{def:metric space}
 	A metric space $M=(A,d)$ is an ordered pair consisting of\newline
 	$(1):\quad \text{a non-empty set }A$\newline
@@ -94,10 +97,14 @@ to free ourselves from euclidean space using the following definition.
 		satisfying:}$
 	\begin{equation}
 	\begin{aligned}
-		(M1)\; &:\forall x\in A &&:d(x,x)=0&&\\
-		(M2)\; &:\forall x,y,z\in A &&:d(x,y)+d(y,z)\leq d(x,z)&&\\
-		(M3)\; &:\forall x,y\in A &&:d(x,y)=d(y,x)&&\\
-		(M4)\; &:\forall x,y\in A &&: x\neq y\implies d(x,y)>0&&\\
+		(M1)\; &:\forall x\in A &&:d(x,x)=0
+			   &&&\text{(Reflexive)}\\
+		(M2)\; &:\forall x,y,z\in A &&:d(x,y)+d(y,z)\leq d(x,z)
+			   &&&\text{(Triangle inequality)}\\
+		(M3)\; &:\forall x,y\in A &&:d(x,y)=d(y,x)
+			   &&&\text{(Symmetric)}\\
+		(M4)\; &:\forall x,y\in A &&: x\neq y\implies d(x,y)>0
+			   &&&\text{(Non-zero)}\\
 	\end{aligned}
 	\end{equation}
 \end{definition}
@@ -118,10 +125,11 @@ to free ourselves from euclidean space using the following definition.
 	\end{equation}
 \end{definition}
 \begin{remark}
-	In the case of $M=(\R^n,\|\cdot\|)$ the above is the same as the inside of a
-	sphere with radius $\varepsilon$ and center $a$ without the border. The
-	missing border will turn out to be the most important property, but first we
-	will use it the extend the definition of continuity.
+	In the case of $M=(\R^n,\|\cdot\|)$ the above is the same as
+	the inside of a sphere with radius $\varepsilon$ and center $a$
+	without the border. The missing border will turn out to be the
+	most important property, but first we will use it the extend
+	the definition of continuity.
 \end{remark}
 \begin{definition}[Continuity III]
 	Let $(A,d_1)$ and $(B,d_2)$ be metric spaces. Let $f:I\rightarrow B$ where
@@ -179,10 +187,13 @@ to free ourselves from euclidean space using the following definition.
 	\end{aligned}
 	\end{equation}
 \end{definition}
+\begin{remark}
+	One may intuitively view a open set as a set missing its border.
+\end{remark}
 \begin{definition}[Closed Set I]
-	Let $M=(A,d)$ be a metric space. Let $H\subseteq A$. Then $H$ is an
-	\textbf{closed set in $M$} if and only if its complement $A\backslash H$ is
-	open in $M$
+	Let $M=(A,d)$ be a metric space. Let $H\subseteq A$. Then $H$
+	is an \textbf{closed set in $M$} if and only if its complement
+	$A\backslash H$ is open in $M$
 \end{definition}
 Using this we may define continuity in terms of open sets.
 \begin{definition}[Continuity IV]
@@ -198,10 +209,11 @@ Using this we may define continuity in terms of open sets.
 \end{theorem}
 \begin{proof}$\ $\newline
 	\textbf{Necessary Condition}\newline
-	Suppose $f$ is Continuity III continues. Let $U$ be an open set in $M_2$.
-	Let $x\in f^{-1}(U)$. Since $f(x)\in U$ which is open there is
-	$\varepsilon\in\R_{>0}$ such that $B_{\varepsilon}(f(x))\subseteq U$. Since
-	$f$ is Continuity III continues there is $\delta\in\R_{>0}$ such that
+	Suppose $f$ is Continuity III continues. Let $U$ be an open
+	set in $M_2$.  Let $x\in f^{-1}(U)$. Since $f(x)\in U$
+	which is open there is $\varepsilon\in\R_{>0}$ such that
+	$B_{\varepsilon}(f(x))\subseteq U$. Since $f$ is Continuity
+	III continues there is $\delta\in\R_{>0}$ such that
 	$f(B_{\delta}(x))\subseteq B_{\varepsilon}(f(x))$. Therefore
 	\begin{equation}
 	\begin{aligned}
@@ -209,8 +221,8 @@ Using this we may define continuity in terms of open sets.
 		f^{-1}(B_{\varepsilon}(f(x)))\subseteq f^{-1}(U)
 	\end{aligned}
 	\end{equation}
-	$x$ was arbitrary and therefore $f^{-1}(U)$ is open in $M_1$. Therefore $f$
-	is Continuity IV continues.
+	$x$ was arbitrary and therefore $f^{-1}(U)$ is open in
+	$M_1$. Therefore $f$ is Continuity IV continues.
 	\newline\newline
 	\textbf{Sufficient Condition}\newline
 	Suppose now that $f$ is Continuity IV continues. Let $x\in A_1$, and let
@@ -305,11 +317,11 @@ Using this we arrive at our final definition of continuity.
 	\end{equation}
 \end{definition}
 \begin{remark}
-	Note that Continuity IV is a special case of Continuity V
-	where the topology on a metric space $(A,d)$ is defined as
-	$\tau=\{B_{\varepsilon}(x):x\in\}$ and $\tau$ clearly satisfies
-	the open set axioms as was shown in Theorem~\ref{Openball is
-	openset}. So Continuity V is an extension of Continuity IV.
+	Note that Continuity IV is a special case of Continuity V where
+	the topology on a metric space $(A,d)$ is defined as described
+	earlier and $\tau$ clearly satisfies the open set axioms as was
+	shown in Theorem~\ref{Openball is openset}. So Continuity V is
+	an extension of Continuity IV.
 \end{remark}
 When we extended the definition continuity with Continuity III we stopped
 considering point-wise continuity. However, we may now define point-wise
@@ -469,6 +481,19 @@ order.
 	\end{aligned}
 	\end{equation}
 	where $H^-$ indicates the closure of $H$ and $H^\circ$ the interior of $H$.
+\end{definition}
+\begin{definition}[Hausdorff Space]
+	Let $T=(S,\tau)$ be a topological space. Then $T$ is a \textit{Hausdorff 
+	space} or \textit{$T_2$ space} if and only if for all $x,y\in S$ with
+	$x\neq y$ there are $U\in\tau$ with $x\in U$ and $V\in\tau$ with $y\in V$
+	such that $U\cap V=\emptyset$, that is $U$ and $V$ have no elements in
+	common. Symbolically:
+	\begin{equation}
+	\begin{aligned}
+		\forall x,y\in S, x\neq y:\exists U,V\in\tau:x\in U,y\in V: U\cap
+		V=\emptyset
+	\end{aligned}
+	\end{equation}
 \end{definition}
 \newpage
 \section{Homology}

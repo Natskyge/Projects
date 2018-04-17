@@ -17,49 +17,32 @@
               (cddr hare) 
               (cons (car tortoise) acc)))))
 
-(define (merge-sort lst)
-  (define part (split lst))
+(define (mergesort lst)
   (if (or (null? lst) (null? (cdr lst)))
 	  lst
-	  (merge (merge-sort (car part))
-			 (merge-sort (cadr part)))))
+	  (merge (mergesort (car  (split lst)))
+			 (mergesort (cadr (split lst))))))
 
 (define (rand-list len)
   (if (<= len 0)
 	  '()
 	  (cons (random 100) (rand-list (- len 1)))))
 
-(define (revers lst)
-  (let loop ((lst1 lst) (acc '()))
-	(if (null? lst1)
-	    acc
-		(loop (cdr lst1) (cons (car lst1) acc)))))
-
 (define (mini x y . args)
-  (if (null? args)
-	  (if (< x y)
-		  x
-		  y)
-	  (car (merge-sort (cons x (cons y args))))))
+  (define (compare x y)
+	(if (< x y) x y))
+  (let loop ((tempmin (compare x y)) (lst args))
+	(if (null? lst)
+	  	tempmin
+		(loop (compare tempmin (car lst)) (cdr lst)))))
 
-(define (median x y . args)
-  (if (null? args)
-	  (/ (+ x y) 2)
-	  ))
+(define (listlength lst)
+  (if (null? lst)
+	  0
+	  (+ 1 (listlength (cdr lst)))))
 
-(define (factorial n)
-  (if (= n 0)
-	  1
-	  (* n (factorial (- n 1)))))
-
-; (let loop ((var1 start1)
-;            (var2 start2)
-;            ...
-;            (varN startN))
-;   (function body))
-
-; Is the same as:
-
-; (define (loop var1 var2 ... varN)
-;   (function body))
-; (loop start1 start2 ... startN)
+(define (findindex i lst)
+  (cond ((null? lst) '())
+		((< i 1) (car lst))
+		(else
+		  (findindex (- i 1) (cdr lst)))))

@@ -1,0 +1,26 @@
+\section{Projektformulering}
+\label{sec:projekformulering}
+
+\subsection{Problemstilling}
+\label{sec:problemstiling}
+Hvad er n{\o}dvendigt for en implementering af et program med det form{\aa}l at automatisk sortere diverse opgave p{\aa} basis af brug input omkring dets relative vigtighed, deadline, relative energi krav og forventet tid. Fokus vil v{\ae}rre p{\aa} backend frem for frontend. 
+
+\subsection{Program funktionalitet}
+\label{sec:program funktionalitet}
+P{\aa} basis af problemstilling (Sektion~\ref{sec:problemstiling}) er f{\o}lgende bed{\o}mt n{\o}vendigt
+\begin{itemize}
+    \item En m{\aa}de at opbevare opgaver og deres associeret data.
+    \item En simpel frontend til at h{\aa}ndtere bruger input. Herunder:
+    \begin{itemize}
+        \item Input.
+        \item Sletning.
+        \item redigering.
+        \item Opgave liste visualisering.
+        \item Opretning af nye opgave liste. 
+    \end{itemize}
+    \item En sorterings algoritme, grundet at programmer skal kunne sortere automatisk.
+    \item En metode der giver en given opgave en score der afg{\o}re dens vigtighed relativt til andre opgaver. 
+    \item Grundet \textit{C}'s mangle p{\aa} en dynamisk data struktur er det n{\o}dvendigt at implementere en til opbevaring af opgaver.
+    \item En m{\aa}de at gemme og l{\ae}se opgaver til en fil for at gemme mellem sessioner. 
+    \item Diverse funktioner til at interface med n{\o}dvendige datastrukturer. 
+\end{itemize}
