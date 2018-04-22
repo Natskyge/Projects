@@ -1,0 +1,11 @@
+Built in functions:
+
+ - atom
+ - eq
+ - car
+ - cdr
+ - cons
+ - quote
+ - cond
+ - lambda
+ Y = λf.(λx.f(x x)) (λx.f (x x))
