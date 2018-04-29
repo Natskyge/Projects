@@ -125,22 +125,3 @@ remove_node(List *list, size_t pos)
 	
 	return;
 }
-
-int
-main(void)
-{
-	List *my_list = list_init();
-	insert_node(3,my_list,0,BEFORE);
-	print_list(my_list);
-	insert_node(2,my_list,0,BEFORE);
-	print_list(my_list);
-	insert_node(1, my_list, 0, BEFORE);
-	print_list(my_list);
-	insert_node(4,my_list,1,AFTER);
-	print_list(my_list);
-	remove_node(my_list, 3);
-	print_list(my_list);
-
-	printf("Succes!");
-	return 0;
-}
