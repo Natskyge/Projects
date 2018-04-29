@@ -67,21 +67,6 @@ list_init(void)
 	return new_list;
 }
 
-void
-print_list(List *list)
-{
-	Node *ptr = list->first->next;
-	
-	while (ptr->node_type != LAST) {
-		printf("%d, ", ptr->data);
-		ptr = ptr->next;
-	}
-	
-	printf("\n");
-	
-	return;
-}
-
 Node*
 get_node(List *list, size_t pos)
 {
