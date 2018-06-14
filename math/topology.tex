@@ -763,7 +763,7 @@ By the closure property of groups this completes the proof.
 	Let $(G,*)$ be an abelian group. Let $H\subseteq G$, then $(H,*)$
 	is called a \textit{subgroup} of $(G,*)$ iff $(H,*)$ satisfies
 	the axioms in definition~\ref{Abelian group}. This we write as
-	$H\trianglelefteqG$. If $H=\{e_G\}$, that is $H$ contains only the
+	$H\trianglelefteq G$. If $H=\{e_G\}$, that is $H$ contains only the
 	identity of $G$ we call this the \textit{trivial subgroup} of $G$.
 	We call $H$ a \textit{proper subgroup} if $H\subset G$.
 \end{definition}
@@ -851,5 +851,52 @@ By the closure property of groups this completes the proof.
 	\end{equation}
 	We note that $h*h'\in H$ since $(H,*)$ has closure. Therefore we conclude
 	that $(g+H)(g'+H)\subseteq (g*g')+H$ and thus $(g+H)(g'+H)=(g*g')+H$.
+\end{proof}
+\begin{definition}[Quotient group]\label{quotient group}
+	Let $G$ be a abelian group, and let $H$ be subgroup of $G$. Let
+	$G/H = \{g+H:g\in G\}$ be the set of cosets of $H$ in $G$ with
+	the operation
+	\begin{equation}
+	\begin{aligned}
+		(g+H)(g'+H)=(g*g')+H
+	\end{aligned}
+	\end{equation}
+	$G/H$ is an abelian group. The identity is $0+H=H$ where $0$ is the identity
+	in $G$ and $-g+H$ is inverse to $g+H$.
+\end{definition}
+\begin{lemma}
+	Let $G$ be an abelian group and let $H$ be a subgroup. For cosets $g+H$ and
+	$g'+H$ either $g+H=g'+H$ or $g+H\cap g'+H=\emptyset$.
+\end{lemma}
+\begin{proof}
+	If $g+H\cap g'+H=\emptyset$ then there is nothing to show. Therefore, assume
+	$g+H\cap g'+H\neq\emptyset$. Then there must be $g''\in g+H\cap g'+H$, thus
+	$g''=g+h$ for $h\in H$ and $g''=g'+h'$ for $h'\in H$. I follows then that
+	\begin{equation}
+	\begin{aligned}
+		g+h=g'+h'\implies g'=g+h'-h
+	\end{aligned}
+	\end{equation}
+	If $k\in g'+H$ then the following holds
+	\begin{equation}
+	\begin{aligned}
+		k=g'+h''=g+h'-h+h''
+	\end{aligned}
+	\end{equation}
+	but $h'-h+h''\in H$, and thus we conclude that $g+h'-h+h''\in g+H$ meaning
+	that $g'+H\subseteq g+H$. A similar argument shows that $g+H\subseteq g'+H$
+	and thus we conclude $g+H=g'+H$ which completes the proof. asdfasfd
+\begin{definition}[Quotient group]\label{quotient group}
+	Let $G$ be a abelian group, and let $H$ be subgroup of $G$. Let
+	$G/H = \{g+H:g\in G\}$ be the set of cosets of $H$ in $G$ with
+	the operation
+	\begin{equation}
+	\begin{aligned}
+		(g+H)(g'+H)=(g*g')+H
+	\end{aligned}
+	\end{equation}
+	$G/H$ is an abelian group. The identity is $0+H=H$ where $0$ is the identity
+	in $G$ and $-g+H$ is inverse to $g+H$.
+\end{definition}
 \end{proof}
 \end{document}

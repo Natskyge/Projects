@@ -46,3 +46,13 @@
 		((< i 1) (car lst))
 		(else
 		  (findindex (- i 1) (cdr lst)))))
+
+(define (frac-approx r acc)
+  (let loop ((r r)
+			 (q-h (ceiling r))
+			 (q-l (floor r)))
+	(cond ((> acc (abs (- r q-h))) q-h)
+		  ((> r (/ (+ q-h q-l) 2))
+		   (loop r q-h (/ (+ q-h q-l) 2)))
+		  (else
+			(loop r (/ (+ q-h q-l) 2) q-l)))))

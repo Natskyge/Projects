@@ -91,16 +91,32 @@ bubbleSort(int *A, int len)
 	}
 }
 
+/* PSUEDO CODE:
+ * Built a binary tree by going through the array and placing an element on the
+ * left of an element if less than or equal and right otherwise.
+ *
+ * Repeatly find the left most element and insert back into the array.
+ */
+
 int
 main(void)
 {
-	int LEN = 100000;
+	int LEN = 1000000;
 	int test[LEN];
 	for (int i = 0; i<LEN; i++) {
 		test[i] = rand() % LEN;
 	}
-	//bubbleSort(test,LEN);
+
+	clock_t t;
+	t = clock();
+	bubbleSort(test,LEN);
 	//mergeSort(test,LEN);
-	quicksort(test,LEN);
+	//quicksort(test,LEN);
+
+	t = clock() - t;
+	double time_taken = ((double)t)/CLOCKS_PER_SEC; // in seconds
+
+	printf("Time %f\n", time_taken);
+
 	return 0;
 }

@@ -31,5 +31,5 @@ printScript(int max)
 int
 main(void)
 {
-	printScript(400);
+	printScript(10000);
 }

@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -18,10 +17,8 @@ List*
 listInit(void)
 {
 	List *newList = (List*)malloc(sizeof(List));
-
 	newList->top  = NULL;
 	newList->size = 0;
-
 	return newList;
 }
 
@@ -29,10 +26,8 @@ Item*
 makeItem(TYPE data, Item *prev)
 {
 	Item *newItem = (Item*)malloc(sizeof(Item));
-
 	newItem->data = data;
 	newItem->prev = prev;
-
 	return newItem;
 }
 
@@ -67,7 +62,7 @@ freeList(List *list)
 	while (0 < list->size) {
 		cdr(list);
 	}
-
+	
 	free(list);
 	return 0;
 }
@@ -82,7 +77,6 @@ dumpToArray(List *list)
         A[size-i-1] = itemPtr->data;
         itemPtr = itemPtr->prev;
     }
-
     TYPE *r = A;
     return r;
 }

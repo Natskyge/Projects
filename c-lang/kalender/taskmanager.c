@@ -583,5 +583,5 @@ main(void)
 	sortTasks(myTaskList);
 	userInputLoop(myTaskList);
 
-	return 1;
+	return 0;
 }
