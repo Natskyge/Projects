@@ -313,3 +313,16 @@
 
 (define (decode-string bits)
   (list->string (decode bits alpha-tree)))
+
+(define bit-tree
+  (generate-huffman-tree
+	'((00 1)
+	  (01 2)
+	  (10 3)
+	  (11 4))))
+
+
+00 1
+01 2
+10 3
+11 4

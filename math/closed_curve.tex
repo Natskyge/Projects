@@ -1205,5 +1205,47 @@ Note that the reference frame is a special world line.
 	$f$ & $f$ & $c$ & $d$ & $b$ & $e$ & $a$ \\
 \end{tabular}
 \end{center}
-1234567890(QA)\{\}()[]Q$<>$AOo0@O\$$\sim$A\#A\%/\&$*-+=/$/A?:;i\|A
+\begin{align*}
+	\exp \int \ln x\ \dx x &= \exp\left(x\ln x -x\right)\\
+						   &= \frac{x^x}{e^x}
+\end{align*}
+\newpage
+\begin{align*}
+	\text{GL}_n(\R) &= \{M\in\R^{n\times n}:\exists M^{-1}\in\R^{n\times
+	n}:MM^{-1}=M^{-1}M=I_n\}\\
+	\text{SL}_n(\R) &= \text{ker}(\text{det}),\; \text{det}:\text{GL}_n(\R)\rightarrow\R/\{0\}
+\end{align*}
+\begin{theorem}
+	Let $G$ be a group and let $H,N\subseteq G$ such that $H\cap
+	N=\emptyset$ and $H\cup N = G$. Then $H$ and $N$ are subgroups iff
+	$H{\times}N \simeq G$.
+\end{theorem}
+\begin{align*}
+	\prod_a^b f(x)^{\dx x} &= \exp \left(\int_a^b \ln f(x)\ \dx x\right) \\
+	\prod_a^b {x}^{n\ \dx x} &= \exp \left(\int_a^b \ln x^n\ \dx x\right) \\
+	&= \exp \left(\int_a^b n \ln x\ \dx x\right) \\
+	&= \exp \left(\int_a^b \ln x\ \dx x\right)^n \\
+	&= \exp \left(\left[x\ln x - x\right]_a^b\right)^n \\
+	&= \exp \left(b\ln b - b - a\ln a + a\right)^n \\
+	&= e^{nb\ln b}e^{-nb}e^{-na\ln a}e^{na} \\
+	&= e^{n(a-b)}b^{nb}a^{-na} \\
+	\prod_1^x {x}^{n\ \dx x} &= e^{n(1-x)}x^{nx} \\
+	&= e^{n(1-x)}e^{nx\ln x} \\
+	&= e^{n-nx+nx\ln x} \\
+	&= e^n e^{n(x\ln x - x)} \\
+\end{align*}
+\begin{align*}
+	f(z)&=\frac{1}{z}+z\\
+		&=\frac{\bar{z}}{z\bar{z}}+z\\
+		&=\frac{\bar{z}}{|z|^2}+z \\
+		&=\frac{\bar{z}+|z|^2z}{|z|^2}\\
+		&=\frac{\bar{z}+\bar{z}z^2}{|z|^2}
+\end{align*}
+\begin{align*}
+	I &= \int_a^b \tan x\ \dx x \\
+	  &= \int_a^b \frac{\sin x}{\cos x}\ \dx x \\
+	u = \cos x &\implies \dx u = -\sin x\ \dx x\\
+	  &= -\int_{\cos a}^{\cos b} \frac{\dx u}{u} \\
+	  &= \ln\left(\frac{\cos a}{{\cos b}}\right) \\
+\end{align*}
 \end{document}

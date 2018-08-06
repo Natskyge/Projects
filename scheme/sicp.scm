@@ -592,3 +592,159 @@
   (if (element-of-set? x set)
 	  set
 	  (cons x set)))
+
+; NEW CHAPTER MY DUDE
+(define withdraw
+  (let ((balance 100))
+	(lambda (amount)
+	  (if (>= balance amount)
+		(begin (set! balance (- balance amount))
+			   balance)
+		"Insufficient funds"))))
+
+(define (make-withdraw balance)
+  (lambda (amount)
+	(if (>= balance amount)
+	    (begin (set! balance (- balance amount))
+			   balance)
+		"Insufficient funds")))
+
+(define (make-account balance)
+  (define (withdraw amount)
+	(if (>= balance amount)
+	    (begin (set! balance (- balance amount))
+			   balance)
+		"Insufficient funds"))
+  (define (deposit amount)
+	(set! balance (+ balance amount))
+	balance)
+  (define (dispatch m)
+	(cond ((eq? m 'withdraw) withdraw)
+		  ((eq? m 'deposit) deposit)
+		  (else (error "Unknown request -- MAKE-ACCOUNT"
+					   m))))
+  dispatch)
+
+(define (make-accumulator init)
+  (let ((sum init))
+	(lambda (n)
+	  (begin (set! sum (+ sum n))
+			 sum))))
+
+(define (make-monitored func)
+  (let ((acc (make-accumulator 0)))
+	(lambda (arg)
+	  (if (eq? arg 'hoow-many-calls?)
+		  (acc 0)
+		  (begin (acc 1)
+				 (func arg))))))
+
+(define (make-account pass balance)
+  (define (withdraw amount)
+	(if (>= balance amount)
+	    (begin (set! balance (- balance amount))
+			   balance)
+		"Insufficient funds"))
+  (define (deposit amount)
+	(set! balance (+ balance amount))
+	balance)
+  (define (dispatch m)
+	(cond ((eq? m 'withdraw) withdraw)
+		  ((eq? m 'deposit) deposit)
+		  (else (error "Unknown request -- MAKE-ACCOUNT"
+					   m))))
+  (let ((count 0))
+	(lambda (password action)
+	  (cond ((> count 7) 'call-the-cops)
+			((eq? password pass)
+			 (begin (set! count 0)
+					(dispatch action)))
+			(else
+			  (begin (set! count (+ count 1))
+					 (lambda (x) 
+					   (display "I'm sorry dave, i'm afraid i can't do that\n"))))))))
+
+(define (monte-carlo trials experiment)
+  (let loop ((remaining trials)
+			 (passed 0))
+	(cond ((= remaining 0)
+		   (/ passed trials))
+		  ((experiment)
+		   (loop (- remaining 1) (+ passed 1)))
+		  (else
+			(loop (- remaining 1) passed)))))
+
+(define (rand-mod2)
+  (= (random 2) 0))
+
+(define (estimate-integral P x1 x2 y1 y2 trials)
+  (define (random-in-range low high)
+	(let ((range (- high low)))
+	  (+ low (random range))))
+  (define (inside?)
+	(let ((x (random-in-range x1 x2))
+		  (y (random-in-range y1 y2)))
+	  (P x y)))
+  (monte-carlo trials inside?))
+
+(define (pi-approx trials)
+  (define (in-circle? x y)
+	(<= (sqrt (+ (* x x) (* y y))) 1))
+  (let ((frac (estimate-integral in-circle? -1 1 -1 1 trials)))
+	(* frac 4.0)))
+
+(define withdraw
+  (let ((balance 100))
+	(lambda (amount)
+	  (if (>= balance amount)
+		(begin (set! balance (- balance amount))
+			   balance)
+		"Insufficient funds"))))
+
+(define f
+  (let ((n 1))
+	(lambda (x)
+	  (begin (set! n (* x n)) n))))
+
+; To evaluate an expression, create a an enviroment that contains definitions of
+; the parameters and then evaluate the expression body.
+;
+; THE ENVIROMENT MODEL OF PROCEDURE APPLICATION:
+;
+; * A procedure object is applied to a set of arguments by constructing a frame,
+; binding the formal parameters of the procedure to the arguments of the call,
+; and then evaluating the body of the procedure in the context of the new
+; enviroment constructed. The new frame has as its enclosing enviroment the
+; enviroment part of the procedure object being applied.
+;
+; * A procedure is created by evaluating a lambda expression relative to a given
+; enviroment. the resuting procedure object is a pair consisting of the text of
+; the lambda expression and a pointer to the enviroment in which the procedure
+; was created.
+;
+; what (set! var val) the does is change the binding of var in the enviroment to
+; val.
+;
+; This is why make-withdraw works, since the function defined points to code in
+; an enviroment pointing to the global enviroment it means that variables inside
+; are isolated from the rest. Then when w1 is ran it creates an enviroment
+; pointing to the enviroment created, changes the value and is destroyed.
+;
+; Evaulating a function/lambda inside a function makes a sub enviroment.
+
+(define (fact n)
+  (let loop ((p 1) (k 1))
+	(if (< n k) p
+		(loop (* p k) (+ k 1)))))
+
+(define (append! x y)
+  (set-cdr! (last-pair x) y)
+  x)
+
+(define (last-pair x)
+  (if (null? (cdr x))
+	  x
+	  (last-pair (cdr x))))
+
+(define (make-cycle x)
+  (set-cdr! (last-pair x) x) x)

@@ -48,11 +48,17 @@ node_insert(TYPE data, int key, Node *root)
 Node*
 node_balance(Node *node)
 {
+	if (!node) {
+		return NULL;
+	}
+
 	node_height_recalc(node);
 
 	if (node_height(node->right)-node_height(node->left) >= 2) {
-		if (node_height(node->right->left) > node_height(node->right->right))
+		if (node_height(node->right->left) > node_height(node->right->right)) {
 			node_rotate_right(node->right);
+		}
+
 
 		return node_rotate_left(node);
 	} else if (node_height(node->right)-node_height(node->left) <= -2) {
@@ -100,6 +106,8 @@ node_height(Node *node)
 void
 node_height_recalc(Node *node)
 {
+	printf("D\n"); /* Error asigning node->height */
+	printf("%d\n", node->key);
 	node->height = 1+MAX(node_height(node->left),node_height(node->right));
 }
 
@@ -115,7 +123,7 @@ node_link_right(Node *parent, Node *right_child)
 	parent->right = right_child;
 }
 
-static Node*
+Node*
 node_new(int key, TYPE data)
 {
 	Node *node = (Node*)malloc(sizeof(Node));
@@ -199,8 +207,6 @@ error_msg(const char* err_msg)
 int
 main(void)
 {
-	printf("A");
-
 	Node *root = node_new(1,1);
 	int fails = 0;
 
@@ -221,6 +227,8 @@ main(void)
 		301, 316, 337, 341, 358, 363, 369, 385, 425, 440, 464, 522, 523, 527,
 		532, 538, 562, 570, 620, 636, 649, 717, 739, 753, 762, 801, 816, 821,
 		851, 883, 901, 922, 923, 947, 957, 966, 969};
+
+	avl_insert(root,2,2);
 
 	//for (int i = 0; i < 100; i++) {
 	//	avl_insert(root,data[i],keys[i]);
