@@ -4,6 +4,7 @@
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{amsthm}
+\usepackage{tensor}
 \usepackage{amsfonts}
 \usepackage{pgf,tikz}
 \usepackage{pgfplots}
@@ -24,9 +25,12 @@
 
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
+\newcommand{\M}{\mathbb{M}}
+\newcommand{\F}{\mathbb{F}}
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\Q}{\mathbb{Q}}
 \newcommand{\C}{\mathbb{C}}
+\newcommand{\J}{\mathbf{J}}
 \newcommand{\cL}{\mathcal{L}}
 \newcommand{\dx}{\text{d}}
 \newcommand{\D}{\text{D}}
@@ -34,6 +38,13 @@
 \newcommand{\iff}{\Longleftrightarrow}
 \newcommand{\dd}{\text{..}}
 \newcommand{\lett}{\sqsupset}
+\DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\im}{Im}
+\DeclareMathOperator{\dive}{div}
+\DeclareMathOperator{\curl}{curl}
+\newcommand{\jhat}{\mathbf{j}}
+\newcommand{\ihat}{\mathbf{i}}
+\newcommand{\khat}{\mathbf{k}}
 
 
 \title{Closed curves}
@@ -42,53 +53,56 @@
 
 \begin{document}
 \maketitle
-\begin{definition}[Simple closed curve]
-	Let $\gamma : [0,1] \rightarrow \R^2$ such that
-	\begin{enumerate}
-		\item $\forall \varepsilon \in \R_{>0}: \exists \delta \in
-			\R_{>0}: |x-a| < \delta \implies 
-			\|\gamma(x)-\gamma(a)\|<\varepsilon$
-		\item $\forall x,x' \in [0,1): \gamma(x) = \gamma(x') 
-			\implies x = x'$
-		\item $\gamma(0) = \gamma(1)$
-	\end{enumerate}
-	Then the map of $\gamma$ is called a simple closed curve.
+\begin{definition}[Simple closed curve]\label{def:simple_closed_curve}
+	A simple closed curve $\Gamma$ is a subset of $\R^2$ with a parametrization
+	$\gamma:[0,1]\to\R^2$ such that $\gamma$ is injective on $(0,1)$, continues
+	and $\gamma(0)=\gamma(1)$. That is to say $\im(\gamma)=\Gamma$.
 \end{definition}
-\begin{theorem}
-	Let $C$ be a simple closed curve in the plane $\R^2$. Then its
-	complement, $\R^2\backslash C$, consists of exactly two connected
-	components. One of these components is bounded (the interior)
-	and the other is unbounded (the exterior), and the curve $C$
-	is the boundary of each component.
-\end{theorem}
+\begin{definition}[Simple closed polygon]\label{def:simple_closed_polygon}
+	Let $\Gamma$ be a polygon with vertexes $v_0,\dots,v_n\in\R^2$ and edges
+	\begin{align*}
+		E_i &= \{tv_i+(1-t)v_{i+1}:t\in[0,1]\} \\
+		E_n &= \{tv_n+(1-t)v_0:t\in[0,1]\}
+	\end{align*}
+	Then $\Gamma$ is called a simple closed polygon if $E_i\cap
+	E_{i+1}=\{v_{i+1}\}$ and $E_i\cap E_j = \emptyset$ otherwise.
+\end{definition}
+\begin{proposition}[Simple closed polygon is simple closed
+	curve]\label{prop:polygon_is_curve}
+	Let $\Gamma$ be a simple closed curve, there is a continues function
+	$\gamma:[0,1]\to\R^2$ making $\Gamma$ a simple closed curve.
+\end{proposition}
 \begin{proof}
-	The proof will proceed as follows; first it is proven that the
-	theorem holds for curves in the form of a triangle, then it
-	is shown that it holds for all polygons by triangulating them,
-	then it is proved that every simple closed curve is the limit
-	of a polygon approximation.
-	
-	n-gon approximation of C using convex combinations of map of
-	adjacent elements of sequence of lenght n in the
-	interval from zero to one
-	\begin{equation}
-	\begin{aligned}
-		&\forall X,Y \subseteq \R^2: d(X,Y) := \sup\ \{\|x-y\|:x\in X \land y 
-		\in y\} \\
-		&\forall x,y \in [0,1]: K(x,y) = \{z=\gamma(x)t+\gamma(y)(1-t)
-		:0\leq t \leq 1\} \\
-		&\forall ([a,b] \subseteq \R \land n \in \N): 
-		\Delta(n,[a,b]) = \{x_0,x_1,\dots,x_n\}:\\ 
-		&(x_0=a \land x_n = b \land x_i<x_{i+1}) \\
-		&\forall \Delta(n,[a,b]): S(\Delta(n,[a,b])) := (s_1,\dots,s_n):
-		s_i\in [x_{i-1},x_i]: 1<i\leq n\\
-		&\forall C: P_n(C) := \{K(s_{i-1},s_i):s_{i-1},s_i\in 
-		S(\Delta(n,[0,1]))\}\\
-		&\forall \varepsilon \in \R_{>0}: \exists n \in \N_{>0} : d(P_n(C),C)<
-		\varepsilon
-	\end{aligned}
-	\end{equation}
+	Let $\Gamma$ be an $n+1$-sided polygon. We may define the function
+	as follows: For each $E_i$ there is an obvious continues function
+	$e_i:[0,1]\to\R^2$ with $\im(e_i) = E_i$ defined by
+	$e_i(t)=(1-t)v_i+tv_{i+1}$. Using those we may define
+	$\gamma:[0,n+1]\to\R^2$
+	\begin{align*}
+		\gamma(t) =
+		\begin{cases}
+			e_i(t-i), & i < t \leq i+1 \\
+			e_n(t-n), & n < t \leq n+1
+		\end{cases}
+	\end{align*}
+	Also since $E_i\cap E_{i+1} = v_i$ we have that
+	\begin{align*}
+		\lim_{t\to i+1} \gamma(t) = e_i(1) = e_{i+1}(0)
+	\end{align*}
+	Meaning that $\gamma$ is continues, since $E_i\cap E_j = \emptyset$
+	and $E_i\cap E_{i+1}=\{v_{i+1}\}$ it is injective on
+	$(0,1)$ and $\gamma(0)=\gamma(n+1)$. Thus clearly $\gamma(t(n+1))$
+	satisfies definition~\ref{def:simple_closed_curve}.
 \end{proof}
+\begin{conjecture}[Simple closed curve theorem]
+	Let $\Gamma$ be a simple closed curve. Then $\R^2/\Gamma$ consists of two,
+	disjoint subsets $I,O\subseteq\R^2$ such that $I\cup O =\R^2/\Gamma$ and
+	$I\cap O = \emptyset$. This property is called the simple closed curve
+	property, or SCSP for short.
+\end{conjecture}
+\begin{lemma}[Simple closed polygon has SCSP]
+\end{lemma}
+
 \newpage
 \begin{align*}
 	d(t)&=re^{\omega i t} \\
@@ -887,15 +901,26 @@
 	\therefore J_1(1)=\frac{\pi}{2}&=\int_0^\infty\frac{\sin^2x}{x^2}\ \dx x\\
 	I&=\frac{\pi}{2}
 	-\int_0^\infty \frac{\sin^2 x}{x^2+1}\ \dx x\\
-	J_1&=\int_0^\infty \frac{\sin^2 x}{x^2+1}\ \dx x\\
-	&=\frac{1}{2}\int_0^\infty \frac{1-\cos (2x)}{x^2+1}\ \dx x\\
-	&=\frac{\pi}{4}-\frac{1}{2}\int_0^\infty \frac{\cos (2x)}{x^2+1}\ \dx x\\
-	&=\frac{\pi}{4}-\frac{1}{2}\int_0^\infty \frac{2\cos^2 x-1}{x^2+1}\ \dx x\\
-	&=\frac{\pi}{2}-\int_0^\infty \frac{\cos^2 x}{x^2+1}\ \dx x\\
-	&=\frac{\pi}{2}-\frac{1}{2}\int_0^\infty \frac{e^{2xi}+e^{-2xi}+2}{x^2+1}\ \dx x\\
+	J_2 &= \int_0^\infty \frac{\sin^2 x}{x^2+1}\ \dx x \\
+		&= \frac{1}{2}\int_0^\infty \frac{1-\cos(2x)}{x^2+1}\ \dx x \\
+		&= \frac{1}{2}\int_0^\infty \frac{1}{x^2+1}\ \dx x
+		- \frac{1}{2}\int_0^\infty \frac{\cos(2x)}{x^2+1}\ \dx x \\
+		&= \frac{\pi}{4}
+		- \frac{1}{4}\int_0^\infty \frac{e^{2ix}+e^{-2ix}}{x^2+1}\ \dx x \\
+\end{align*}
+\begin{align*}
 \end{align*}
 \begin{align*}
 	\int_{\del \Omega} \omega = \int_{\Omega} \dx \omega
+\end{align*}
+\begin{align*}
+	\cos(a-b)+i\sin(a-b) &= e^{(a-b)i} \\
+	&= e^{ai} e^{-bi} \\
+	&= (\cos(a)+i\sin(a))(\cos(-b)+i\sin(-b)) \\
+	&= (\cos(a)+i\sin(a))(\cos(b)-i\sin(b)) \\
+	&= \cos(a)\cos(b)+\sin(a)\sin(b)+i\sin(a)\cos(b)-i\cos(a)\sin(b) \\
+	\\
+	\sin(i) = \frac{e^{i}-e^{-i}}{2i}
 \end{align*}
 \newpage
 \section{Construction of $\N$}
@@ -1247,5 +1272,517 @@ Note that the reference frame is a special world line.
 	u = \cos x &\implies \dx u = -\sin x\ \dx x\\
 	  &= -\int_{\cos a}^{\cos b} \frac{\dx u}{u} \\
 	  &= \ln\left(\frac{\cos a}{{\cos b}}\right) \\
+\end{align*}
+\begin{align}
+	&ABCDEFGHIJKLMNOPQRSTUVWXYZ\\
+	&\mathbf{ABCDEFGHIJKLMNOPQRSTUVWXYZ}\\
+	&abcdefghijklmnopqrstuvwxyz\\
+	&\mathbf{abcdefghijklmnopqrstuvwxyz}\\
+	&\mathbb{ABCDEFGHIJKLMNOPQRSTUVWXYZ}\\
+	&\mathcal{ABCDEFGHIJKLMNOPQRSTUVWXYZ}\\
+	&\mathfrak{ABCDEFGHIJKLMNOPQRSTUVWXYZ}\\
+\end{align}
+\newpage
+Let $A\in\M_{n{\times}m}(\F)$
+\begin{align*}
+	A =
+		\begin{bmatrix}
+			a_{11} & a_{12} & \cdots & a_{1m} \\
+			a_{21} & a_{22} & \cdots & a_{2m} \\
+			\vdots & \vdots & \ddots & \vdots \\
+			a_{n1} & a_{n2} & \cdots & a_{nm} \\
+		\end{bmatrix}
+\end{align*}
+\begin{align*}
+	\mathbf{f}:\R^n\to\R^m \\
+	\mathbf{x} = 
+	\begin{bmatrix}
+		x_1 \\
+		x_2 \\
+		\vdots \\
+		x_n \\
+	\end{bmatrix} \\
+	\mathbf{f}(\mathbf{x}) = 
+	\begin{bmatrix}
+		f_1(\mathbf{x}) \\
+		f_2(\mathbf{x}) \\
+		\vdots \\
+		f_m(\mathbf{x}) \\
+	\end{bmatrix} \\
+	\J_{(-)}(\mathbf{x}):\text{Hom}(\R^n,\R^m) \to \cL(\R^n,\R^m)\\
+	{\J}_{\mathbf{f}}(\mathbf{x}) = 
+		\begin{bmatrix}
+			\frac{\del f_1}{\del x_1} & \frac{\del f_1}{\del x_2} & \cdots & \frac{\del f_1}{\del x_n} \\
+			\frac{\del f_2}{\del x_1} & \frac{\del f_2}{\del x_2} & \cdots & \frac{\del f_2}{\del x_n} \\
+			\vdots                    & \vdots                    & \ddots & \vdots                    \\
+			\frac{\del f_m}{\del x_1} & \frac{\del f_m}{\del x_2} & \cdots & \frac{\del f_m}{\del x_n}
+		\end{bmatrix} \\
+		{{\J}_{\mathbf{f}}(\mathbf{x})}_{ij} = \frac{\del f_i}{\del x_j} =
+		\del_{x_j} f_i \\
+		\exists \mathbf{f}^{-1}(\mathbf{x}) \iff \det(\J_\mathbf{f}(\mathbf{x}))
+			\neq 0
+\end{align*}
+\begin{align*}
+	{\J_{\mathbf{f}+\mathbf{g}}(\mathbf{x})}_{ij} = \frac{\del (f_i+g_i)}{\del
+	x_j} &= \frac{\del f_i}{\del{ x_j}}+\frac{\del g_i}{\del{ x_j}} =
+	{\J_{\mathbf{f}}(\mathbf{x})}_{ij}+	{\J_{\mathbf{g}}(\mathbf{x})}_{ij} \\
+	\implies
+	{\J_{\mathbf{f}+\mathbf{g}}(\mathbf{x})} &=
+	{\J_{\mathbf{f}}(\mathbf{x})}+{\J_{\mathbf{g}}(\mathbf{x})} \\
+	\\
+	{\J_{\lambda\mathbf{f}}(\mathbf{x})}_{ij} = \frac{\del (\lambda f_i)}{\del
+	x_j} &= \lambda \frac{\del f_i}{\del x_j} =
+	\lambda {\J_{\mathbf{f}}(\mathbf{x})}_{ij} \\
+	\implies {\J_{\lambda\mathbf{f}}(\mathbf{x})} &=
+	\lambda {\J_{\mathbf{f}}(\mathbf{x})} \\
+	\\
+\end{align*}
+\begin{align}
+	a+bi = \begin{bmatrix} a & -b \\ b & a \end{bmatrix}
+\end{align}
+\begin{align*}
+	(x+yi)^2 &= x^2+2ixy-y^2\\
+	u(x,y) &= x^2-y^2 \\
+	v(x,y) &= 2xy \\
+	\frac{\del u}{\del x} = 2x &= \frac{\del v}{\del y} \\
+	\frac{\del u}{\del y} = -2y &= -(2y) = -\frac{\del v}{\del x}\\
+	\\
+	\J_{\mathbf{f}}(x,y) &=
+	\begin{bmatrix}
+		2x & -2y \\
+		2y & 2x
+	\end{bmatrix}
+	= 2x+2iy \\
+	\\
+	\frac{\del (f_i\circ g_i)}{\del x_j} &= \frac{\del (f_i\circ g_i)}{\del
+	g_i}\frac{\del g_i}{\del x_j}
+\end{align*}
+\begin{align*}
+	\grad f = \nabla f &=\frac{\del f}{\del x}\mathbf{i}
+	+\frac{\del f}{\del y}\mathbf{j}
+	+\frac{\del f}{\del z}\mathbf{k} \\
+	\dive \mathbf{f} = \nabla \cdot \mathbf{f} &= \frac{\del f_x}{\del x} + \frac{\del
+	f_y}{\del y} + \frac{\del f_z}{\del z} \\
+	\curl\mathbf{f} = \nabla \times \mathbf{f} &=
+	\left(\frac{\del f_z}{\del y}-\frac{\del f_y}{\del z}\right)\mathbf{i}
+	+\left(\frac{\del f_x}{\del z}-\frac{\del f_z}{\del x}\right)\mathbf{j}
+	+\left(\frac{\del f_y}{\del x}-\frac{\del f_x}{\del y}\right)\mathbf{k}\\
+	\nabla^2 f &=
+	\frac{\del^2 f}{\del^2 x} +
+	\frac{\del^2 f}{\del^2 y} +
+	\frac{\del^2 f}{\del^2 z}
+\end{align*}
+\begin{align*}
+	\begin{bmatrix}
+		\frac{\del}{\del x} \\
+		\frac{\del}{\del y} \\
+		\frac{\del}{\del z} \\
+	\end{bmatrix}
+	{\times}
+	\begin{bmatrix}
+		f(x) \\
+		f(x) \\
+		f(x) \\
+	\end{bmatrix}
+	=
+	\begin{bmatrix}
+		\frac{\del f(\mathbf{x})}{\del y}-\frac{\del f(\mathbf{x})}{\del z} \\
+		\frac{\del f(\mathbf{x})}{\del z}-\frac{\del f(\mathbf{x})}{\del x} \\
+		\frac{\del f(\mathbf{x})}{\del x}-\frac{\del f(\mathbf{x})}{\del y} \\
+	\end{bmatrix}
+\end{align*}
+\begin{align*}
+	\begin{bmatrix}
+		x_1 \\
+		x_2 \\
+		x_3 \\
+	\end{bmatrix}
+	{\times}
+	\begin{bmatrix}
+		y_1 \\
+		y_2 \\
+		y_3 \\
+	\end{bmatrix}
+	=
+	\begin{bmatrix}
+		x_2y_3-x_3y_2 \\
+		x_3y_1-x_1y_3 \\
+		x_1y_2-x_2y_1 \\
+	\end{bmatrix} \\
+\end{align*}
+\begin{align*}
+	\times:\R^3\times\R^3&\to\R^3\\
+	\ihat\times\jhat = \khat,\ \jhat\times\khat &= \ihat,\
+	\khat\times\ihat = \jhat \\
+	\mathbf{x}\times\mathbf{y} &= -\mathbf{y}\times\mathbf{x} \\
+	(\lambda\mathbf{x})\times\mathbf{y} &= \lambda(\mathbf{x}\times\mathbf{y})\\
+	(\mathbf{x}+\mathbf{y})\times\mathbf{z} &=
+	\mathbf{x}\times\mathbf{z}+\mathbf{y}\times\mathbf{z}\\
+	\\
+	\mathbf{x}\times(\mathbf{y}+\mathbf{z}) &=
+	-(\mathbf{y}+\mathbf{z})\times\mathbf{x} \\
+	&=-\mathbf{y}\times\mathbf{x}-\mathbf{z}\times\mathbf{x} \\
+	&=\mathbf{x}\times\mathbf{y}+\mathbf{x}\times\mathbf{z} \\
+	\\
+	\mathbf{x}\times(\lambda\mathbf{y})&= -(\lambda\mathbf{y})\times\mathbf{x}\\
+									   &= -\lambda(\mathbf{y}\times\mathbf{x})\\
+									   &= \lambda(\mathbf{x}\times\mathbf{y}) \\
+	\\
+	\mathbf{x}\times\mathbf{x} &= -\mathbf{x}\times\mathbf{x} \\
+	\mathbf{x}\times\mathbf{x} &= \mathbf{0} \\
+	\\
+	x_1\ihat\times(y_1\ihat+y_2\jhat+y_3\khat)
+	&= x_1y_1(\ihat\times\ihat)+x_1y_2(\ihat\times\jhat)+x_1y_3(\ihat\times\khat) \\
+	&= x_1y_2\khat-x_1y_3\jhat \\
+	x_2\jhat\times(y_1\ihat+y_2\jhat+y_3\khat) &= 
+	x_2y_1(\jhat\times\ihat)+x_2y_2(\jhat\times\jhat)+x_2y_3(\jhat\times\khat)\\
+	&= x_2y_3\ihat-x_2y_1\khat\\
+	x_3\khat\times(y_1\ihat+y_2\jhat+y_3\khat) &= 
+	x_3y_1(\khat\times\ihat)+x_3y_2(\khat\times\jhat)+x_3y_3(\khat\times\khat)\\
+	&= x_3y_1\jhat-x_3y_2\ihat\\
+	\\
+	\begin{bmatrix}
+		x_1 \\
+		x_2 \\
+		x_3 \\
+	\end{bmatrix}
+	{\times}
+	\begin{bmatrix}
+		y_1 \\
+		y_2 \\
+		y_3 \\
+	\end{bmatrix}
+	&=
+	\begin{bmatrix}
+		x_2y_3-x_3y_2 \\
+		x_3y_1-x_1y_3 \\
+		x_1y_2-x_2y_1 \\
+	\end{bmatrix} \\
+\end{align*}
+\begin{align*}
+	\cdot:\R^n\times\R^n&\to\R\\
+	\mathbf{e}_i\cdot \mathbf{e}_j &= {\delta}_{ij} \\
+	\mathbf{x}\cdot\mathbf{y} &= \mathbf{y}\cdot\mathbf{x} \\
+	(\lambda\mathbf{x})\cdot\mathbf{y} &= \lambda(\mathbf{x}\cdot\mathbf{y})\\
+	(\mathbf{x}+\mathbf{y})\cdot\mathbf{z} &=
+	\mathbf{x}\cdot\mathbf{z}+\mathbf{y}\cdot\mathbf{z}\\
+	\\
+	\mathbf{x}\cdot(\mathbf{y}+\mathbf{z})
+	&=(\mathbf{y}+\mathbf{z})\cdot\mathbf{x} \\
+	&=\mathbf{y}\cdot\mathbf{x}+\mathbf{z}\cdot\mathbf{x} \\
+	&=\mathbf{x}\cdot\mathbf{y}+\mathbf{x}\cdot\mathbf{z} \\
+	\\
+	\mathbf{x}\cdot(\lambda\mathbf{y})
+	&= (\lambda\mathbf{y})\cdot\mathbf{x} \\
+	&= \lambda(\mathbf{y}\cdot\mathbf{x}) \\
+	&= \lambda(\mathbf{x}\cdot\mathbf{y}) \\
+	\\
+	\mathbf{x}\cdot\mathbf{y} 
+	&= \left(\sum_{i=1}^n x_i\mathbf{e}_i\right)\cdot
+	\left(\sum_{k=1}^n y_k\mathbf{e}_k\right) \\
+	&= \sum_{i=1}^n \sum_{k=1}^n x_i\mathbf{e}_i\cdot y_k\mathbf{e}_k \\
+	&= \sum_{i=1}^n \sum_{k=1}^n x_i y_k (\mathbf{e}_i\cdot \mathbf{e}_k) \\
+	&= \sum_{i=1}^n \sum_{k=1}^n {\delta}_{ik} x_i {y}_{k}  \\
+	&= \sum_{i=1}^n x_i y_i  \\
+\end{align*}
+\newpage
+\begin{definition}[Del Operator]
+	Let $\mathbf{V}$ be a vector space of dimension $n$. Let
+	$(\mathbf{e}_1,\mathbf{e}_2,\dots,\mathbf{e}_n)$ be the standard ordered
+	basis of $\mathbf{V}$, that is $(\mathbf{e}_i)_j = \delta_{ij}$. The
+	\textit{del operator} is a unary operator on $\mathbf{V}$ defined as:
+	\begin{align*}
+		\nabla := \sum_{j=1}^{n} \mathbf{e}_j \frac{\del }{\del x_j}
+	\end{align*}
+	Where $\mathbf{x} = \sum_{j=1}^{n} x_j\mathbf{e}_j$ is an arbitary
+	element of $\mathbf{V}$.
+\end{definition}
+\begin{align*}
+	\nabla\cdot\mathbf{E} &= \frac{\rho}{\varepsilon_0} \\
+	\nabla\cdot\mathbf{B} &= 0 \\
+	\nabla\times\mathbf{E} &= -\frac{\del\mathbf{B}}{\del t} \\
+	\nabla\times\mathbf{B} &= -\mu_0\left(\mathbf{J}+\varepsilon_0\frac{\del
+	\mathbf{E}}{\del t}\right) \\
+\end{align*}
+\begin{align*}
+	{R}_{\mu \nu} - \frac{1}{2} R {g}_{\mu \nu} + \Lambda {g}_{\mu \nu}
+	= \frac{8 \pi G}{c^4} {T}_{\mu \nu}
+\end{align*}
+\begin{align*}
+	i\hbar\frac{\del}{\del t} |\Psi(t)\rangle = \hat{H}|\Psi(t)\rangle
+\end{align*}
+Let a disk with center $O$ and radius $r$ have angular velocity $\omega$.
+Let $P$ be a point along it's circumference and consider an observer at $O$. The
+relative velocity along the radius $r$ between $O$ and $P$ is clearly 0. By the
+definition of angular velocity the relative velocity tangent to the
+circumference is $u=\omega r$. Consider now a small step along the circumference
+$\dx L$. Due to length contraction we have $\dx L =\dx L_0}/\gamma$ where
+$\gamma = 1/\sqrt{1-u^2/c^2}$ and $\dx L_0$ is the length of the step when
+$\omega = 0$ in which case geometry is euclidean and thus $\dx L_0 = r\ \dx \theta $
+for some correspondingly small angle $\dx \theta$. Thus the circumference of the
+disk is:
+\begin{align*}
+	C = \int_{0}^{C} \dx L = \int_{0}^{C_0} \frac{\dx L_0}{\gamma} =
+	\int_{0}^{2\pi} \frac{r\ \dx \theta}{\gamma}  = \frac{2\pi r}{\gamma}
+\end{align*}
+Thus the geometry of space is non-euclidean.
+\begin{align*}
+	{\eta}_{\mu\nu} &=
+	\begin{pmatrix}
+		-1 & 0 & 0 & 0 \\
+		0  & 1 & 0 & 0 \\
+		0  & 0 & 1 & 0 \\
+		0  & 0 & 0 & 1 \\
+	\end{pmatrix}
+	\\
+	{\eta}_{\mu\nu}{p}^{\mu}q^{\nu} &= \frac{E_pE_q}{c^2}-p_x q_x-p_y q_y - p_z
+	q_z \\
+	{\eta}_{\mu\nu} p^{\mu} p^{\nu} &= m_0^2c^2
+\end{align*}
+\newpage
+\begin{align*}
+	\mathbf{f}:\R\to\R^2,\; \mathbf{f}=\mathbf{e}_{i} f_i\text{ so }
+	\dx^2\mathbf{f} =\mathbf{e}_{i}\ \dx^2 f_i \text{ exists, where } i=1,2 \\
+	\text{Let }n^1 = \frac{\mathbf{e}_i\ \dx f_i}{\sqrt{f_j'f_j'}},\;\;
+	n^2 = \frac{\varepsilon_{ik}\mathbf{e}_k\ \dx f_i}{\sqrt{f_j'f_j'}}\text{ we
+	clearly have } n^1_in^1_i =n^2_in^2_i = 1\text{ and } n^1_in^2_i = 0 \\
+	\text{Then } n^{j}_{i} \in \R^{2\times 2}\text{ thus } \det(n^j_i) 
+	= n^1_1 n^2_2 - n^1_2 n^2_1 =
+	\frac{f_1'f_1'}{f_j'f_j'}-\frac{-f_2'f_2'}{f_j'f_j'} = 1\\
+\end{align*}
+\begin{align*}
+	\nabla &= \mathbf{e}_j\frac{\del}{\del x_j} \\
+\end{align*}
+\begin{align*}
+	\frac{a}{b+c}+\frac{b}{a+c}+\frac{c}{a+b} &= 4 \\
+	a(a+c)(a+b) &= 4(b+c)(a+c)(a+b) \\
+	+b(b+c)(a+b)& \\
+	+c(b+c)(a+c)& \\
+	a(a^2+ab+ac+bc) &= 4(b+c)(a^2+ab+ac+bc) \\
+	+b(ab+b^2+ac+bc)& \\
+	+c(ab+bc+ac+c^2)& \\
+	a^3+a^2b+a^2c+abc &= 4(a^2b+a^2c+ab^2+abc+abc+ac^2+b^2c+bc^2) \\
+	+ab^2+b^3+abc+b^2c&\\
+	+abc+bc^2+ac^2+c^3&\\
+	a^3+a^2b+a^2c &= 4a^2b+4a^2c+4ab^2+8abc+4ac^2+4b^2c+4bc^2 \\
+	+ab^2+b^3+b^2c&\\
+	+bc^2+ac^2+c^3&\\
+			 +3abc&\\
+	a^3+b^3+c^3 &= 3a^2b+3a^2c+3ab^2+3b^2c+3ac^2+3bc^2+5abc \\
+\end{align*}
+\begin{align*}
+	\mathbf{x}=x_i\mathbf{e}_i \implies \mathbf{e}_i = \frac{\del
+	\mathbf{x}}{\del x_i} \\
+\end{align*}
+\newpage
+\begin{align*}
+	\dx s^2 &= \dx x^2+\dx y^2 \\
+	\frac{\dx s^2}{\dx x^2} &= 1+{\left(\frac{\dx y}{\dx x}\right)}^2 \\
+	\frac{\dx s}{\dx x} &= \sqrt{1+{\left(\frac{\dx y}{\dx x}\right)}^2} \\
+	\int_a^b \frac{\dx s}{\dx x} \dx x &= \int_a^b\sqrt{1+{\left(\frac{\dx
+	y}{\dx x}\right)}^2}\ \dx x \\
+	\int_{s(a)}^{s(b)} \dx s &= \int_a^b\sqrt{1+{\left(\frac{\dx y}{\dx
+	x}\right)}^2}\ \dx x \\
+	s(b)-s(a) &= \int_a^b\sqrt{1+{\left(\frac{\dx y}{\dx x}\right)}^2}\ \dx x
+\end{align*}
+\begin{align*}
+	\dx s^2 &= \dx x^2+\dx y^2 \\
+	\frac{\dx s^2}{\dx t^2} &= \frac{\dx x^2}{\dx t^2} + \frac{\dx y^2}{\dx t^2} \\
+	\frac{\dx s}{\dx t} &= \sqrt{\left(\frac{\dx x}{\dx t}\right)^2 + {\left(\frac{\dx y}{\dx t}\right)}^2} \\
+	\int \frac{\dx s}{\dx t}\ \dx t &= \int 
+	\sqrt{\left(\frac{\dx x}{\dx t}\right)^2 + {\left(\frac{\dx y}{\dx
+	t}\right)}^2}\ \dx t \\
+	\int \frac{\dx s}{\dx t}\ \dx t &= \int \|y'(t)\|\ \dx t \\
+	s &= \int \|y'(t)\|\ \dx t \\
+\end{align*}
+\begin{align*}
+	\oint_C f(z)\ \dx z &= \sum_{i=1}^n \int_{a_i}^{b_i} f(\gamma_i(t))\gamma_i '(t)\ \dx t \\
+\end{align*}
+\begin{align*}
+	h^A(-) &= \text{Hom}_{\mathcal{C}}(A,-) \\
+	\text{Nat}(h^A,F) &\cong F(A) \\
+	\text{Nat}(h^A,h^B) &\cong h^B(A) \cong \text{Hom}_{\mathcal{C}}(B,A)\\
+\end{align*}
+\newpage
+\begin{align*}
+	\mathbf{e}_i\wedge\mathbf{e}_i &= 0 \\
+	\mathbf{x}\wedge\mathbf{y} &= -\mathbf{y}\wedge\mathbf{x} \\
+	(\lambda\mathbf{x})\wedge\mathbf{y} &= \lambda(\mathbf{x}\wedge\mathbf{y}) \\
+	(\mathbf{x}+\mathbf{y})\wedge\mathbf{z}
+	&= \mathbf{x}\wedge\mathbf{z}+\mathbf{x}\wedge\mathbf{z} \\
+	\\
+	\mathbf{e}_i\cdot \mathbf{e}_j &= {\delta}_{ij} \\
+	\mathbf{x}\cdot\mathbf{y} &= \mathbf{y}\cdot\mathbf{x} \\
+	(\lambda\mathbf{x})\cdot\mathbf{y} &= \lambda(\mathbf{x}\cdot\mathbf{y})\\
+	(\mathbf{x}+\mathbf{y})\cdot\mathbf{z} &=
+	\mathbf{x}\cdot\mathbf{z}+\mathbf{y}\cdot\mathbf{z}\\
+	\\
+	\mathbf{x}\mathbf{y} &= \mathbf{x}\cdot\mathbf{y}+\mathbf{x}\wedge\mathbf{y}
+	\\
+	\mathbf{e}_1\mathbf{e}_2 &=  \mathbf{e}_1\wedge\mathbf{e}_2 \\
+	(\mathbf{e}_1\mathbf{e}_2)^2
+	&= \mathbf{e}_1\mathbf{e}_2\mathbf{e}_1\mathbf{e}_2 \\
+	&=-\mathbf{e}_1\mathbf{e}_1\mathbf{e}_2\mathbf{e}_2 \\
+	&=-1 \\
+\end{align*}
+\newpage
+\begin{align*}
+	|x-x_0| &\leq \min\left(1,\frac{\varepsilon}{2|y_0|}\right) \\
+	|y-y_0| &\leq \frac{\varepsilon}{2(1+|x_0|)} \\
+	\\
+	|x|-|x_0| &\leq |x-x_0| \leq 1 \\
+	|x| &\leq  1+|x_0| \\
+	\\
+	|xy-x_0y_0|&= |y_0x-y_0x_0+xy-xy_0|\\
+	&= |y_0(x-x_0)+x(y-y_0)|\\
+	&\leq |y_0(x-x_0)|+|x(y-y_0)|\\
+	&\leq |y_0||x-x_0|+|x||y-y_0|\\
+	&\leq |y_0||x-x_0|+(1+|x_0|)|y-y_0|\\
+	&\leq |y_0|\frac{\varepsilon}{2|y_0|}
+	      +(1+|x_0|)\frac{\varepsilon}{2(1+|x_0|)}\\
+	&\leq \frac{\varepsilon}{2}+\frac{\varepsilon}{2}=\varepsilon\\
+\end{align*}
+\begin{align*}
+	\left|\frac{1}{y}-\frac{1}{y_0}\right| &=
+	\left|\frac{y_0-y}{yy_0}\right| \\
+	&= \frac{|y_0-y|}{|yy_0|} \\
+	&\leq \frac{\varepsilon|yy_0|}{|yy_0|} \\
+\end{align*}
+\newpage
+\begin{align*}
+	\beta = \frac{v}{c},\; \gamma &= \frac{1}{\sqrt{1-\beta^2}} \\
+	\Lambda &\equiv
+	\begin{pmatrix}
+		\tensor{\Lambda}{^0_0} & \tensor{\Lambda}{^0_1} & \tensor{\Lambda}{^0_2} & \tensor{\Lambda}{^0_3} \\
+		\tensor{\Lambda}{^1_0} & \tensor{\Lambda}{^1_1} & \tensor{\Lambda}{^1_2} & \tensor{\Lambda}{^1_3} \\
+		\tensor{\Lambda}{^2_0} & \tensor{\Lambda}{^2_1} & \tensor{\Lambda}{^2_2} & \tensor{\Lambda}{^2_3} \\
+		\tensor{\Lambda}{^3_0} & \tensor{\Lambda}{^3_1} & \tensor{\Lambda}{^3_2} & \tensor{\Lambda}{^3_3} \\
+	\end{pmatrix} \\
+	\eta &\equiv
+	\begin{pmatrix}
+		1 & 0 & 0 & 0 \\
+		0 & -1 & 0 & 0 \\
+		0 & 0 & -1 & 0 \\
+		0 & 0 & 0 & -1 \\
+	\end{pmatrix} \\
+	\tensor{(\Lambda^{-1})}{^\mu_\beta}\tensor{\Lambda}{^\beta_\nu} &=
+	\tensor{\delta}{^\mu_\nu},\\ 
+	\tensor{(\Lambda^{-1})}{^\mu_\nu}&\equiv\tensor{\Lambda}{_\mu^\nu} \\
+	\tensor{A}{_\mu} &\equiv \tensor{\eta}{_{\mu\nu}}\tensor{A}{^\nu} \\
+	\tensor{A'}{^\mu} &\equiv \tensor{\Lambda}{^\mu_\nu}\tensor{A}{^\nu} \\
+	\tensor{\eta}{_{\mu\nu}} &=
+	\tensor{\Lambda}{^\alpha_\mu}
+	\tensor{\Lambda}{^\beta_\nu}
+	\tensor{\eta}{_{\alpha\beta}}
+	\\
+	\\
+	\tensor{\Lambda}{^\alpha_\mu}
+	\tensor{\Lambda}{^\beta_\nu}
+	\tensor{\eta}{_\alpha_\beta}
+	&= \tensor{\eta}{_\mu_\nu} \\
+	\tensor{\Lambda}{^\alpha_\mu}
+	\tensor{\eta}{^\alpha_\beta}
+	\tensor{\Lambda}{^\beta_\nu}
+	&= \tensor{\eta}{^\mu_\nu} \\
+	\tensor{(\Lambda^\top)}{^\mu_\alpha} 
+	\tensor{(\eta\Lambda)}{^\alpha_\nu} 
+	&= \tensor{\eta}{^\mu_\nu} \\
+	\tensor{(\Lambda^\top\eta\Lambda)}{^\mu_\nu} &= \tensor{\eta}{^\mu_\nu} \\
+	\Lambda^\top\eta\Lambda &= \eta \\
+	\\
+	A\cdot B &= \tensor{A}{_\alpha}\tensor{B}{^\alpha} =
+	\tensor{\eta}{_{\alpha\beta}}\tensor{A}{^\alpha}\tensor{B}{^\beta}\\
+	A'\cdot B' &= \tensor{A'}{_\mu}\tensor{B'}{^\mu} \\
+	&= \tensor{\eta}{_\mu_\nu}\tensor{A'}{^\nu}\tensor{B'}{^\mu} \\
+	&= \tensor{\eta}{_\mu_\nu}
+	\tensor{\Lambda}{^\nu_\alpha}\tensor{A}{^\alpha}
+	\tensor{\Lambda}{^\mu_\beta}\tensor{B}{^\beta}
+	\\
+	&= 
+	\tensor{\Lambda}{^\nu_\alpha}\tensor{\Lambda}{^\mu_\beta}
+	\tensor{\eta}{_\mu_\nu}
+	\tensor{A}{^\alpha}\tensor{B}{^\beta}
+	\\
+	&= \tensor{\eta}{_\alpha_\beta}
+	\tensor{A}{^\alpha}\tensor{B}{^\beta}\\
+	\\
+\end{align*}
+\newpage
+\begin{align*}
+	\eta &= \Lambda^\top\eta\Lambda \\
+	\eta\Lambda^{-1} &= \Lambda^\top\eta \\
+	\Lambda^{-1} &= \eta\Lambda^\top\eta \\
+	\\
+	\tensor{\Lambda}{_\mu^\beta} 
+	\tensor{\Lambda}{^\mu_\nu} 
+	&=
+	\tensor{\delta}{^\beta_\nu}
+	\\
+	\tensor{(\Lambda\Lambda^{-1})}{^\mu_\nu}
+	&=
+	\tensor{\delta}{^\mu_\nu}
+	\\
+	\tensor{\Lambda}{^\mu_\alpha}
+	\tensor{(\Lambda^{-1})}{^\alpha_\nu}
+	&=
+	\tensor{\delta}{^\mu_\nu}
+	\\
+	\tensor{\Lambda}{^\mu_\alpha}
+	\tensor{\Lambda^{-1}}{_\nu^\alpha}
+	&=
+	\tensor{\delta}{^\mu_\nu}
+	\\
+	\\
+	\tensor{\eta}{_{\mu\nu}} &= 
+	\tensor{\Lambda}{^\alpha_\mu}
+	\tensor{\Lambda}{^\beta_\nu}
+	\tensor{\eta}{_{\alpha\beta}} \\
+	\tensor{\eta}{_{\mu\nu}}
+	\tensor{\Lambda}{_\sigma^\nu} 
+	&=
+	\tensor{\Lambda}{^\alpha_\mu}
+	\tensor{\eta}{_{\alpha\beta}}
+	\tensor{\Lambda}{^\beta_\nu} 
+	\tensor{\Lambda}{_\sigma^\nu} 
+	\\
+	\tensor{\eta}{_{\mu\nu}}
+	\tensor{\Lambda}{_\sigma^\nu} 
+	&=
+	\tensor{\Lambda}{^\alpha_\mu}
+	\tensor{\eta}{_{\alpha\beta}}
+	\tensor{\delta}{^\beta_\sigma} 
+	\\
+	\tensor{\eta}{_{\mu\nu}}
+	\tensor{\Lambda}{_\beta^\nu} 
+	&=
+	\tensor{\Lambda}{^\alpha_\mu}
+	\tensor{\eta}{_{\alpha\beta}}
+	\\
+	\tensor{\eta}{^{\sigma\mu}}
+	\tensor{\eta}{_{\mu\nu}}
+	\tensor{\Lambda}{_\beta^\nu} 
+	&=
+	\tensor{\eta}{^{\sigma\mu}}
+	\tensor{\Lambda}{^\alpha_\mu}
+	\tensor{\eta}{_{\alpha\beta}}
+	\\
+	\tensor{\delta}{^\sigma_\nu}
+	\tensor{\Lambda}{_\beta^\nu} 
+	&=
+	\tensor{\eta}{_{\sigma\mu}}
+	\tensor{\Lambda}{^\alpha_\mu}
+	\tensor{\eta}{_{\alpha\beta}}
+	\\
+	\tensor{\Lambda}{_\beta^\nu} 
+	&=
+	\tensor{\eta}{_{\nu\mu}}
+	\tensor{\Lambda}{^\alpha_\mu}
+	\tensor{\eta}{_{\alpha\beta}}
+	\\
+	\\
+	\det(\eta) &= \det(\Lambda^\top\eta\Lambda) \\
+	-1 &= -\det(\Lambda^\top)\det(\Lambda) \\
+	1 &= \det(\Lambda)^2 \\
+	\det(\Lambda)^2 &= \pm 1
 \end{align*}
 \end{document}
